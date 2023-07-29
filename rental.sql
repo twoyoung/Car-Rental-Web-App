@@ -51,11 +51,11 @@ INSERT INTO users VALUES
 ("staff3","staff3","staff3@gmail.com");
 
 INSERT INTO accountprofile VALUES 
-(000001,"customer1","customername1","auckland 1000","customer1@gmail.com","02100001",),
-(00002,"customer2","customername2","auckland bilingol street","customer2@gmail.com","02200002",),
-(00003,"customer3","customername3","auckland woolsworth street","customer3@gmail.com","02800003",),
-(00004,"customer4","customername4","auckland kate street", "customer4@gmail.com","02100004",),
-(00005,"customer5","customername5","auckland lake street", "customer5@gmail.com","02100005",),
+(000001,"customer1","customername1","auckland 1000","customer1@gmail.com","02100001",NULL),
+(00002,"customer2","customername2","auckland bilingol street","customer2@gmail.com","02200002",NULL),
+(00003,"customer3","customername3","auckland woolsworth street","customer3@gmail.com","02800003",NULL),
+(00004,"customer4","customername4","auckland kate street", "customer4@gmail.com","02100004",NULL),
+(00005,"customer5","customername5","auckland lake street", "customer5@gmail.com","02100005",NULL),
 (006,"staff1","staffname1","auckland bike street","staff1@gmail.com","02100221",1),
 (007,"staff2","staffname2","auckland desk street","staff2@gmail.com","02100222",1),
 (008,"staff3","staffname3","auckland window street","staff3@gmail.com","02100223",1);
