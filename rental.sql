@@ -7,34 +7,23 @@ CREATE TABLE IF NOT EXISTS users
 UserName VARCHAR(50) NOT NULL,
 Password VARCHAR(20) NOT NULL,
 Email VARCHAR(80) NOT NULL,
-Role INT NOT NULL,
 PRIMARY KEY (UserName)
 );
 
-CREATE TABLE IF NOT EXISTS customer
+CREATE TABLE IF NOT EXISTS accountprofile
 (
-CustomerID INT auto_increment NOT NULL,
-CustomerName VARCHAR(80) NOT NULL,
-Address VARCHAR(80) NOT NULL,
+UserID INT auto_increment NOT NULL,
+UserName VARCHAR(50) NOT NULL,
+ProfileName VARCHAR(80),
+Address VARCHAR(80),
 Email VARCHAR(80) NOT NULL,
 PhoneNumber VARCHAR(20),
-UserName VARCHAR(50) NOT NULL,
-PRIMARY KEY (CustomerID),
+Role INT,
+PRIMARY KEY (UserID),
 FOREIGN KEY (UserName) REFERENCES users(UserName)
+ON UPDATE CASCADE
+ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS staff
-(
-StaffID INT auto_increment NOT NULL,
-StaffName VARCHAR(80) NOT NULL,
-Address VARCHAR(80) NOT NULL,
-Email VARCHAR(80) NOT NULL,
-PhoneNumber VARCHAR(20),
-UserName VARCHAR(50) NOT NULL,
-PRIMARY KEY (StaffID),
-FOREIGN KEY (UserName) REFERENCES users(UserName)
-);
-
 
 CREATE TABLE IF NOT EXISTS car
 (
@@ -44,34 +33,32 @@ Year INT NOT NULL,
 RegNumber VARCHAR(10) NOT NULL, 
 SeatCap INT NOT NULL,
 RentalPerDay float NOT NULL,
-CustomerID INT,
+UserID INT,
 PRIMARY KEY (CarID),
-FOREIGN KEY (CustomerID) REFERENCES customer(CustomerID)
+FOREIGN KEY (UserID) REFERENCES accountprofile(UserID)
 );
 
 
 INSERT INTO users VALUES 
-("customer1","customer1",1),
-("customer2","customer2",1),
-("customer3","customer3",1),
-("customer4","customer4",1),
-("customer5","customer5",1),
-("admin","admin",2),
-("staff1","staff1",3),
-("staff2","staff2",3),
-("staff3","staff3",3);
+("customer1","customer1","customer1@gamil.com"),
+("customer2","customer2","customer2@gmail.com"),
+("customer3","customer3","customer3@gmail.com"),
+("customer4","customer4","customer4@gmail.com"),
+("customer5","customer5","customer5@gmail.com"),
+("admin","admin","admin@gmail.com"),
+("staff1","staff1","staff1@gmail.com"),
+("staff2","staff2","staff2@gmail.com"),
+("staff3","staff3","staff3@gmail.com");
 
-INSERT INTO customer VALUES 
-(000001,"customername1","auckland 1000","customer1@gmail.com","02100001","customer1"),
-(00002,"customername2","auckland bilingol street","customer2@gmail.com","02200002","customer2"),
-(00003,"customername3","auckland woolsworth street","customer3@gmail.com","02800003","customer3"),
-(00004,"customername4","auckland kate street", "customer4@gmail.com","02100004","customer4"),
-(00005,"customername5","auckland lake street", "customer5@gmail.com","02100005","customer5");
-
-INSERT INTO staff VALUES 
-(001,"staffname1","auckland bike street","staff1@gmail.com","02100221","staff1"),
-(002,"staffname2","auckland desk street","staff2@gmail.com","02100222","staff2"),
-(003,"staffname3","auckland window street","staff3@gmail.com","02100223","staff3");
+INSERT INTO accountprofile VALUES 
+(000001,"customer1","customername1","auckland 1000","customer1@gmail.com","02100001",),
+(00002,"customer2","customername2","auckland bilingol street","customer2@gmail.com","02200002",),
+(00003,"customer3","customername3","auckland woolsworth street","customer3@gmail.com","02800003",),
+(00004,"customer4","customername4","auckland kate street", "customer4@gmail.com","02100004",),
+(00005,"customer5","customername5","auckland lake street", "customer5@gmail.com","02100005",),
+(006,"staff1","staffname1","auckland bike street","staff1@gmail.com","02100221",1),
+(007,"staff2","staffname2","auckland desk street","staff2@gmail.com","02100222",1),
+(008,"staff3","staffname3","auckland window street","staff3@gmail.com","02100223",1);
 
 INSERT INTO car VALUES
 (00001,"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
