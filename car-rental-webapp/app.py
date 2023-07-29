@@ -11,8 +11,8 @@ app.secret_key = 'Young32494971'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Young32494971'
+app.config['MYSQL_USER'] = '2young'
+app.config['MYSQL_PASSWORD'] = 'Young@32494971'
 app.config['MYSQL_DB'] = '2young$COMP639'
 app.config['MYSQL_PORT'] = 3306
 
