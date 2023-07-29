@@ -35,7 +35,7 @@ def login():
         user_password = request.form['password']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE UserName = %s', (username,))
+        cursor.execute('SELECT * FROM user WHERE UserName = %s', (username,))
         # Fetch one record and return result
         account = cursor.fetchone()
         if account is not None:
