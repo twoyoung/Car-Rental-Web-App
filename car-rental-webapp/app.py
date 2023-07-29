@@ -27,7 +27,7 @@ def hello_world():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
-    msg = 'Something is wrong.'
+    msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         # Create variables for easy access
@@ -80,7 +80,7 @@ def register():
         email = request.form['email']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE UserName = %s', (username,))
+        cursor.execute('SELECT * FROM secureaccount WHERE UserName = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
