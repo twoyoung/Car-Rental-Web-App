@@ -80,7 +80,7 @@ def register():
         email = request.form['email']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM secureaccount WHERE UserName = %s', (username,))
+        cursor.execute('SELECT * FROM user WHERE UserName = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
@@ -95,7 +95,7 @@ def register():
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             print(hashed)
-            cursor.execute('INSERT INTO secureaccount VALUES (NULL, %s, %s, %s)', (username, hashed, email,))
+            cursor.execute('INSERT INTO user (UserName, Password, Email) VALUES (%s, %s, %s)', (username, hashed, email,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
