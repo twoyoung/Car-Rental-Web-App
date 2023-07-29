@@ -39,7 +39,7 @@ def login():
         # Fetch one record and return result
         account = cursor.fetchone()
         if account is not None:
-            password = account['password']
+            password = account['Password']
             if bcrypt.checkpw(user_password.encode('utf-8'),password.encode('utf-8')):
             # If account exists in accounts table in out database
             # Create session data, we can access this data in other routes
