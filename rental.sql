@@ -29,7 +29,7 @@ FOREIGN KEY (UserID) REFERENCES user(UserID)
 );
 
 INSERT INTO user VALUES 
-(1,"admin","admin","admin@gmail.com",NULL,NULL,NULL,1)
+(1,"admin","admin","admin@gmail.com",NULL,NULL,NULL,1),
 (2,"customer1","customer1","customer1@gamil.com","customername1","auckland 1000","02100001",NULL),
 (3,"customer2","customer2","customer2@gmail.com","customername2","auckland bilingol street","02200002",NULL),
 (4,"customer3","customer3","customer3@gmail.com","customername3","auckland woolsworth street","02800003",NULL),
