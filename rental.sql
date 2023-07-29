@@ -35,9 +35,9 @@ INSERT INTO user VALUES
 (4,"customer3","customer3","customer3@gmail.com","customername3","auckland woolsworth street","02800003",NULL),
 (5,"customer4","customer4","customer4@gmail.com","customername4","auckland kate street","02100004",NULL),
 (6,"customer5","customer5","customer5@gmail.com","customername5","auckland lake street","02100005",NULL),
-(7,"staff1","staffname1","auckland bike street","staff1@gmail.com","02100221",2),
-(8,"staff2","staffname2","auckland desk street","staff2@gmail.com","02100222",2),
-(9,"staff3","staffname3","auckland window street","staff3@gmail.com","02100223",2);
+(7,"staff1","staff1","staff1@gmail.com","staffname1","auckland bike street","02100221",2),
+(8,"staff2","staff2","staff2@gmail.com","staffname2","auckland desk street","02100222",2),
+(9,"staff3","staff2","staff3@gmail.com","staffname3","auckland window street","02100223",2);
 
 INSERT INTO car VALUES
 (00001,"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
