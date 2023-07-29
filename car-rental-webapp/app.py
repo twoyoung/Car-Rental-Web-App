@@ -121,7 +121,7 @@ def profile():
     if 'loggedin' in session:
         # We need all the account info for the user so we can display it on the profile page
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM secureaccount WHERE id = %s', (session['id'],))
+        cursor.execute('SELECT * FROM user WHERE UserId = %s', (session['id'],))
         account = cursor.fetchone()
         # Show the profile page with account info
         return render_template('profile.html', account=account)
