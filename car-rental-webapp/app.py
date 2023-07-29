@@ -44,8 +44,8 @@ def login():
             # If account exists in accounts table in out database
             # Create session data, we can access this data in other routes
                 session['loggedin'] = True
-                session['id'] = account['id']
-                session['username'] = account['username']
+                session['id'] = account['UserID']
+                session['username'] = account['UserName']
                 # Redirect to home page
                 return redirect(url_for('home'))
             else:
