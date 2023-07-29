@@ -7,11 +7,11 @@ import bcrypt
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
-app.secret_key = 'your secret key'
+app.secret_key = 'Young32494971'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = '2young'
+app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Young32494971'
 app.config['MYSQL_DB'] = '2young$COMP639'
 app.config['MYSQL_PORT'] = 3306
@@ -27,7 +27,7 @@ def hello_world():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     # Output message if something goes wrong...
-    msg = ''
+    msg = 'Something is wrong.'
     # Check if "username" and "password" POST requests exist (user submitted form)
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         # Create variables for easy access
