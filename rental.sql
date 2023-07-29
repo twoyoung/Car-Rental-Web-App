@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS user
 (
 UserID INT auto_increment NOT NULL,
 UserName VARCHAR(50) NOT NULL,
-Password VARCHAR(20) NOT NULL,
+Password VARCHAR(100) NOT NULL,
 Email VARCHAR(80) NOT NULL,
 ProfileName VARCHAR(80),
 Address VARCHAR(80),
