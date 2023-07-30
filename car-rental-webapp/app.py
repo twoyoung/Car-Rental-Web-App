@@ -164,11 +164,13 @@ def cars():
             cursor.execute('SELECT * FROM car WHERE UserID is NULL')
             cars = cursor.fetchall()
             return render_template('customer_cars.html', cars=cars)
-        elif user_role == 'staff':
+        elif user_role == 'staff' or user_role == 'admin':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car')
             cars = cursor.fetchall()
             return render_template('manage_cars.html', cars=cars)
+        else:
+            return 'unauthorized'
 
 
 @app.route('/home/cars/<carid>')
