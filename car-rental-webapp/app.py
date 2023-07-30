@@ -23,15 +23,15 @@ mysql = MySQL(app)
 def is_authenticated():
     return 'loggedin' in session
 
-# def get_user_role():
-#     if session['role'] == 1:
-#         return 'admin'
-#     elif session['role'] is NULL :
-#         return 'customer'
-#     elif session['role'] == 2:
-#         return 'staff'
-#     else:
-#         return None
+def get_user_role():
+    if session['role'] == 1:
+        return 'admin'
+    elif session['role'] is None:
+        return 'customer'
+    elif session['role'] == 2:
+        return 'staff'
+    else:
+        return None
 
 # http://localhost:5000/login/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/login/', methods=['GET', 'POST'])
@@ -125,25 +125,17 @@ def home():
         # User is loggedin show them the home page
 
         # Get the user's role.
-        # user_role = get_user_role()
-        if session['role'] == 1:
+        user_role = get_user_role()
+        
+        # Check if the user's role is allowed to access this page.
+        if user_role == 'admin':
             return render_template('admin_home.html', username=session['username'])
-        elif session['role'] is None:
-            return render_template('customer_home.html', username=session['username'])
-        elif session['role'] == 2:
+        elif user_role == 'staff':
             return render_template('staff_home.html', username=session['username'])
+        elif user_role == 'customer':
+            return render_template('customer_home.html', username=session['username'])
         else:
             return 'unauthorized'
-
-        # Check if the user's role is allowed to access this page.
-        # if user_role == 'admin':
-            
-        # elif user_role == 'staff':
-            
-        # elif user_role == 'customer':
-            
-        # else:
-            
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
