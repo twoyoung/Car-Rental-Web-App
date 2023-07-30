@@ -6,7 +6,15 @@
 
 <table>
     <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
-    {% for entry in cars %}
+
+    {% for car in cars %}
+        <tr>
+            {% for entry in car %}
+                <td>{{entry}}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    <!-- {% for entry in cars %}
         <tr>
                 <td><a href="/home/cars/{{entry[0]}}">{{entry[0]}}</a></td>
                 <td>{{entry[1]}}</td>
@@ -20,7 +28,7 @@
                     <td>Unavailable</td>
                 {% endif %}
         </tr>
-    {% endfor %}
+    {% endfor %} -->
 </table>
 
 
