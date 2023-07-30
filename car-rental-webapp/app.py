@@ -188,7 +188,7 @@ def customerlist():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE Role is NULL')
         customerlist = cursor.fetchall()
-        if user_role == 'staff':
+        if user_role == 'staff' or 'admin':
             return render_template('customerlist.html', customerlist=customerlist)
         elif user_role == 'admin':
             return render_template('manage_customer.html', customerlist=customerlist)
