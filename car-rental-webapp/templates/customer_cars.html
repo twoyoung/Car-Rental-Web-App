@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}Cars{% endblock %}
+
+{% block content %}
+
+<table class="table table-striped table-hover table-bordered">
+    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
+    {% for entry in cars %}
+        <tr>
+                <td><a href="/home/cars/{{entry[0]}}">{{entry[0]}}</a></td>
+                <td>{{entry[1]}}</td>
+                <td>{{entry[2]}}</td>
+                <td>{{entry[3]}}</td>
+                <td>{{entry[4]}}</td>
+                <td>{{entry[5]}}</td>
+                {% if {{entry[6]}} is NULL %}
+                    <td>Available</td>
+                {% else %}
+                    <td>Unavailable</td>
+                {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+{% endblock %}
