@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+
+<table>
+    <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th></tr>
+    {% for staff in stafflist %}
+        <tr>
+                <td>{{staff['UserID']}}</td>
+                <td>{{staff['UserName']}}</td>
+                <td>{{staff['Email']}}</td>
+                <td>{{staff['ProfileName']}}</td>
+                <td>{{staff['Address']}}</td>
+                <td>{{staff['PhoneNumber']}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}
