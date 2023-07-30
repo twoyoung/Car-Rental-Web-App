@@ -4,37 +4,24 @@
 
 {% block content %}
 
-<!-- <table> -->
-    <!-- <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr> -->
-
-    <!-- {% for entry in cars %}
+<table>
+    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
+    {% for car in cars %}
         <tr>
-            <td>{{entry[0]}}</td>
-            <td>{{entry[1]}}</td>
-            <td>{{entry[2]}}</td>
-            <td>{{entry[3]}}</td>
-            <td>{{entry[4]}}</td>
-            <td>{{entry[5]}}</td>
-            <td>{{entry[6]}}</td>
-        </tr>
-    {% endfor %} -->
-    <!-- {% for entry in cars %}
-        <tr>
-                <td><a href="/home/cars/{{entry[0]}}">{{entry[0]}}</a></td>
-                <td>{{entry[1]}}</td>
-                <td>{{entry[2]}}</td>
-                <td>{{entry[3]}}</td>
-                <td>{{entry[4]}}</td>
-                <td>{{entry[5]}}</td>
-                {% if entry[6] == NULL %}
+                <td><a href="/home/cars/{{entry[0]}}"></a>{{car['CarID']}}</a></td>
+                <td>{{car['CarModel']}}</td>
+                <td>{{car['Year']}}</td>
+                <td>{{car['RegNumber']}}</td>
+                <td>{{car['SeatCap']}}</td>
+                <td>{{car['RentalPerDay']}}</td>
+                {% if car['UserID'] == None %}
                     <td>Available</td>
                 {% else %}
                     <td>Unavailable</td>
                 {% endif %}
         </tr>
-    {% endfor %} -->
-<!-- </table> -->
+    {% endfor %}
+</table>
 
-{{carlist['CarID']}};
 
 {% endblock %}
