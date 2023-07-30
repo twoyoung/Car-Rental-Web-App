@@ -161,7 +161,7 @@ def cars():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         sql = "SELECT * FROM car;"
         cursor.execute(sql)
-        cars = cursor.fetchall()
+        cars = cursor.fetchone()
         # if  get_user_role() == 'customer':
         return render_template('customer_cars.html', carlist=cars)
 
