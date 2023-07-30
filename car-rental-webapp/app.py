@@ -21,12 +21,12 @@ app.config['MYSQL_PORT'] = 3306
 mysql = MySQL(app)
 
 def is_authenticated():
-    return 'role' in session
+    return 'loggedin' in session
 
 def get_user_role():
     # In a real application, you would likely retrieve the user's role from a database.
     # For this example, let's assume a user with the username 'admin' has the role 'admin'.
-    if 'role' in session:
+    if 'loggedin' in session:
         if session['role'] == 1:
             return 'admin'
         elif session['role'] is NULL :
@@ -125,8 +125,7 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        if not is_authenticated():
-            return redirect(url_for('login'))
+
         # Get the user's role.
         user_role = get_user_role()
 
