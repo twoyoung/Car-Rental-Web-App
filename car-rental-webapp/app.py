@@ -126,7 +126,7 @@ def home():
 
         # Get the user's role.
         user_role = get_user_role()
-        
+
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
             return render_template('admin_home.html', username=session['username'])
@@ -154,6 +154,15 @@ def profile():
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/home/cars')
+def cars():
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM car')
+        cars = cursor.fetchall()
+        if  get_user_role() == 'customer':
+            return render_template('customer_cars.html', cars=cars)
 
 if __name__ == '__main__':
     app.run(debug=True)
