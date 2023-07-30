@@ -8,17 +8,34 @@
     <p>Your account details are below:</p>
     <table>
         <tr>
+            <td>User ID:</td>
+            <td>{{ account['UserID'] }}</td>
+        </tr>
+        <tr>
             <td>Username:</td>
             <td>{{ account['UserName'] }}</td>
         </tr>
         <tr>
-            <td>Password:</td>
-            <td>{{ account['Password'] }}</td>
+            <td>Display Name:</td>
+            <td>{{ account['ProfileName'] }}</td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td>{{ account['Address'] }}</td>
+        </tr>
+        <tr>
+            <td>Phone number:</td>
+            <td>{{ account['PhoneNumber'] }}</td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>{{ account['Email'] }}</td>
         </tr>
+        <tr>
+            <td>Password:</td>
+            <td>{{ account['Password'] }}</td>
+        </tr>
+
     </table>
 </div>
 {% endblock %}
