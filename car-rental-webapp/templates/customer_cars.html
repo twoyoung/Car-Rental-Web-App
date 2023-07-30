@@ -8,7 +8,7 @@
     <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
     {% for car in cars %}
         <tr>
-                <td><a href="/home/cars/{{car['CarID']}}"></a>{{car['CarID']}}</a></td>
+                <td><a href="/home/cars/{{car['CarID']}}">{{car['CarID']}}</a></td>
                 <td>{{car['CarModel']}}</td>
                 <td>{{car['Year']}}</td>
                 <td>{{car['RegNumber']}}</td>
