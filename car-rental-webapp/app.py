@@ -158,11 +158,18 @@ def profile():
 @app.route('/home/cars')
 def cars():
     if 'loggedin' in session:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM car WHERE UserID is NULL')
-        cars = cursor.fetchall()
-        if  get_user_role() == 'customer':
+        user_role = get_user_role()
+        if  user_role == 'customer':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM car WHERE UserID is NULL')
+            cars = cursor.fetchall()
             return render_template('customer_cars.html', cars=cars)
+        elif user_role == 'staff':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM car')
+            cars = cursor.fetchall()
+            return render_template('manage_cars.html', cars=cars)
+
 
 @app.route('/home/cars/<carid>')
 def car(carid):
