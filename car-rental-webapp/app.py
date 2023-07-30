@@ -155,7 +155,7 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/home/cars')
+@app.route('/home/carlist')
 def cars():
     if 'loggedin' in session:
         user_role = get_user_role()
@@ -180,6 +180,36 @@ def car(carid):
         cursor.execute('SELECT * FROM car WHERE CarID = %s', (carid,))
         car = cursor.fetchone()
         return render_template('car.html', car=car)
+    
+@app.route('/home/customerlist')
+def customerlist():
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user WHERE Role is NULL')
+        customerlist = cursor.fetchall()
+        if user_role == 'staff':
+            return render_template('customerlist.html', customerlist=customerlist)
+        elif user_role == 'admin':
+            return render_template('manage_customer.html', customerlist=customerlist)
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/home/stafflist')
+def stafflist():
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user WHERE Role = 2')
+        stafflist = cursor.fetchall()
+        if user_role == 'admin':
+            return render_template('stafflist.html', stafflist=stafflist)
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
 
 if __name__ == '__main__':
     app.run(debug=True)
