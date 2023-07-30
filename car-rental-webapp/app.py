@@ -125,7 +125,8 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-
+        if not is_authenticated():
+            return redirect(url_for('login'))
         # Get the user's role.
         user_role = get_user_role()
 
