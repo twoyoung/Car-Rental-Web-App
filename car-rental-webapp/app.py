@@ -133,7 +133,7 @@ def home():
         elif session['role'] == 2:
             return render_template('staff_home.html', username=session['username'])
         else:
-            return "Unauthorized"
+            return session['role']
 
         # Check if the user's role is allowed to access this page.
         # if user_role == 'admin':
