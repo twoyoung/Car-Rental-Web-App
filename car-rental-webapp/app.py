@@ -163,7 +163,7 @@ def cars():
         cursor.execute(sql)
         cars = cursor.fetchall()
         # if  get_user_role() == 'customer':
-        return render_template('customer_cars.html', cars=cars)
+        return render_template('customer_cars.html', carlist=cars)
 
 if __name__ == '__main__':
     app.run(debug=True)
