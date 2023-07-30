@@ -159,7 +159,7 @@ def profile():
 def cars():
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        sql = "SELECT * FROM cars;"
+        sql = "SELECT * FROM car;"
         cursor.execute(sql)
         cars = cursor.fetchall()
         # if  get_user_role() == 'customer':
