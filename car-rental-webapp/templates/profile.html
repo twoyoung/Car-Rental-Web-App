@@ -5,7 +5,8 @@
 {% block content %}
 <h2>Profile Page</h2>
 <div>
-    <p>Your account details are below:</p>
+    <p>Account information:</p>
+
     <table>
         <tr>
             <td>User ID:</td>
@@ -13,27 +14,33 @@
         </tr>
         <tr>
             <td>Username:</td>
-            <td>{{ account['UserName'] }}</td>
+            <td>@{{ account['UserName'] }}</td>
+            <td>Edit</td>
         </tr>
         <tr>
             <td>Display Name:</td>
             <td>{{ account['ProfileName'] }}</td>
+            <td>Edit</td>
         </tr>
         <tr>
             <td>Address:</td>
             <td>{{ account['Address'] }}</td>
+            <td>Edit</td>
         </tr>
         <tr>
             <td>Phone number:</td>
             <td>{{ account['PhoneNumber'] }}</td>
+            <td>Edit</td>
         </tr>
         <tr>
             <td>Email:</td>
             <td>{{ account['Email'] }}</td>
+            <td>Edit</td>
         </tr>
         <tr>
             <td>Password:</td>
             <td>{{ account['Password'] }}</td>
+            <td>Edit</td>
         </tr>
 
     </table>
