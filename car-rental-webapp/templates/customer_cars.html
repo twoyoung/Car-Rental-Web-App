@@ -4,10 +4,10 @@
 
 {% block content %}
 
-<table>
-    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
+<!-- <table> -->
+    <!-- <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr> -->
 
-    {% for entry in cars %}
+    <!-- {% for entry in cars %}
         <tr>
             <td>{{entry[0]}}</td>
             <td>{{entry[1]}}</td>
@@ -17,7 +17,7 @@
             <td>{{entry[5]}}</td>
             <td>{{entry[6]}}</td>
         </tr>
-    {% endfor %}
+    {% endfor %} -->
     <!-- {% for entry in cars %}
         <tr>
                 <td><a href="/home/cars/{{entry[0]}}">{{entry[0]}}</a></td>
@@ -33,8 +33,9 @@
                 {% endif %}
         </tr>
     {% endfor %} -->
-</table>
+<!-- </table> -->
 
-
-
+carlist[0][0]; carlist[0][1]; carlist[0][2]; carlist[0][3]; carlist[0][4]; carlist[0][5]; carlist[0][6];
+<hr />
+carlist[1][0]; carlist[1][1]
 {% endblock %}
