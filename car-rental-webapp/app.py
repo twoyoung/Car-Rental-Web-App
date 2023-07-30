@@ -164,5 +164,13 @@ def cars():
         if  get_user_role() == 'customer':
             return render_template('customer_cars.html', cars=cars)
 
+@app.route('/home/cars/<carid>')
+def car(carid):
+    if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM car WHERE CarID = %s', (carid,))
+        car = cursor.fetchone()
+        return render_template('car.html', car=car)
+
 if __name__ == '__main__':
     app.run(debug=True)
