@@ -3,6 +3,7 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import bcrypt
+from pymysql import NULL
 
 app = Flask(__name__)
 
@@ -19,9 +20,20 @@ app.config['MYSQL_PORT'] = 3306
 # Intialize MySQL
 mysql = MySQL(app)
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def is_authenticated():
+    return 'role' in session
+
+def get_user_role():
+    # In a real application, you would likely retrieve the user's role from a database.
+    # For this example, let's assume a user with the username 'admin' has the role 'admin'.
+    if 'role' in session:
+        if session['role'] == 1:
+            return 'admin'
+        elif session['role'] is NULL :
+            return 'customer'
+        elif session['role'] == 2:
+            return 'staff'
+    return None
 
 # http://localhost:5000/login/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/login/', methods=['GET', 'POST'])
@@ -46,6 +58,7 @@ def login():
                 session['loggedin'] = True
                 session['id'] = account['UserID']
                 session['username'] = account['UserName']
+                session['role'] = account['Role']
                 # Redirect to home page
                 return redirect(url_for('home'))
             else:
@@ -64,6 +77,7 @@ def logout():
    session.pop('loggedin', None)
    session.pop('id', None)
    session.pop('username', None)
+   session.pop('role', None)
    # Redirect to login page
    return redirect(url_for('login'))
 
@@ -104,15 +118,30 @@ def register():
     # Show registration form with message (if any)
     return render_template('register.html', msg=msg)
 
+
 # http://localhost:5000/home - this will be the home page, only accessible for loggedin users
 @app.route('/home')
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'])
+
+        # Get the user's role.
+        user_role = get_user_role()
+
+        # Check if the user's role is allowed to access this page.
+        if user_role == 'admin':
+            return render_template('admin_home.html', username=session['username'])
+        elif user_role == 'staff':
+            return render_template('staff_home.html', username=session['username'])
+        elif user_role == 'customer':
+            return render_template('customer_home.html', username=session['username'])
+        else:
+            return "Unauthorized"
+    else:
     # User is not loggedin redirect to login page
-    return redirect(url_for('login'))
+        return redirect(url_for('login'))
+
 
 # http://localhost:5000/profile - this will be the profile page, only accessible for loggedin users
 @app.route('/profile')
