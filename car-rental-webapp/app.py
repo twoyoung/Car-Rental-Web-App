@@ -33,6 +33,10 @@ def get_user_role():
     else:
         return None
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
 # http://localhost:5000/login/ - this will be the login page, we need to use both GET and POST requests
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
