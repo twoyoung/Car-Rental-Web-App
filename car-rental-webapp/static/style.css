@@ -5,6 +5,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.cover-container {
+    background-image: url("https://media-public.canva.com/MABKNIlq7Dg/3/screen_2x.jpg")
+}
+
 body {
     background-color: #435165;
     margin: 0;
