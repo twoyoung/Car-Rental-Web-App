@@ -4,22 +4,97 @@
 		<meta charset="utf-8">
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"> -->
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
 	</head>
 	<body class="loggedin">
-		<nav class="navtop">
-			<div>
-				<h1>Login Example</h1>
-                <a href="{{ url_for('home') }}"><i class="fas fa-home"></i>Home</a>
-				<a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i>Profile</a>
-				<a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+
+		<header>
+			<div class="px-3 py-2 text-bg-dark border-bottom">
+			  <div class="container">				
+				<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+				  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+						<img src="../image/swift-rental-cars-high-resolution-logo-color-on-transparent-background.png">
+				  </a>
+				  <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+					<li>
+					  <a href="{{ url_for('home') }}" class="nav-link text-white">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-house-door d-block mx-auto mb-1" viewBox="0 0 16 16">
+							<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"></path>
+						</svg>
+						Home
+					  </a>
+					</li>
+					<li>
+					  <a href="{{ url_for('profile') }}" class="nav-link text-white">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-person-circle" viewBox="0 0 16 16">
+							<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+							<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+						</svg>
+						Profile
+					  </a>
+					</li>
+					<li>
+					  <a href="{{ url_for('logout') }}" class="nav-link text-white">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-box-arrow-right" viewBox="0 0 16 16">
+							<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+							<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+						</svg>
+						Logout
+					  </a>
+					</li>
+				  </ul>
+				</div>
+			  </div>
 			</div>
-		</nav>
+			
+		</header>
+
 		<div class="content">
 			{% block content %}{% endblock %}
 		</div>
+
+		<script>
+			// Enable form validation
+			(function () {
+			  'use strict';
+		  
+			  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+			  var forms = document.querySelectorAll('.needs-validation');
+		  
+			  // Loop over them and prevent submission
+			  Array.prototype.slice.call(forms).forEach(function (form) {
+				form.addEventListener('submit', function (event) {
+				  if (!form.checkValidity()) {
+					event.preventDefault();
+					event.stopPropagation();
+				  }
+		  
+				  form.classList.add('was-validated');
+		  
+				  var numberInput = document.getElementById('numberInput');
+				  if (!isValidNumber(numberInput.value.trim())) {
+					event.preventDefault();
+					event.stopPropagation();
+					numberInput.classList.add('is-invalid');
+				  } else {
+					numberInput.classList.remove('is-invalid');
+				  }
+				}, false);
+			  });
+			})();
+		  
+			// Custom validation function to check if the input is a valid number
+			function isValidNumber(input) {
+			  if (input === '') {
+				return true; // Allow empty input
+			  }
+		  
+			  var numberPattern = /^\d+(\.\d+)?$/;
+			  return numberPattern.test(input);
+			}
+		  </script>
 
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 

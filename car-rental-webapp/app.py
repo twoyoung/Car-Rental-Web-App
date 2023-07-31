@@ -11,10 +11,16 @@ app = Flask(__name__)
 app.secret_key = 'Young32494971'
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = '2young'
-app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-app.config['MYSQL_DB'] = '2young$COMP639'
+# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_USER'] = '2young'
+# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+# app.config['MYSQL_DB'] = '2young$COMP639'
+# app.config['MYSQL_PORT'] = 3306
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'rental'
 app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
@@ -214,6 +220,23 @@ def stafflist():
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
+
+@app.route('/edit/<userid>')
+def edituser(userid):
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
+        user_to_edit = cursor.fetchone()
+        userlist = cursor.fetchall()
+        if user_role == 'admin':
+            return render_template('edituser.html', user_to_edit=user_to_edit, userlist=userlist)
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
+    
+
 
 if __name__ == '__main__':
     app.run(debug=True)

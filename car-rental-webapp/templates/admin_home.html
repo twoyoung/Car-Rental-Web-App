@@ -4,8 +4,32 @@
 
 {% block content %}
 
-<h2><a href="/home/customerlist">Manage customers</a></h2>
-<h2><a href="/home/stafflist">Manage staff</a></h2>
-<h2><a href="/home/carlist">Manage rental cars</a></h2>
-
+<div class="container-fluid pb-3">
+    <div class="d-grid gap-3" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="bg-body-tertiary border rounded-3">
+        <h2>
+            <a href="/home/customerlist" class="nav-link">
+              Customers
+            </a>
+        </h2>
+        <br><br><br><br><br><br><br><br><br><br>
+      </div>
+      <div class="bg-body-tertiary border rounded-3">
+        <h2>
+            <a href="/home/stafflist" class="nav-link">
+              Staff
+            </a>
+        </h2>
+        <br><br><br><br><br><br><br><br><br><br>
+      </div>
+      <div class="bg-body-tertiary border rounded-3">
+        <h2>
+            <a href="/home/carlist" class="nav-link">
+                Cars
+            </a>
+        </h2>
+        <br><br><br><br><br><br><br><br><br><br>
+      </div>
+    </div>
+  </div>
 {% endblock %}
