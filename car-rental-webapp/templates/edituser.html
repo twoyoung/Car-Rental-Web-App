@@ -5,7 +5,9 @@
 {% block content %}
 
     {% if user_to_edit['Role'] == 2 %}
-        <table class="table table-striped mt-5 text-center" id="myTable">
+
+    <p>edit staff</p>
+        <!-- <table class="table table-striped mt-5 text-center" id="myTable">
             <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th></tr>
             {% for staff in userlist %}
                 {% if staff['UserID'] != user_to_edit['UserID'] %}
@@ -63,7 +65,7 @@
                 </tr>
                 {% endif %}
             {% endfor %}
-        </table>
+        </table> -->
 
 
 {% endblock %}

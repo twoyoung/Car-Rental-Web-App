@@ -228,7 +228,10 @@ def edituser(userid):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
         user_to_edit = cursor.fetchone()
+        print(user_to_edit)
+        cursor.execute('SELECT * FROM user WHERE Role=%s',(user_to_edit['Role'],))
         userlist = cursor.fetchall()
+        print(userlist)
         if user_role == 'admin':
             return render_template('edituser.html', user_to_edit=user_to_edit, userlist=userlist)
         else:
