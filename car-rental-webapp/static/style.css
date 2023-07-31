@@ -6,7 +6,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.cover-container {
+.cover {
     background-image: url("https://media-public.canva.com/MABKNIlq7Dg/3/screen_2x.jpg");
     background-size: cover;
 }
