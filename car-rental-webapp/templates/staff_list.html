@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+
+{% with msg = get_flashed_messages() %}
+  {% if msg %}
+        {{ msg }}
+  {% endif %}
+{% endwith %}
+
+<a href="{{ url_for('add_user_page', type='staff')}}" class="btn btn-primary">Add Staff</a>
+
+<table class="table table-striped mt-5 text-center">
+    <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th><th>Action</th></tr>
+    {% for staff in stafflist %}
+        <tr>
+                <td>{{staff['UserID']}}</td>
+                <td>{{staff['UserName']}}</td>
+                <td>{{staff['Email']}}</td>
+                <td>{{staff['ProfileName']}}</td>
+                <td>{{staff['Address']}}</td>
+                <td>{{staff['PhoneNumber']}}</td>
+                <td>
+                    <a href="{{ url_for('edit_user', userid=staff['UserID'], type='staff')}}">Edit</a>
+                    <a href="/delete/user/{{staff['UserID']}}">Delete</a>
+                </td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

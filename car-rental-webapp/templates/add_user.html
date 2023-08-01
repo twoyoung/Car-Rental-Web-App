@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  {% if user_type == 'staff' %}
+      Add staff
+  {% elif user_type == 'customer' %}
+      Add customer
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="col-md-7 col-lg-8 container mt-4" >
+    <form action="/add/user" method = "POST" class="needs-validation" novalidate>
+
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <label for="username" class="form-label">User name</label>
+          <input type="text" name="username" class="form-control" id="userName" value="" required>
+          <div class="invalid-feedback">
+            Valid user name is required.
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+            <label for="password" class="form-label">Password</label>
+            <input type="text" name="password" class="form-control" id="password" value="" required>
+            <div class="invalid-feedback">
+              Valid password is required.
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="text" name="email" class="form-control" id="email" value="" required>
+          <div class="invalid-feedback">
+            Valid email is required.
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label for="display_name" class="form-label">Display Name <span class="text-body-secondary">(Optional)</span></label>
+          <input type="text" name="display_name" class="form-control" id="display_name" value="">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" name="address" class="form-control" id="address" value="">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="phone" class="form-label">Phone number</label>
+          <input type="text" name="phone" id="phone" value="">
+        </div>
+
+      {% if user_type == 'staff' %}
+
+        <input type="hidden" name="user_type" value="staff">
+    </div>
+      <hr class="my-4">
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Add staff</button>
+      
+      {% elif user_type == 'customer' %}
+      <input type="hidden" name="user_type" value="customer">
+    </div>
+      <hr class="my-4">
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Add customer</button>
+      {% endif %}
+      
+      </form>
+ </div>
+
+
+{% endblock %}

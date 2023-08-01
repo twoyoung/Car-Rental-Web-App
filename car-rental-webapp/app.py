@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, flash, get_flashed_messages, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
@@ -11,17 +11,17 @@ app = Flask(__name__)
 app.secret_key = 'Young32494971'
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = '2young'
-app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-app.config['MYSQL_DB'] = '2young$COMP639'
-app.config['MYSQL_PORT'] = 3306
-
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = ''
-# app.config['MYSQL_DB'] = 'rental'
+# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_USER'] = '2young'
+# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+# app.config['MYSQL_DB'] = '2young$COMP639'
 # app.config['MYSQL_PORT'] = 3306
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'rental'
+app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -139,11 +139,11 @@ def home():
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
-            return render_template('admin_home.html', username=session['username'])
+            return render_template('admin_dashboard.html', username=session['username'])
         elif user_role == 'staff':
-            return render_template('staff_home.html', username=session['username'])
+            return render_template('staff_dashboard.html', username=session['username'])
         elif user_role == 'customer':
-            return render_template('customer_home.html', username=session['username'])
+            return render_template('customer_dashboard.html', username=session['username'])
         else:
             return 'unauthorized'
     else:
@@ -165,20 +165,21 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/home/carlist')
-def cars():
+@app.route('/home/car_list')
+def car_list():
     if 'loggedin' in session:
         user_role = get_user_role()
+        msg = get_flashed_messages()
         if  user_role == 'customer':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car WHERE UserID is NULL')
-            cars = cursor.fetchall()
-            return render_template('customer_cars.html', cars=cars)
+            car_list = cursor.fetchall()
+            return render_template('car_list.html', car_list=car_list)
         elif user_role == 'staff' or user_role == 'admin':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car')
-            cars = cursor.fetchall()
-            return render_template('manage_cars.html', cars=cars)
+            car_list = cursor.fetchall()
+            return render_template('car_list.html', car_list=car_list,msg=msg)
         else:
             return 'unauthorized'
 
@@ -191,70 +192,215 @@ def car(carid):
         car = cursor.fetchone()
         return render_template('car.html', car=car)
     
-@app.route('/home/customerlist')
-def customerlist():
+@app.route('/home/customer_list')
+def customer_list():
     if 'loggedin' in session:
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE Role is NULL')
-        customerlist = cursor.fetchall()
-        if user_role == 'staff' or 'admin':
-            return render_template('customerlist.html', customerlist=customerlist)
-        elif user_role == 'admin':
-            return render_template('manage_customer.html', customerlist=customerlist)
+        customer_list = cursor.fetchall()
+        msg = get_flashed_messages()
+        print(msg)
+        if user_role == 'admin':
+            return render_template('customer_list.html', customer_list=customer_list, msg=msg)
         else:
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
 
-@app.route('/home/stafflist')
-def stafflist():
+@app.route('/home/staff_list')
+def staff_list():
     if 'loggedin' in session:
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE Role = 2')
         stafflist = cursor.fetchall()
-        print(stafflist)
+        msg = get_flashed_messages()
+        print(msg)
         if user_role == 'admin':
-            return render_template('stafflist.html', stafflist=stafflist)
+            return render_template('staff_list.html', stafflist=stafflist, msg=msg)
         else:
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
 
-@app.route('/edit/<userid>')
-def edituser(userid):
+@app.route('/edit/user/<userid>')
+def edit_user(userid):
     if 'loggedin' in session:
+        user_type = request.args.get('type')
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
         user_to_edit = cursor.fetchone()
+        print(user_to_edit)
         if user_role == 'admin':
-            return render_template('edituser.html', user_to_edit=user_to_edit)
+            return render_template('edit_user.html', user_type=user_type, user_to_edit=user_to_edit)
         else:
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
     
-@app.route('/updateprofile', methods=['GET', 'POST'])
-def updateprofile():
+@app.route('/update/user', methods=['GET', 'POST'])
+def update_user():
+    user_type = request.args.get('type')
     userid = int(request.form.get('userid'))
     username = request.form.get('username')
+    password = request.form.get('password')
     email = request.form.get('email')
     display_name = request.form.get('display_name')
     address = request.form.get('address')
     phone = request.form.get('phone')
-    print(phone)
+    role = request.form.get('role')
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     # insert the data to the database
     sql = '''UPDATE user 
-            SET UserID = %s, UserName = %s, Email = %s, ProfileName = %s, Address = %s, PhoneNumber = %s
+            SET UserName = %s, Email = %s, Password = %s, ProfileName = %s, Address = %s, PhoneNumber = %s
             WHERE UserID = %s;'''
-    parameters = (userid, username, email, display_name, address, phone, userid)
+    parameters = (username, email, hashed, display_name, address, phone, userid)
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute(sql, parameters)
-    return redirect(url_for('stafflist'))
+    mysql.connection.commit()
+    if user_type == 'staff':
+        return redirect(url_for('staff_list'))
+    elif user_type == 'customer':
+        return redirect(url_for('customer_list'))
+
+@app.route('/delete/user/<userid>')
+def delete_user(userid):
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        if user_role == 'admin':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
+            user_to_delete = cursor.fetchone()
+            cursor.execute('SELECT * FROM car WHERE UserID=%s',(userid,))
+            rented_car = cursor.fetchone()
+            if rented_car:
+                flash("Cannot delete customer who has rented a car.")
+                return redirect(url_for('customer_list'))
+            else:
+                cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
+                mysql.connection.commit()
+                flash("Delete successfully")
+                if user_to_delete['Role'] is None:
+                    return redirect(url_for('customer_list'))
+                elif user_to_delete['Role'] == 2:
+                    return redirect(url_for('staff_list'))
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
+    
+@app.route('/add/user/page', methods=['GET'])
+def add_user_page():
+    user_type = request.args.get('type')
+    return render_template('add_user.html',user_type=user_type)
 
     
+@app.route('/add/user', methods=['Get', 'POST'])
+def add_user():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    email = request.form.get('email')
+    display_name = request.form.get('display_name')
+    address = request.form.get('address')
+    phone = request.form.get('phone')
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    user_type = request.form.get('user_type')
+    # insert the data to the database
+    sql = '''INSERT INTO user (UserName, Password, Email, ProfileName, Address, PhoneNumber, Role)
+            Values (%s, %s, %s, %s, %s, %s, %s);'''
+    if user_type == 'customer':
+        parameters = (username, hashed, email, display_name, address, phone, None)
+    elif user_type == 'staff':
+        parameters = (username, hashed, email, display_name, address, phone, 2)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(sql, parameters)
+    mysql.connection.commit()
+    if user_type == 'customer':
+        flash("You have successfully added a customer!")
+        return redirect(url_for('customer_list'))
+    elif user_type == 'staff':
+        flash("You have successfully added a staff!")
+    # msg = 'You have successfully added a staff!'
+        return redirect(url_for('staff_list'))
+
+@app.route('/add/car/page')
+def add_car_page():
+    return render_template('add_car.html')
+
+@app.route('/add/car', methods=['GET', 'POST'])
+def add_car():
+    model = request.form.get('model')
+    year = request.form.get('year')
+    registration = request.form.get('registration')
+    seat_capacity = request.form.get('seat_capacity')
+    rental_per_day = request.form.get('rental_per_day')
+    userid = request.form.get('userid')
+    if userid == "" or userid == 0:
+        userid = None
+    # insert the data to the database
+    sql = '''INSERT INTO car (CarModel, Year, RegNumber, SeatCap, RentalPerDay, UserID)
+            Values (%s, %s, %s, %s, %s, %s);'''
+    parameters = (model, year, registration, seat_capacity, rental_per_day, userid)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(sql, parameters)
+    mysql.connection.commit()
+    flash("You have successfully added a car!")
+    return redirect(url_for('car_list'))
+
+@app.route('/edit/car/<carid>')
+def edit_car(carid):
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM car WHERE CarID=%s',(carid,))
+        car_to_edit = cursor.fetchone()
+        if user_role == 'admin':
+            return render_template('edit_car.html', car_to_edit=car_to_edit)
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/update/car', methods=['GET', 'POST'])
+def update_car():
+    carid = int(request.form.get('carid'))
+    car_model = request.form.get('car_model')
+    year = request.form.get('year')
+    registration_number = request.form.get('registration_number')
+    seat_cap = request.form.get('seat_cap')
+    rental_per_day = request.form.get('rental_per_day')
+    userid = request.form.get('userid')
+    if userid == "":
+        userid = None
+    # insert the data to the database
+    sql = '''UPDATE car 
+            SET CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, UserID = %s
+            WHERE CarID = %s;'''
+    parameters = (car_model, year, registration_number, seat_cap, rental_per_day, userid, carid)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(sql, parameters)
+    mysql.connection.commit()
+    return redirect(url_for('car_list'))
+
+@app.route('/delete/car/<carid>')
+def delete_car(carid):
+    if 'loggedin' in session:
+        user_role = get_user_role()
+        if user_role == 'admin':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM car WHERE CarID=%s',(carid,))
+            car_to_delete = cursor.fetchone()
+            cursor.execute('DELETE FROM car WHERE CarID=%s',(carid,))
+            mysql.connection.commit()
+            flash("Delete successfully")
+            return redirect(url_for('car_list'))
+
+        else:
+            return 'unauthorized'
+    else:
+        return redirect(url_for('login'))
 
 
 if __name__ == '__main__':

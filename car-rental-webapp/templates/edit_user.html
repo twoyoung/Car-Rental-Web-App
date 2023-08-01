@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit profile{% endblock %}
+
+{% block content %}
+
+<div class="col-md-7 col-lg-8 container mt-4" >
+
+    {% if user_type == 'staff' %}
+    <h4 class="mb-3">Edit a staff</h4>
+    {% elif user_type == 'customer' %}
+    <h4 class="mb-3">Edit a customer</h4>
+    {% endif %}
+    <form action="{{ url_for('update_user', type=user_type)}}" method = "POST" class="needs-validation" novalidate>
+      <div class="row g-3">
+          <div class="col-sm-6">
+            <label for="userid" class="form-label">User ID (read only):</label>
+            <input type="text" name="userid" id="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
+          </div>
+
+    <div class="row g-3">
+      <div class="col-sm-6">
+        <label for="username" class="form-label">User name</label>
+        <input type="text" name="username" class="form-control" id="userName" value="{{user_to_edit['UserName']}}" required>
+        <div class="invalid-feedback">
+          Valid user name is required.
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label for="password" class="form-label">Password</label>
+        <input type="text" name="password" class="form-control" id="password" value="{{user_to_edit['Password']}}" required>
+        <div class="invalid-feedback">
+          Valid Password is required.
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" name="email" class="form-control" id="email" value="{{user_to_edit['Email']}}" required>
+        <div class="invalid-feedback">
+          Valid email is required.
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <label for="display_name" class="form-label">Display Name <span class="text-body-secondary">(Optional)</span></label>
+        <input type="text" name="display_name" class="form-control" id="display_name" value="{{user_to_edit['ProfileName']}}">
+      </div>
+
+      <div class="col-sm-6">
+        <label for="address" class="form-label">Address</label>
+        <input type="text" name="address" class="form-control" id="address" value="{{user_to_edit['Address']}}">
+      </div>
+
+      <div class="col-sm-6">
+        <label for="phone" class="form-label">Phone number</label>
+        <input type="text" name="phone" id="phone" value="{{user_to_edit['PhoneNumber']}}">
+      </div>
+    </div>
+
+      <div class="col-sm-6">
+        <label for="role" class="form-label">Role</label>
+        <input class="form-control" type="text" name="role" id="role" placeholder="Staff" value="{{user_to_edit['Role']}}" disabled readonly>
+      </div>
+  </div>
+
+    <hr class="my-4">
+
+    <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
+    </form> 
+
+</div>
+
+{% endblock %}
+
