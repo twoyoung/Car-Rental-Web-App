@@ -1,71 +1,60 @@
 {% extends 'layout.html' %}
 
-{% block title %}Staff{% endblock %}
+{% block title %}Edit profile{% endblock %}
 
 {% block content %}
 
-    <!-- {% if user_to_edit['Role'] == 2 %} -->
+<div class="col-md-7 col-lg-8 container mt-4" >
+    {% if user_to_edit['Role'] == 2 %}
+    <h4 class="mb-3">Edit a staff</h4>
+    {% else %}
+    <h4 class="mb-3">Edit a customer</h4>
+    {% endif %}     
+    <form action="/updateprofile" method = "POST" class="needs-validation" novalidate>
+        <div class="row g-3">
+            <div class="col-sm-6">
+              <label for="userid" class="form-label">User ID (read only):</label>
+              <input type="text"name="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
+            </div>
 
-    <p>edit staff</p>
-        <!-- <table class="table table-striped mt-5 text-center" id="myTable">
-            <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th></tr>
-            {% for staff in userlist %}
-                {% if staff['UserID'] != user_to_edit['UserID'] %}
-                <tr>
-                    <td>{{staff['UserID']}}</td>
-                    <td>{{staff['UserName']}}</td>
-                    <td>{{staff['Email']}}</td>
-                    <td>{{staff['ProfileName']}}</td>
-                    <td>{{staff['Address']}}</td>
-                    <td>{{staff['PhoneNumber']}}</td>
-                    <td>
-                        <a href="/edit/{{staff['UserId']}}">Save</a>
-                    </td>
-                    <td>Delete</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <form action="" method = "POST" class="needs-validation" novalidate>
-                        <td>
-                        <div><input type="text" name="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly ></div>
-                        </td>
-                        <td>
-                        <div>
-                            <input type="text"name="username" class="form-control" id="username" value="{{user_to_edit['UserName']}}" required>
-                            <div class="invalid-feedback">
-                            Valid user name is required.
-                        </div>
-                        </td>
-                        <td>
-                        <div>
-                            <input type="text"name="email" class="form-control" id="email" value="{{user_to_edit['Email']}}" required>
-                            <div class="invalid-feedback">
-                            Valid email is required.
-                        </div>
-                        </td>
-                        <td>
-                        <div>
-                            <input type="text" name="display-name" class="form-control" id="display-name" value="{{user_to_edit['ProfileName']}}">
-                        </div>
-                        </td>
-                        <td>
-                        <div>
-                            <input type="text" name="address" class="form-control" id="address" value="{{user_to_edit['Address']}}">
-                        </div>
-                        </td>
-                        <td>
-                        <div>
-                            <input type="text" name="phone" class="form-control" id="phone" value="{{user_to_edit['PhoneNumber']}}">
-                        </div>
-                        </td>
-                        <td>
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
-                        </td>
-                  </form>
-                </tr>
-                {% endif %}
-            {% endfor %}
-        </table> -->
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <label for="username" class="form-label">User name</label>
+          <input type="text"name="username" class="form-control" id="userName" value="{{user_to_edit['UserName']}}" required>
+          <div class="invalid-feedback">
+            Valid user name is required.
+          </div>
+        </div>
 
+        <div class="col-sm-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="text" name="email" class="form-control" id="email" value="{{user_to_edit['Email']}}" required>
+          <div class="invalid-feedback">
+            Valid email is required.
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label for="display_name" class="form-label">Display Name <span class="text-body-secondary">(Optional)</span></label>
+          <input type="text" name="display_name" class="form-control" id="display_Name" value="{{user_to_edit['ProfileName']}}">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="address" class="form-label">Address</label>
+          <input type="text" name="address" class="form-control" id="address" value="{{user_to_edit['Address']}}">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="phone" class="form-label">Phone number</label>
+          <input type="text" name="phone" value="{{user_to_edit['PhoneNumber']}}">
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
+      </form>
+ </div>
 
 {% endblock %}
+

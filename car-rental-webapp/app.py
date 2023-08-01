@@ -11,17 +11,17 @@ app = Flask(__name__)
 app.secret_key = 'Young32494971'
 
 # Enter your database connection details below
-# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-# app.config['MYSQL_USER'] = '2young'
-# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-# app.config['MYSQL_DB'] = '2young$COMP639'
-# app.config['MYSQL_PORT'] = 3306
-
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'rental'
+app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+app.config['MYSQL_USER'] = '2young'
+app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+app.config['MYSQL_DB'] = '2young$COMP639'
 app.config['MYSQL_PORT'] = 3306
+
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'rental'
+# app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -214,6 +214,7 @@ def stafflist():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE Role = 2')
         stafflist = cursor.fetchall()
+        print(stafflist)
         if user_role == 'admin':
             return render_template('stafflist.html', stafflist=stafflist)
         else:
@@ -228,16 +229,31 @@ def edituser(userid):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
         user_to_edit = cursor.fetchone()
-        print(user_to_edit)
-        cursor.execute('SELECT * FROM user WHERE Role=%s',(user_to_edit['Role'],))
-        userlist = cursor.fetchall()
-        print(userlist)
         if user_role == 'admin':
-            return render_template('edituser.html', user_to_edit=user_to_edit, userlist=userlist)
+            return render_template('edituser.html', user_to_edit=user_to_edit)
         else:
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
+    
+@app.route('/updateprofile', methods=['GET', 'POST'])
+def updateprofile():
+    userid = int(request.form.get('userid'))
+    username = request.form.get('username')
+    email = request.form.get('email')
+    display_name = request.form.get('display_name')
+    address = request.form.get('address')
+    phone = request.form.get('phone')
+    print(phone)
+    # insert the data to the database
+    sql = '''UPDATE user 
+            SET UserID = %s, UserName = %s, Email = %s, ProfileName = %s, Address = %s, PhoneNumber = %s
+            WHERE UserID = %s;'''
+    parameters = (userid, username, email, display_name, address, phone, userid)
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(sql, parameters)
+    return redirect(url_for('stafflist'))
+
     
 
 
