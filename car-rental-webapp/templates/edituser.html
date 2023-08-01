@@ -14,13 +14,13 @@
         <div class="row g-3">
             <div class="col-sm-6">
               <label for="userid" class="form-label">User ID (read only):</label>
-              <input type="text"name="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
+              <input type="text" name="userid" id="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
             </div>
 
       <div class="row g-3">
         <div class="col-sm-6">
           <label for="username" class="form-label">User name</label>
-          <input type="text"name="username" class="form-control" id="userName" value="{{user_to_edit['UserName']}}" required>
+          <input type="text" name="username" class="form-control" id="userName" value="{{user_to_edit['UserName']}}" required>
           <div class="invalid-feedback">
             Valid user name is required.
           </div>
@@ -36,7 +36,7 @@
 
         <div class="col-sm-6">
           <label for="display_name" class="form-label">Display Name <span class="text-body-secondary">(Optional)</span></label>
-          <input type="text" name="display_name" class="form-control" id="display_Name" value="{{user_to_edit['ProfileName']}}">
+          <input type="text" name="display_name" class="form-control" id="display_name" value="{{user_to_edit['ProfileName']}}">
         </div>
 
         <div class="col-sm-6">
@@ -46,7 +46,7 @@
 
         <div class="col-sm-6">
           <label for="phone" class="form-label">Phone number</label>
-          <input type="text" name="phone" value="{{user_to_edit['PhoneNumber']}}">
+          <input type="text" name="phone" id="phone" value="{{user_to_edit['PhoneNumber']}}">
         </div>
       </div>
 
