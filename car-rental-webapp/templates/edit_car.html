@@ -25,8 +25,8 @@
       </div>
 
       <div class="col-sm-6">
-        <label for="year" class="form-label">Year</label>
-        <input type="year" name="year" class="form-control" id="year" value="{{car_to_edit['Year']}}" required>
+        <label for="year" class="form-label">Year (YYYY)</label>
+        <input type="text" name="year" class="form-control" pattern="[0-9]{4}" id="year" value="{{car_to_edit['Year']}}" required>
         <div class="invalid-feedback">
           Valid year is required.
         </div>

@@ -10,23 +10,30 @@
   {% endif %}
 {% endwith %}
 
-
-<a href="{{ url_for('add_user_page', type='customer')}}" class="btn btn-primary">Add Customer</a>
+{% if user_role == 'admin' %}
+    <a href="{{ url_for('add_user_page', type='customer')}}" class="btn btn-primary">Add Customer</a>
+{% endif %}
 
 <table class="table table-striped mt-5 text-center" id="myTable">
-    <tr><th>Customer ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th><th>Action</th></tr>
+    <tr><th>Customer ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th>
+        {% if user_role == 'admin' %}
+        <th>Action</th>
+        {% endif %}
+    </tr>
     {% for customer in customer_list %}
         <tr>
                 <td>{{customer['UserID']}}</td>
-                <td>{{customer['UserName']}}</td>
+                <td><a href="/profile/{{customer['UserID']}}">{{customer['UserName']}}</a></td>
                 <td>{{customer['Email']}}</td>
                 <td>{{customer['ProfileName']}}</td>
                 <td>{{customer['Address']}}</td>
                 <td>{{customer['PhoneNumber']}}</td>
+                {% if user_role == 'admin' %}
                 <td>
                     <a href="{{ url_for('edit_user', userid=customer['UserID'], type='customer')}}">Edit</a>
                     <a href="/delete/user/{{customer['UserID']}}">Delete</a>
                 </td>
+                {% endif %}
         </tr>
     {% endfor %}
 </table>
