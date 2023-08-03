@@ -97,7 +97,6 @@ def login():
             # If account exists in accounts table in out database
             # Create session data, we can access this data in other routes
                 session['loggedin'] = True
-                session['username'] = account['UserName']
                 session['role'] = account['Role']
                 session['id'] = account['UserID']
                 # Redirect to home page
@@ -172,11 +171,11 @@ def home():
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
-            return render_template('admin_dashboard.html', username=session['username'])
+            return render_template('admin_dashboard.html')
         elif user_role == 'staff':
-            return render_template('staff_dashboard.html', username=session['username'])
+            return render_template('staff_dashboard.html')
         elif user_role == 'customer':
-            return render_template('customer_dashboard.html', username=session['username'])
+            return render_template('customer_dashboard.html')
         else:
             return 'unauthorized'
     else:
@@ -249,7 +248,6 @@ def update_profile():
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, session['id']))
                     mysql.connection.commit()
-                    session['username'] = username
 
             # check if the password is changed by comparing the input password with the password stored in database
             if password != original_account['Password']:
