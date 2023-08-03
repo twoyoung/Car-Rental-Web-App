@@ -4,7 +4,7 @@ USE rental;
 
 CREATE TABLE IF NOT EXISTS user
 (
-UserID INT auto_increment NOT NULL,
+UserID INT UNSIGNED auto_increment NOT NULL,
 UserName VARCHAR(50) NOT NULL UNIQUE,
 Password VARCHAR(100) NOT NULL,
 Role INT,
@@ -13,8 +13,8 @@ PRIMARY KEY (UserID)
 
 CREATE TABLE IF NOT EXISTS staff
 (
-UserID INT NOT NULL,
-StaffID INT auto_increment NOT NULL,
+UserID INT UNSIGNED NOT NULL,
+StaffID INT UNSIGNED auto_increment NOT NULL,
 Email VARCHAR(80) NOT NULL,
 DisplayName VARCHAR(80),
 Address VARCHAR(80),
@@ -27,8 +27,8 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS customer
 (
-UserID INT NOT NULL,
-CustomerID INT auto_increment NOT NULL,
+UserID INT UNSIGNED NOT NULL,
+CustomerID INT UNSIGNED auto_increment NOT NULL,
 Email VARCHAR(80) NOT NULL,
 DisplayName VARCHAR(80),
 Address VARCHAR(80),
@@ -41,14 +41,14 @@ ON UPDATE CASCADE
 
 CREATE TABLE IF NOT EXISTS car
 (
-CarID INT auto_increment NOT NULL,
+CarID INT UNSIGNED auto_increment NOT NULL,
 CarImage LONGBLOB,
 CarModel VARCHAR(50) NOT NULL,
 Year YEAR NOT NULL,
 RegNumber VARCHAR(10) NOT NULL, 
-SeatCap INT NOT NULL,
+SeatCap INT UNSIGNED NOT NULL,
 RentalPerDay DECIMAL(8,2) NOT NULL,
-CustomerID INT,
+CustomerID INT UNSIGNED,
 PRIMARY KEY (CarID),
 FOREIGN KEY (CustomerID) REFERENCES customer(CustomerID)
 ON UPDATE CASCADE
@@ -68,7 +68,7 @@ INSERT INTO customer VALUES
 (2,1,"customer1@gamil.com","customername1","auckland 1000","02100001");
 
 INSERT INTO car VALUES
-(1,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
-(2,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/c07b063c22aeb3b07507425b831f451e57fc1bec.jpg'),"Toyota IST",2004,"JWS416",5,30.7,NULL),
+(1,LOAD_FILE('/Users/yangyang/Downloads/img1.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
+(2,LOAD_FILE('/Users/yangyang/Documents/GitHub/car-rental-webapp/car_images/img2.jpg'),"Toyota IST",2004,"JWS416",5,30.7,NULL),
 (3,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/6149f3c8d632e8d8264ff1382a40bfa9b0c85df0.png'),"Honda Fit",2008,"YANG",5,31.4,1),
 (4,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/25db9d7624e918f19fe8aa530420cd4799d65f6d.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL);
