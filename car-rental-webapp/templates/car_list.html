@@ -15,13 +15,18 @@
 {% endif %}
 
 <table class="table table-striped mt-5 text-center" >
-    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
+    <tr><th>Car ID</th><th>Car Image</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
         {% if user_role == 'admin' or user_role == 'staff' %}
         <th>Action</th></tr>
         {% endif %}
     {% for car in car_list %}
         <tr>
                 <td>{{car['CarID']}}</td>
+                {% if car['CarImage'] %}
+                    <td><img src="data:image/jpeg;base64,{{car['CarImage']}}"></td>
+                {% else %}
+                    <td>Image unavailable</td>
+                {% endif %}
                 <td><a href="/home/car/{{car['CarID']}}">{{car['CarModel']}}</a></td>
                 <td>{{car['Year']}}</td>
                 <td>{{car['RegNumber']}}</td>

@@ -68,11 +68,7 @@ INSERT INTO customer VALUES
 (2,1,"customer1@gamil.com","customername1","auckland 1000","02100001");
 
 INSERT INTO car VALUES
-(1,LOAD_FILE('https://www.transfercar.co.nz/relocation/Christchurch_Airport/Auckland_Airport/509510.html
-https://www.transfercar.co.nz/uploads/thumbs/vehicle_mobile_vertical_new/uploads/vehicles/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
-(2,LOAD_FILE('https://www.transfercar.co.nz/relocation/Christchurch_Airport/Auckland_Airport/509510.html
-https://www.transfercar.co.nz/uploads/thumbs/vehicle_mobile_vertical_new/uploads/vehicles/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Toyota IST",2004,"JWS416",5,30.7,NULL),
-(3,LOAD_FILE('https://www.transfercar.co.nz/relocation/Christchurch_Airport/Auckland_Airport/509510.html
-https://www.transfercar.co.nz/uploads/thumbs/vehicle_mobile_vertical_new/uploads/vehicles/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Honda Fit",2008,"YANG",5,31.4,1),
-(4,LOAD_FILE('https://www.transfercar.co.nz/relocation/Christchurch_Airport/Auckland_Airport/509510.html
-https://www.transfercar.co.nz/uploads/thumbs/vehicle_mobile_vertical_new/uploads/vehicles/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL);
+(1,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/5e289036e2665762f6d35e29dbcadbdf7483c849.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
+(2,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/c07b063c22aeb3b07507425b831f451e57fc1bec.jpg'),"Toyota IST",2004,"JWS416",5,30.7,NULL),
+(3,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/6149f3c8d632e8d8264ff1382a40bfa9b0c85df0.png'),"Honda Fit",2008,"YANG",5,31.4,1),
+(4,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/25db9d7624e918f19fe8aa530420cd4799d65f6d.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL);

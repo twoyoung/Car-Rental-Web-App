@@ -289,6 +289,9 @@ def car_list():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car')
             car_list = cursor.fetchall()
+            for car in car_list:
+                if car['CarImage']:
+                    car['CarImage'] = base64.b64encode(car['CarImage']).decode('utf-8')
             return render_template('car_list.html', car_list=car_list,msg=msg, user_role=user_role)
         else:
             return 'unauthorized'
