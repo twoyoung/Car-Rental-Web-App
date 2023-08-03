@@ -8,19 +8,38 @@
 
     {% if user_type == 'staff' %}
         <h4 class="mb-3">Edit a staff</h4>
+
     {% elif user_type == 'customer' %}
         <h4 class="mb-3">Edit a customer</h4>
+       
     {% endif %}
+
+
     <form action="{{ url_for('update_user', type=user_type)}}" method = "POST" class="needs-validation" novalidate>
       <div class="row g-3">
-          <div class="col-sm-6">
-            <label for="userid" class="form-label">User ID (read only):</label>
-            <input type="text" name="userid" id="userid" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
+
+        <div class="col-sm-6">
+          <label for="user_id" class="form-label">User ID (read only):</label>
+          <input type="text" name="user_id" id="user_id" value="{{user_to_edit['UserID']}}" class="form-control" readonly >
+        </div>
+          
+        {% if user_type == 'staff' %}
+        <div class="col-sm-6">
+            <label for="staff_id" class="form-label">Staff ID (read only):</label>
+            <input type="text" name="staff_id" id="staff_id" value="{{user_to_edit['StaffID']}}" class="form-control" readonly >
           </div>
+
+    
+        {% elif user_type == 'customer' %}
+                <div class="col-sm-6">
+                  <label for="customer_id" class="form-label">Customer ID (read only):</label>
+                  <input type="text" name="customer_id" id="customer_id" value="{{user_to_edit['CustomerID']}}" class="form-control" readonly >
+                </div>
+         {% endif %}
 
     <div class="row g-3">
       <div class="col-sm-6">
-        <label for="username" class="form-label">User name</label>
+        <label for="username" class="form-label">Username:</label>
         <input type="text" name="username" class="form-control" id="userName" value="{{user_to_edit['UserName']}}" required>
         <div class="invalid-feedback">
           Valid user name is required.
@@ -28,8 +47,11 @@
       </div>
 
       <div class="col-sm-6">
-        <label for="password" class="form-label">Password</label>
-        <input type="text" name="password" class="form-control" id="password" value="{{user_to_edit['Password']}}" readonly>
+        <label for="password" class="form-label">Password:</label>
+        <input type="text" name="password" class="form-control" id="password" value="{{user_to_edit['Password']}}" required>
+        <div class="invalid-feedback">
+          Valid password is required.
+        </div>
       </div>
 
       <div class="col-sm-6">
@@ -42,7 +64,7 @@
 
       <div class="col-sm-6">
         <label for="display_name" class="form-label">Display Name <span class="text-body-secondary">(Optional)</span></label>
-        <input type="text" name="display_name" class="form-control" id="display_name" value="{{user_to_edit['ProfileName']}}">
+        <input type="text" name="display_name" class="form-control" id="display_name" value="{{user_to_edit['DisplayName']}}">
       </div>
 
       <div class="col-sm-6">
@@ -58,7 +80,7 @@
   </div>
 
     <hr class="my-4">
-
+    {{msg}}
     <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
     </form> 
 

@@ -38,6 +38,39 @@ def get_user_role():
         return 'staff'
     else:
         return None
+    
+def username_crash(username):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM user WHERE UserName = %s', (username,))
+    exist_account = cursor.fetchone()
+        # If account exists show error and validation checks
+    if exist_account:
+        return 1
+    else:
+        return 0
+    
+def get_account(userid):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    sql = '''SELECT * FROM
+            (SELECT 
+            user.UserID,
+            user.UserName,
+            user.Password,
+            user.Role,
+            COALESCE(staff.StaffID, NULL) AS StaffID,
+            COALESCE(customer.CustomerID, NULL) AS CustomerID,
+            COALESCE(staff.Email, customer.Email) AS Email,
+            COALESCE(staff.DisplayName, customer.DisplayName) AS DisplayName,
+            COALESCE(staff.Address, customer.Address) AS Address,
+            COALESCE(staff.PhoneNumber, customer.PhoneNumber) AS PhoneNumber
+            FROM user
+            LEFT JOIN staff ON user.UserID = staff.UserID
+            LEFT JOIN customer ON user.UserID = customer.UserID) AS user_customer_staff         
+            WHERE UserID = %s;'''
+    cursor.execute(sql,(userid,))
+    account = cursor.fetchone()
+    return account
+    
 
 @app.route('/')
 def index():
@@ -60,15 +93,13 @@ def login():
         account = cursor.fetchone()
         if account is not None:
             password = account['Password']
-            print(user_password)
-            print(password)
             if bcrypt.checkpw(user_password.encode('utf-8'),password.encode('utf-8')):
             # If account exists in accounts table in out database
             # Create session data, we can access this data in other routes
                 session['loggedin'] = True
-                session['id'] = account['UserID']
                 session['username'] = account['UserName']
                 session['role'] = account['Role']
+                session['id'] = account['UserID']
                 # Redirect to home page
                 return redirect(url_for('home'))
             else:
@@ -85,7 +116,6 @@ def login():
 def logout():
     # Remove session data, this will log the user out
    session.pop('loggedin', None)
-   session.pop('id', None)
    session.pop('username', None)
    session.pop('role', None)
    # Redirect to login page
@@ -119,8 +149,9 @@ def register():
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)', (username, hashed, 3))
+            user_id = cursor.lastrowid
+            cursor.execute('INSERT INTO customer (UserID, Email) VALUES (%s, %s)',(user_id, email))
             mysql.connection.commit()
-            cursor.execute('UPDATE customer SET Email=%s WHERE Username=%s',(email,username))
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -157,12 +188,12 @@ def home():
 def profile():
     # Check if user is loggedin
     if is_authenticated():
+        user_role = get_user_role()
         # We need all the account info for the user so we can display it on the profile page
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE UserId = %s', (session['id'],))
-        account = cursor.fetchone()
+        account = get_account(session['id'])
+        print(account)
         # Show the profile page with account info
-        return render_template('profile.html', account=account)
+        return render_template('profile.html', account=account,user_role=user_role)
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -171,12 +202,14 @@ def profile():
 def check_profile(userid):
     # Check if user is loggedin
     if is_authenticated():
-        # We need all the account info for the user so we can display it on the profile page
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE UserId = %s', (userid,))
-        account = cursor.fetchone()
-        # Show the profile page with account info
-        return render_template('profile.html', account=account)
+        user_role = get_user_role()
+        if user_role in ['admin','staff']:
+            # We need all the account info for the user so we can display it on the profile page
+            account = get_account(userid)
+            # Show the profile page with account info
+            return render_template('profile.html', account=account,user_role=user_role)
+        else:
+            return "unauthorized"
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -185,16 +218,11 @@ def check_profile(userid):
 @app.route('/edit/profile')
 def edit_profile():
     if is_authenticated():
-        user_role = get_user_role()
-        if user_role in ['staff','customer','admin']:
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM user WHERE UserId = %s', (session['id'],))
-            account = cursor.fetchone()
-            return render_template('edit_profile.html',account=account)
-        else:
-            return "unauthorized"
+        msg = get_flashed_messages()
+        account = get_account(session['id'])
+        return render_template('edit_profile.html',account=account,msg=msg) 
     else:
-    # User is not loggedin redirect to login page
+        # User is not loggedin redirect to login page
         return redirect(url_for('login'))
 
     
@@ -203,39 +231,49 @@ def update_profile():
     if is_authenticated():
         user_role = get_user_role()
         if user_role in ['admin','staff','customer']:
-            userid = int(request.form.get('userid'))
             username = request.form.get('username')
             password = request.form.get('password')
             email = request.form.get('email')
             display_name = request.form.get('display_name')
             address = request.form.get('address')
-            phone = request.form.get('phone')   
+            phone = request.form.get('phone')
+
+            original_account = get_account(session['id'])
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            #if username is changed:
+            if username != original_account['UserName']:
+                #check if username already exists in database
+                if username_crash(username):
+                    flash('Username already exists. Please choose a different username.')
+                    return redirect(url_for('edit_profile'))
+                else:
+                    cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, session['id']))
+                    mysql.connection.commit()
+                    session['username'] = username
 
             # check if the password is changed by comparing the input password with the password stored in database
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute("SELECT * FROM user WHERE UserID=%s",(userid,))
-            user_to_update = cursor.fetchone()
-            # if password is changed, then the new password needs to be encrypted before inserting into databse
-            print(password)
-            print(user_to_update['Password'])
-            if bcrypt.checkpw(password.encode('utf-8'),user_to_update['Password'].encode('utf-8')):
-                hashed = password
-            else:
+            if password != original_account['Password']:
+                # if password is changed, then the new password needs to be encrypted before inserting into databse
                 hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                cursor.execute('UPDATE user SET Password=%s WHERE UserID=%s',(hashed, session['id']))
+                mysql.connection.commit()
 
-            # insert the data to the database
-            sql = '''UPDATE user 
-                    SET UserName = %s, Email = %s, Password = %s, ProfileName = %s, Address = %s, PhoneNumber = %s
-                    WHERE UserID = %s;'''
-            parameters = (username, email, hashed, display_name, address, phone, userid)
-            cursor.execute(sql, parameters)
-            mysql.connection.commit()
-            print(user_to_update['Password'])
-            return redirect(url_for('profile'))
+            # update the other data to the database
+            if user_role == 'customer':
+                cursor.execute('UPDATE customer SET Email=%s, DisplayName = %s, Address = %s, PhoneNumber = %s WHERE customer.UserID = %s', (email, display_name, address, phone, session['id']))
+                mysql.connection.commit()
+                return redirect(url_for('profile'))
+            elif user_role == 'staff':
+                cursor.execute('UPDATE staff SET Email=%s, DisplayName = %s, Address = %s, PhoneNumber = %s WHERE staff.UserID = %s', (email, display_name, address, phone, session['id']))
+                mysql.connection.commit()
+                return redirect(url_for('profile'))
+            else:
+                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/home/car_list')
 def car_list():
@@ -244,14 +282,14 @@ def car_list():
         msg = get_flashed_messages()
         if  user_role == 'customer':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE UserID is NULL')
+            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL')
             car_list = cursor.fetchall()
-            return render_template('car_list.html', car_list=car_list)
-        elif user_role == 'staff' or user_role == 'admin':
+            return render_template('car_list.html', car_list=car_list, user_role=user_role )
+        elif user_role in ['staff','admin']:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car')
             car_list = cursor.fetchall()
-            return render_template('car_list.html', car_list=car_list,msg=msg)
+            return render_template('car_list.html', car_list=car_list,msg=msg, user_role=user_role)
         else:
             return 'unauthorized'
     else:
@@ -259,8 +297,8 @@ def car_list():
         return redirect(url_for('login'))
 
 
-@app.route('/home/cars/<carid>')
-def car(carid):
+@app.route('/home/car/<carid>')
+def check_car(carid):
     if is_authenticated():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM car WHERE CarID = %s', (carid,))
@@ -275,7 +313,7 @@ def customer_list():
     if is_authenticated():
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM customer')
+        cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID')
         customer_list = cursor.fetchall()
         msg = get_flashed_messages()
         if user_role in ['admin','staff']:
@@ -290,7 +328,7 @@ def staff_list():
     if is_authenticated():
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM staff')
+        cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID')
         stafflist = cursor.fetchall()
         msg = get_flashed_messages()
         print(msg)
@@ -301,16 +339,19 @@ def staff_list():
     else:
         return redirect(url_for('login'))
 
-@app.route('/edit/user/<username>')
-def edit_user(username):
+@app.route('/edit/user/<userid>')
+def edit_user(userid):
     if is_authenticated():
-        user_type = request.args.get('type')
         user_role = get_user_role()
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM user WHERE UserName=%s',(username,))
-        user_to_edit = cursor.fetchone()
-        if user_role == 'admin':
-            return render_template('edit_user.html', user_type=user_type, user_to_edit=user_to_edit)
+        if user_role in ['admin']:
+            msg = get_flashed_messages()
+            user_type = request.args.get('type')
+            user_role = get_user_role()
+            user_to_edit = get_account(userid)
+            if user_role == 'admin':
+                return render_template('edit_user.html', user_type=user_type, user_to_edit=user_to_edit,msg=msg)
+            else:
+                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -322,25 +363,46 @@ def update_user():
         user_role = get_user_role()
         if user_role in ['admin']:
             user_type = request.args.get('type')
-            userid = int(request.form.get('userid'))
+            user_id = request.form.get('user_id')
             username = request.form.get('username')
             password = request.form.get('password')
             email = request.form.get('email')
             display_name = request.form.get('display_name')
             address = request.form.get('address')
-            phone = request.form.get('phone')   
-            # insert the data to the database
-            sql = '''UPDATE user 
-                    SET UserName = %s, Email = %s, Password = %s, ProfileName = %s, Address = %s, PhoneNumber = %s
-                    WHERE UserID = %s;'''
-            parameters = (username, email, password, display_name, address, phone, userid)
+            phone = request.form.get('phone')  
+
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(sql, parameters)
-            mysql.connection.commit()
-            if user_type == 'staff':
-                return redirect(url_for('staff_list'))
-            elif user_type == 'customer':
+            cursor.execute('SELECT * FROM user LEFT JOIN (SELECT * FROM customer UNION SELECT * FROM staff) AS customer_and_staff ON customer_and_staff.UserID=user.UserID WHERE user.UserID = %s',(user_id,))
+            original_account = cursor.fetchone()
+
+            #if username is changed:
+            if username != original_account['UserName']:
+                #check if username already exists in database
+                if username_crash(username):
+                    flash('Username already exists. Please choose a different username.')
+                    return redirect(url_for('edit_user',userid=user_id))
+                else:
+                    cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, user_id))
+                    mysql.connection.commit()
+
+            # check if the password is changed by comparing the input password with the password stored in database
+            if password != original_account['Password']:
+                # if password is changed, then the new password needs to be encrypted before inserting into databse
+                hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                cursor.execute('UPDATE user SET Password=%s WHERE UserID=%s',(hashed, user_id))
+                mysql.connection.commit()
+
+            # update the other data to the database
+            if user_type == 'customer':
+                cursor.execute('UPDATE customer SET Email=%s, DisplayName = %s, Address = %s, PhoneNumber = %s WHERE customer.UserID = %s', (email, display_name, address, phone, user_id))
+                mysql.connection.commit()
                 return redirect(url_for('customer_list'))
+            elif user_type == 'staff':
+                cursor.execute('UPDATE staff SET Email=%s, DisplayName = %s, Address = %s, PhoneNumber = %s WHERE staff.UserID = %s', (email, display_name, address, phone, user_id))
+                mysql.connection.commit()
+                return redirect(url_for('staff_list'))
+            else:
+                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -354,19 +416,28 @@ def delete_user(userid):
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
             user_to_delete = cursor.fetchone()
-            cursor.execute('SELECT * FROM car WHERE UserID=%s',(userid,))
-            rented_car = cursor.fetchone()
-            if rented_car:
-                flash("Cannot delete customer who has rented a car.")
-                return redirect(url_for('customer_list'))
-            else:
-                cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
-                mysql.connection.commit()
-                flash("Delete successfully")
-                if user_to_delete['Role'] is None:
+
+            # delete a customer
+            if user_to_delete['Role'] == 3:
+                # Check if the customer has rented a car, 
+                cursor.execute('SELECT * FROM car WHERE CustomerID in (SELECT CustomerID FROM customer WHERE customer.UserID=%s)',(userid,))
+                rented_car = cursor.fetchall()
+                if rented_car:
+                    flash("Cannot delete customer who has rented a car.")
                     return redirect(url_for('customer_list'))
-                elif user_to_delete['Role'] == 2:
+                else:
+                    cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
+                    mysql.connection.commit()
+                    flash("Delete successfully")
+                    return redirect(url_for('customer_list'))
+            # delete a staff
+            elif user_to_delete['Role'] == 2:
+                    cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
+                    mysql.connection.commit()
+                    flash("Delete successfully")
                     return redirect(url_for('staff_list'))
+            else:
+                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -399,22 +470,23 @@ def add_user():
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             user_type = request.form.get('user_type')
             # insert the data to the database
-            sql = '''INSERT INTO user (UserName, Password, Email, ProfileName, Address, PhoneNumber, Role)
-                    Values (%s, %s, %s, %s, %s, %s, %s);'''
-            if user_type == 'customer':
-                parameters = (username, hashed, email, display_name, address, phone, None)
-            elif user_type == 'staff':
-                parameters = (username, hashed, email, display_name, address, phone, 2)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute(sql, parameters)
-            mysql.connection.commit()
-            if user_type == 'customer':
+            if user_type == 'staff':
+                cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)',(username, hashed, 2))
+                user_id = cursor.lastrowid
+                cursor.execute('INSERT INTO staff (UserID, Email, DisplayName, Address, PhoneNumber) VALUES (%s,%s,%s,%s,%s)',(user_id, email, display_name, address, phone))
+                mysql.connection.commit()
+                flash("You have successfully added a staff!")
+                return redirect(url_for('staff_list'))
+            elif user_type == 'customer':
+                cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)',(username, hashed, 3))
+                user_id = cursor.lastrowid
+                cursor.execute('INSERT INTO customer (UserID, Email, DisplayName, Address, PhoneNumber) VALUES (%s,%s,%s,%s,%s)',(user_id, email, display_name, address, phone))
+                mysql.connection.commit()
                 flash("You have successfully added a customer!")
                 return redirect(url_for('customer_list'))
-            elif user_type == 'staff':
-                flash("You have successfully added a staff!")
-            # msg = 'You have successfully added a staff!'
-                return redirect(url_for('staff_list'))
+            else:
+                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -441,13 +513,11 @@ def add_car():
             registration = request.form.get('registration')
             seat_capacity = request.form.get('seat_capacity')
             rental_per_day = request.form.get('rental_per_day')
-            userid = request.form.get('userid')
-            if userid == "" or userid == 0:
-                userid = None
+            customer_id = request.form.get('customer_id')
             # insert the data to the database
-            sql = '''INSERT INTO car (CarModel, Year, RegNumber, SeatCap, RentalPerDay, UserID)
+            sql = '''INSERT INTO car (CarModel, Year, RegNumber, SeatCap, RentalPerDay, CustomerID)
                     Values (%s, %s, %s, %s, %s, %s);'''
-            parameters = (model, year, registration, seat_capacity, rental_per_day, userid)
+            parameters = (model, year, registration, seat_capacity, rental_per_day, customer_id)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()
@@ -483,14 +553,14 @@ def update_car():
             registration_number = request.form.get('registration_number')
             seat_cap = request.form.get('seat_cap')
             rental_per_day = request.form.get('rental_per_day')
-            userid = request.form.get('userid')
-            if userid == "":
-                userid = None
+            customer_id = request.form.get('customer_id')
+            if customer_id == "":
+                customer_id = None
             # insert the data to the database
             sql = '''UPDATE car 
-                    SET CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, UserID = %s
+                    SET CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, CustomerID = %s
                     WHERE CarID = %s;'''
-            parameters = (car_model, year, registration_number, seat_cap, rental_per_day, userid, carid)
+            parameters = (car_model, year, registration_number, seat_cap, rental_per_day, customer_id, carid)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()

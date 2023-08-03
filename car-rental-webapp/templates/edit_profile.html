@@ -9,14 +9,28 @@
     <h4 class="mb-3">Edit Profile</h4>
     <form action="{{ url_for('update_profile')}}" method = "POST" class="needs-validation" novalidate>
       <div class="row g-3">
-          <div class="col-sm-6">
-            <label for="userid" class="form-label">User ID (read only):</label>
-            <input type="text" name="userid" id="userid" value="{{account['UserID']}}" class="form-control" readonly >
+
+        <div class="col-sm-6">
+            <label for="user_id" class="form-label">User ID (read only):</label>
+            <input type="text" name="user_id" id="user_id" value="{{account['UserID']}}" class="form-control" readonly >
           </div>
+
+        {% if account['Role']==3 %}
+          <div class="col-sm-6">
+            <label for="customer_id" class="form-label">Customer ID (read only):</label>
+            <input type="text" name="customer_id" id="customer_id" value="{{account['CustomerID']}}" class="form-control" readonly >
+          </div>
+        
+        {% elif account['Role'] == 2 %}
+            <div class="col-sm-6">
+            <label for="staff_id" class="form-label">Staff ID (read only):</label>
+            <input type="text" name="staff_id" id="staff_id" value="{{account['StaffID']}}" class="form-control" readonly >
+          </div>
+        {% endif %}
 
     <div class="row g-3">
       <div class="col-sm-6">
-        <label for="username" class="form-label">User name</label>
+        <label for="username" class="form-label">Username</label>
         <input type="text" name="username" class="form-control" id="userName" value="{{account['UserName']}}" required>
         <div class="invalid-feedback">
           Valid user name is required.
@@ -45,12 +59,12 @@
       </div>
 
       <div class="col-sm-6">
-        <label for="address" class="form-label">Address</label>
+        <label for="address" class="form-label">Address <span class="text-body-secondary">(Optional)</span></label>
         <input type="text" name="address" class="form-control" id="address" value="{{account['Address']}}">
       </div>
 
       <div class="col-sm-6">
-        <label for="phone" class="form-label">Phone number</label>
+        <label for="phone" class="form-label">Phone number <span class="text-body-secondary">(Optional)</span></label>
         <input type="text" name="phone" id="phone" value="{{account['PhoneNumber']}}">
       </div>
     </div>
@@ -58,6 +72,7 @@
 
     <hr class="my-4">
 
+    {{msg}}
     <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
     </form> 
 

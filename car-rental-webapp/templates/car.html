@@ -5,22 +5,47 @@
 {% block content %}
 
 
-<table>
-    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th></tr>
-        <tr>
-                <td>{{car['CarID']}}</td>
-                <td>{{car['CarModel']}}</td>
-                <td>{{car['Year']}}</td>
-                <td>{{car['RegNumber']}}</td>
-                <td>{{car['SeatCap']}}</td>
-                <td>{{car['RentalPerDay']}}</td>
-                {% if car['UserID'] == None %}
-                    <td>Available</td>
-                {% else %}
-                    <td>Unavailable</td>
-                {% endif %}
-        </tr>
 </table>
+<div>
+<table>
+    <tr>
+        <td>Car ID:</td>
+        <td>{{car['CarID']}}</td>
+    </tr>
+    <tr>
+        <td>Car Model:</td>
+        <td>{{car['CarModel']}}</td>
+    </tr>
+    <tr>
+        <td>Year:</td>
+        <td>{{car['Year']}}</td>
+    </tr>
+    <tr>
+        <td>Registration Number:</td>
+        <td>{{car['RegNumber']}}</td>
+    </tr>
+
+    <tr>
+        <td>Seat Capacity:</td>
+        <td>{{car['SeatCap']}}</td>
+    </tr>
+    <tr>
+        <td>Rental Per Day:</td>
+        <td>{{car['RentalPerDay']}}</td>
+    </tr>
+    <tr>
+        <td>Availability:</td>
+        {% if car['CustomerID'] == None %}
+        <td>Available</td>
+
+        {% else %}
+        <td>Unavailable</td> 
+        <td>Under rent by Customer {{car['CustomerID']}}</td> 
+        {% endif %}
+    </tr>
+
+</table>
+</div>
 
 
 

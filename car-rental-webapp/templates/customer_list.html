@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% block title %}Staff{% endblock %}
+{% block title %}Customer{% endblock %}
 
 {% block content %}
 
@@ -22,10 +22,10 @@
     </tr>
     {% for customer in customer_list %}
         <tr>
-                <td>{{customer['UserID']}}</td>
+                <td>{{customer['CustomerID']}}</td>
                 <td><a href="/profile/{{customer['UserID']}}">{{customer['UserName']}}</a></td>
                 <td>{{customer['Email']}}</td>
-                <td>{{customer['ProfileName']}}</td>
+                <td>{{customer['DisplayName']}}</td>
                 <td>{{customer['Address']}}</td>
                 <td>{{customer['PhoneNumber']}}</td>
                 {% if user_role == 'admin' %}

@@ -16,10 +16,10 @@
     <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th><th>Action</th></tr>
     {% for staff in stafflist %}
         <tr>
-                <td>{{staff['UserID']}}</td>
+                <td>{{staff['StaffID']}}</td>
                 <td>{{staff['UserName']}}</td>
                 <td>{{staff['Email']}}</td>
-                <td>{{staff['ProfileName']}}</td>
+                <td>{{staff['DisplayName']}}</td>
                 <td>{{staff['Address']}}</td>
                 <td>{{staff['PhoneNumber']}}</td>
                 <td>

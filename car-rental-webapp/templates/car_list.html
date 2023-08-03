@@ -10,27 +10,35 @@
   {% endif %}
 {% endwith %}
 
+{% if user_role == 'admin' or user_role == 'staff' %}
 <a href="{{ url_for('add_car_page')}}" class="btn btn-primary">Add car</a>
+{% endif %}
 
 <table class="table table-striped mt-5 text-center" >
-    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th><th>Action</th></tr>
+    <tr><th>Car ID</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
+        {% if user_role == 'admin' or user_role == 'staff' %}
+        <th>Action</th></tr>
+        {% endif %}
     {% for car in car_list %}
         <tr>
                 <td>{{car['CarID']}}</td>
-                <td>{{car['CarModel']}}</td>
+                <td><a href="/home/car/{{car['CarID']}}">{{car['CarModel']}}</a></td>
                 <td>{{car['Year']}}</td>
                 <td>{{car['RegNumber']}}</td>
                 <td>{{car['SeatCap']}}</td>
                 <td>{{car['RentalPerDay']}}</td>
-                {% if car['UserID'] == None %}
+                {% if car['CustomerID'] == None %}
                     <td>Available</td>
                 {% else %}
-                    <td>Unavailable</td>
+                    <td>Unavailable</td>  
                 {% endif %}
+
+                {% if user_role == 'admin' or user_role == 'staff' %}
                 <td>
                     <a href="/edit/car/{{car['CarID']}}">Edit</a>
                     <a href="/delete/car/{{car['CarID']}}">Delete</a>
                 </td>
+                {% endif %}
         </tr>
     {% endfor %}
 </table>
