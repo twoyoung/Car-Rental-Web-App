@@ -23,7 +23,7 @@
         <tr>
                 <td>{{car['CarID']}}</td>
                 {% if car['CarImage'] %}
-                    <td><img src="data:image/jpeg;base64,{{car['CarImage']}}"></td>
+                    <td><img src="../static/car_images/{{car['CarImage']}}"></td>
                 {% else %}
                     <td>Image unavailable</td>
                 {% endif %}

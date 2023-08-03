@@ -42,7 +42,7 @@ ON UPDATE CASCADE
 CREATE TABLE IF NOT EXISTS car
 (
 CarID INT UNSIGNED auto_increment NOT NULL,
-CarImage LONGBLOB,
+CarImage VARCHAR(225),
 CarModel VARCHAR(50) NOT NULL,
 Year YEAR NOT NULL,
 RegNumber VARCHAR(10) NOT NULL, 
@@ -68,7 +68,7 @@ INSERT INTO customer VALUES
 (2,1,"customer1@gamil.com","customername1","auckland 1000","02100001");
 
 INSERT INTO car VALUES
-(1,LOAD_FILE('/Users/yangyang/Downloads/img1.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL),
-(2,LOAD_FILE('/Users/yangyang/Documents/GitHub/car-rental-webapp/car_images/img2.jpg'),"Toyota IST",2004,"JWS416",5,30.7,NULL),
-(3,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/6149f3c8d632e8d8264ff1382a40bfa9b0c85df0.png'),"Honda Fit",2008,"YANG",5,31.4,1),
-(4,LOAD_FILE('/home/2young/COMP639-Rental-Car-Web-App/car_images/25db9d7624e918f19fe8aa530420cd4799d65f6d.jpg'),"Toyota Estima",2003,"WSJ788",8,300.5,NULL);
+(1,"img1.jpg","Toyota Estima",2003,"WSJ788",8,300.5,NULL),
+(2,"img2.jpg","Toyota IST",2004,"JWS416",5,30.7,NULL),
+(3,"img3.jpg","Honda Fit",2008,"YANG",5,31.4,1),
+(4,"img4.jpg","Toyota Estima",2003,"WSJ788",8,300.5,NULL);

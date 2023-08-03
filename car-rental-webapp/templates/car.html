@@ -1,16 +1,18 @@
 {% extends 'layout.html' %}
 
-{% block title %}Cars{% endblock %}
+{% block title %}Car Details{% endblock %}
 
 {% block content %}
 
-
-</table>
 <div>
-<table>
+<table class="table table-striped mt-5 text-center" >
     <tr>
         <td>Car ID:</td>
         <td>{{car['CarID']}}</td>
+    </tr>
+    <tr>
+        <td>Car Image:</td>
+        <td><img src="../static/car_images/{{car['CarImage']}}"></td>
     </tr>
     <tr>
         <td>Car Model:</td>
@@ -46,9 +48,5 @@
 
 </table>
 </div>
-
-
-
-
 
 {% endblock %}
