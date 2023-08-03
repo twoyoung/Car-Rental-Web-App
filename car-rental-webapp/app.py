@@ -48,7 +48,7 @@ def get_user_role():
     
 def username_crash(username):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM user WHERE UserName = %s', (username,))
+    cursor.execute('SELECT * FROM user WHERE Active = 1 and UserName = %s', (username,))
     exist_account = cursor.fetchone()
         # If account exists show error and validation checks
     if exist_account:
@@ -64,6 +64,7 @@ def get_account(userid):
             user.UserName,
             user.Password,
             user.Role,
+            user.Active,
             COALESCE(staff.StaffID, NULL) AS StaffID,
             COALESCE(customer.CustomerID, NULL) AS CustomerID,
             COALESCE(staff.Email, customer.Email) AS Email,
@@ -79,7 +80,7 @@ def get_account(userid):
             FROM user
             LEFT JOIN staff ON user.UserID = staff.UserID
             LEFT JOIN customer ON user.UserID = customer.UserID) AS user_customer_staff         
-            WHERE UserID = %s;'''
+            WHERE Active = 1 and UserID = %s;'''
     cursor.execute(sql,(userid,))
     account = cursor.fetchone()
     return account
@@ -311,12 +312,12 @@ def car_list():
         msg = get_flashed_messages()
         if  user_role == 'customer':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL')
+            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Acitve=1')
             car_list = cursor.fetchall()
             return render_template('car_list.html', car_list=car_list, user_role=user_role )
         elif user_role in ['staff','admin']:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car')
+            cursor.execute('SELECT * FROM car WHERE Active=1')
             car_list = cursor.fetchall()
             return render_template('car_list.html', car_list=car_list,msg=msg, user_role=user_role)
         else:
@@ -330,10 +331,8 @@ def car_list():
 def check_car(carid):
     if is_authenticated():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM car WHERE CarID = %s', (carid,))
+        cursor.execute('SELECT * FROM car WHERE CarID = %s and Active = 1', (carid,))
         car = cursor.fetchone()
-        print(car)
-        print(car['CarImage'])
         return render_template('car.html', car=car)
         # return render_template('car_test.html')
     else:
@@ -345,7 +344,7 @@ def customer_list():
     if is_authenticated():
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID')
+        cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID WHERE user.Active=1')
         customer_list = cursor.fetchall()
         msg = get_flashed_messages()
         if user_role in ['admin','staff']:
@@ -360,7 +359,7 @@ def staff_list():
     if is_authenticated():
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID')
+        cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID WHERE user.Active = 1')
         stafflist = cursor.fetchall()
         msg = get_flashed_messages()
         print(msg)
@@ -409,9 +408,8 @@ def update_user():
             country = request.form.get('country')
             password = request.form.get('password')
 
+            original_account = get_account(user_id)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM user LEFT JOIN (SELECT * FROM customer UNION SELECT * FROM staff) AS customer_and_staff ON customer_and_staff.UserID=user.UserID WHERE user.UserID = %s',(user_id,))
-            original_account = cursor.fetchone()
 
             #if username is changed:
             if username != original_account['UserName']:
@@ -452,25 +450,27 @@ def delete_user(userid):
         user_role = get_user_role()
         if user_role == 'admin':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM user WHERE UserID=%s',(userid,))
+            cursor.execute('SELECT * FROM user WHERE UserID=%s and Active = 1',(userid,))
             user_to_delete = cursor.fetchone()
 
             # delete a customer
             if user_to_delete['Role'] == 3:
                 # Check if the customer has rented a car, 
-                cursor.execute('SELECT * FROM car WHERE CustomerID in (SELECT CustomerID FROM customer WHERE customer.UserID=%s)',(userid,))
+                cursor.execute('SELECT * FROM car WHERE Active = 1 and CustomerID in (SELECT CustomerID FROM customer WHERE customer.UserID=%s)',(userid,))
                 rented_car = cursor.fetchall()
                 if rented_car:
                     flash("Cannot delete customer who has rented a car.")
                     return redirect(url_for('customer_list'))
                 else:
-                    cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
+                    cursor.execute('UPDATE user SET Active=%s WHERE UserID=%s',(0,userid))
+                    cursor.execute('UPDATE customer SET Active=%s WHERE UserID=%s',(0,userid))
                     mysql.connection.commit()
                     flash("Delete successfully")
                     return redirect(url_for('customer_list'))
             # delete a staff
             elif user_to_delete['Role'] == 2:
-                    cursor.execute('DELETE FROM user WHERE UserID=%s',(userid,))
+                    cursor.execute('UPDATE user SET Active=%s WHERE UserID=%s',(0,userid,))
+                    cursor.execute('UPDATE staff SET Active=%s WHERE UserID=%s',(0,userid))
                     mysql.connection.commit()
                     flash("Delete successfully")
                     return redirect(url_for('staff_list'))
@@ -598,7 +598,7 @@ def edit_car(carid):
             msg = ''
             msg = get_flashed_messages()
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE CarID=%s',(carid,))
+            cursor.execute('SELECT * FROM car WHERE Active=1 and CarID=%s',(carid,))
             car_to_edit = cursor.fetchone()
             return render_template('edit_car.html', car_to_edit=car_to_edit, msg=msg)
         else:
@@ -652,7 +652,7 @@ def delete_car(carid):
         user_role = get_user_role()
         if user_role in ['admin','staff']:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('DELETE FROM car WHERE CarID=%s',(carid,))
+            cursor.execute('UPDATE car SET Active=%s WHERE CarID=%s',(0,carid))
             mysql.connection.commit()
             flash("Delete successfully")
             return redirect(url_for('car_list'))
