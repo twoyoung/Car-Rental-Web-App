@@ -13,15 +13,15 @@
 <a href="{{ url_for('add_user_page', type='staff')}}" class="btn btn-primary">Add Staff</a>
 
 <table class="table table-striped mt-5 text-center">
-    <tr><th>Staff ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th><th>Action</th></tr>
+    <tr><th>Staff ID</th><th>Username</th><th>Staff Name</th><th>Email</th><th>Phone Number</th><th>Country</th><th>Action</th></tr>
     {% for staff in stafflist %}
         <tr>
                 <td>{{staff['StaffID']}}</td>
-                <td>{{staff['UserName']}}</td>
+                <td><a href="/profile/{{staff['UserID']}}">{{staff['UserName']}}</a></td>
+                <td><a href="/profile/{{staff['UserID']}}">{{staff['FirstName']}} {{staff['LastName']}}</a></td>
                 <td>{{staff['Email']}}</td>
-                <td>{{staff['DisplayName']}}</td>
-                <td>{{staff['Address']}}</td>
                 <td>{{staff['PhoneNumber']}}</td>
+                <td>{{staff['Country']}}</td>
                 <td>
                     <a href="{{ url_for('edit_user', userid=staff['UserID'], type='staff')}}">Edit</a>
                     <a href="/delete/user/{{staff['UserID']}}">Delete</a>

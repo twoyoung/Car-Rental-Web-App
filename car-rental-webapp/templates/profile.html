@@ -30,20 +30,14 @@
             <td>Username:</td>
             <td>@{{ account['UserName'] }}</td>
         </tr>
-
-        <tr>
-            <td>Password:</td>
-            <td>{{ account['Password'] }}</td>
-        </tr>
-
         {% if account['Role'] == 2 or account['Role'] == 3 %}
         <tr>
-            <td>Display Name:</td>
-            <td>{{ account['DisplayName'] }}</td>
+            <td>First Name:</td>
+            <td>{{ account['FirstName'] }}</td>
         </tr>
         <tr>
-            <td>Address:</td>
-            <td>{{ account['Address'] }}</td>
+            <td>Last Name:</td>
+            <td>{{ account['LastName'] }}</td>
         </tr>
         <tr>
             <td>Phone number:</td>
@@ -53,12 +47,43 @@
             <td>Email:</td>
             <td>{{ account['Email'] }}</td>
         </tr>
+        <tr>
+            <td>Address:</td>
+            <td>{{ account['Address'] }}</td>
+        </tr>
+        <tr>
+            <td>Suburb:</td>
+            <td>{{ account['Suburb'] }}</td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>{{ account['City'] }}</td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td>{{ account['State'] }}</td>
+        </tr>
+        <tr>
+            <td>Postcode:</td>
+            <td>{{ account['Postcode'] }}</td>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td>{{ account['Country'] }}</td>
+        </tr>
+
        {% endif %}
+
+       {% if user_role != 'staff' or account['Role'] != 3 %}
+       <tr>
+        <td>Password:</td>
+        <td>{{ account['Password'] }}</td>
+       </tr>
 
     </table>
 
-    {% if user_role != 'staff' or account['Role'] != 3 %}
-    <a href="{{ url_for('edit_profile')}}">Edit</a>
+    
+    <a href="{{ url_for('edit_profile',userid=account['UserID'])}}">Edit</a>
     {% endif %}
 
     

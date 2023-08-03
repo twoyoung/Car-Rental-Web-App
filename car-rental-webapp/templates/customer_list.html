@@ -14,8 +14,8 @@
     <a href="{{ url_for('add_user_page', type='customer')}}" class="btn btn-primary">Add Customer</a>
 {% endif %}
 
-<table class="table table-striped mt-5 text-center" id="myTable">
-    <tr><th>Customer ID</th><th>Username</th><th>Email</th><th>Display Name</th><th>Address</th><th>Phone Number</th>
+<table class="table table-striped mt-5 text-center">
+    <tr><th>Customer ID</th><th>Username</th><th>Customer Name</th><th>Email</th><th>Phone Number</th><th>Country</th>
         {% if user_role == 'admin' %}
         <th>Action</th>
         {% endif %}
@@ -24,10 +24,10 @@
         <tr>
                 <td>{{customer['CustomerID']}}</td>
                 <td><a href="/profile/{{customer['UserID']}}">{{customer['UserName']}}</a></td>
+                <td><a href="/profile/{{customer['UserID']}}">{{customer['FirstName']}} {{customer['LastName']}}</a></td>
                 <td>{{customer['Email']}}</td>
-                <td>{{customer['DisplayName']}}</td>
-                <td>{{customer['Address']}}</td>
                 <td>{{customer['PhoneNumber']}}</td>
+                <td>{{customer['Country']}}</td>
                 {% if user_role == 'admin' %}
                 <td>
                     <a href="{{ url_for('edit_user', userid=customer['UserID'], type='customer')}}">Edit</a>

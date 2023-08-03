@@ -23,9 +23,9 @@
         <tr>
                 <td>{{car['CarID']}}</td>
                 {% if car['CarImage'] %}
-                    <td><img src="../static/car_images/{{car['CarImage']}}"></td>
+                    <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + car['CarImage']) }}"></a></td>
                 {% else %}
-                    <td>Image unavailable</td>
+                    <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}"></a></td>
                 {% endif %}
                 <td><a href="/home/car/{{car['CarID']}}">{{car['CarModel']}}</a></td>
                 <td>{{car['Year']}}</td>

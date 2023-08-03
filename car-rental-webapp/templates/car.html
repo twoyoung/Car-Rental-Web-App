@@ -12,7 +12,11 @@
     </tr>
     <tr>
         <td>Car Image:</td>
-        <td><img src="../static/car_images/{{car['CarImage']}}"></td>
+        {% if car['CarImage'] %}
+        <td><img src="{{ url_for('static', filename='car_images/' + car['CarImage']) }}"></td>
+        {% else %}
+        <td><img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}"></td>
+        {% endif %}
     </tr>
     <tr>
         <td>Car Model:</td>

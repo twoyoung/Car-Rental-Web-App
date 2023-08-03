@@ -8,7 +8,7 @@
 
     <h4 class="mb-3">Edit a car</h4>
 
-    <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation" novalidate>
+    <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
       <div class="row g-3">
           <div class="col-sm-6">
             <label for="carid" class="form-label">Car ID (read only):</label>
@@ -55,6 +55,22 @@
         <input type="number" name="userid" id="userid" value="{{car_to_edit['UserID']}}">
       </div>
     </div>
+
+   
+    <div class="col-sm-6">
+        <label for="car_image" class="form-label">Car Image</label>
+        {% if car_to_edit['CarImage'] %}
+            <img src="{{ url_for('static', filename='car_images/' + car_to_edit['CarImage']) }}">
+        {% else %}
+            <img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}">
+        {% endif %}
+        <input type="file" name="car_image" class="form-control" id="car_image">
+        <div class="invalid-feedback">
+          To change the image, please select a valid image file (jpg, jpeg, png, gif).
+        </div>
+      </div>
+
+    {{msg}}
 
     <hr class="my-4">
 
