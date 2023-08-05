@@ -21,11 +21,6 @@ FirstName VARCHAR(50) NULL DEFAULT NULL,
 LastName VARCHAR(50) NULL DEFAULT NULL,
 PhoneNumber VARCHAR(25) NULL DEFAULT NULL,
 Address LONGTEXT NULL DEFAULT NULL,
-Suburb VARCHAR(50) NULL DEFAULT NULL,
-City VARCHAR(50) NULL DEFAULT NULL,
-State VARCHAR(50) NULL DEFAULT NULL,
-Postcode VARCHAR(15) NULL DEFAULT NULL,
-Country VARCHAR(50) NULL DEFAULT NULL,
 Active TINYINT NOT NULL DEFAULT 1,
 PRIMARY KEY (StaffID),
 FOREIGN KEY (UserID) REFERENCES user(UserID)
@@ -42,11 +37,6 @@ FirstName VARCHAR(50) NULL DEFAULT NULL,
 LastName VARCHAR(50) NULL DEFAULT NULL,
 PhoneNumber VARCHAR(25) NULL DEFAULT NULL,
 Address LONGTEXT NULL DEFAULT NULL,
-Suburb VARCHAR(50) NULL DEFAULT NULL,
-City VARCHAR(50) NULL DEFAULT NULL,
-State VARCHAR(50) NULL DEFAULT NULL,
-Postcode VARCHAR(15) NULL DEFAULT NULL,
-Country VARCHAR(50) NULL DEFAULT NULL,
 Active TINYINT NOT NULL DEFAULT 1,
 PRIMARY KEY (CustomerID),
 FOREIGN KEY (UserID) REFERENCES user(UserID)
@@ -85,16 +75,16 @@ INSERT INTO user VALUES
 
 
 INSERT INTO staff VALUES
-(2,1,'staff1@gmail.com','Bedecs','Anna','(123)555-0100','123 1st Street','Avondale','Auckland',NULL,'1023','New Zealand',1),
-(3,2,'staff2@gmail.com','Axen','Thomas','(123)555-0100','123 11th Street','Papanui','Christchurch',NULL,'2024','New Zealand',1),
-(4,3,'staff3@gmail.com','Xie','Ming-Yang','(123)555-0100)','456 13th Street','Greenlane','Auckland',NULL,'1010','New Zealand',1);
+(2,1,'staff1@gmail.com','Bedecs','Anna','(123)555-0100','123 1st Street, Avondale, Auckland, New Zealand',1),
+(3,2,'staff2@gmail.com','Axen','Thomas','(123)555-0100','123 11th Street, Papanui, Christchurch, New Zealand',1),
+(4,3,'staff3@gmail.com','Xie','Ming-Yang','(123)555-0100)','456 13th Street, Greenlane, Auckland, New Zealand',1);
 
 INSERT INTO customer VALUES
-(5,1,'customer1@gmail.com','O’Donnell','Martin','(123)555-0100','789 20th Street',NULL,'Las Vegas','NV','99999','USA',1),
-(6,2,'customer2@gmail.com','Bagel','Jean Philippe','(123)555-0100','456 16th Street',NULL,'Chicago', 'IL', '99999', 'USA',1),
-(7,3,'customer3@gmail.com','Andersen', 'Elizabeth','(123)555-0100','456 16th Street',NULL,'Memphis', 'TN', '99999', 'USA',1),
-(8,4,'customer4@gmail.com','Wacker', 'Roland','(123)555-0100','456 16th Street',NULL,'New York', 'NY', '99999', 'USA',1),
-(9,5,'customer5@gmail.com','Grilo', 'Carlos','(123)555-0100','456 16th Street',NULL,'Salt Lake City', 'UT', '99999', 'USA',1);
+(5,1,'customer1@gmail.com','O’Donnell','Martin','(123)555-0100','789 20th Street, Las Vegas, USA',1),
+(6,2,'customer2@gmail.com','Bagel','Jean Philippe','(123)555-0100','456 16th Street, Chicago, USA',1),
+(7,3,'customer3@gmail.com','Andersen', 'Elizabeth','(123)555-0100','456 16th Street, Memphis, USA',1),
+(8,4,'customer4@gmail.com','Wacker', 'Roland','(123)555-0100','456 16th Street, New York, USA',1),
+(9,5,'customer5@gmail.com','Grilo', 'Carlos','(123)555-0100','456 16th Street, Salt Lake City, USA',1);
 
 INSERT INTO car VALUES
 (1,'img1.jpg','Toyota Estima',2003,'WSJ788',8,60.5,1,1),

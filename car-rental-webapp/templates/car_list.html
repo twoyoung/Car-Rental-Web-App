@@ -14,6 +14,8 @@
 <a href="{{ url_for('add_car_page')}}" class="btn btn-primary">Add car</a>
 {% endif %}
 
+<a href="{{ url_for('home')}}">Go back</a>
+
 <table class="table table-striped mt-5 text-center" >
     <tr><th>Car ID</th><th>Car Image</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
         {% if user_role == 'admin' or user_role == 'staff' %}

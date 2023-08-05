@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Change this to your secret key (can be anything, it's for extra protection)
-app.secret_key = 'Young32494971'
+app.secret_key = '32494971'
 
 #Enter your database connection details below
 # app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
@@ -71,12 +71,7 @@ def get_account(userid):
             COALESCE(staff.FirstName, customer.FirstName) AS FirstName,
             COALESCE(staff.LastName, customer.LastName) AS LastName,
             COALESCE(staff.PhoneNumber, customer.PhoneNumber) AS PhoneNumber,
-            COALESCE(staff.Address, customer.Address) AS Address,
-            COALESCE(staff.Suburb, customer.Suburb) AS Suburb,
-            COALESCE(staff.City, customer.City) AS City,
-            COALESCE(staff.State, customer.State) AS State,
-            COALESCE(staff.Postcode, customer.Postcode) AS Postcode,
-            COALESCE(staff.Country, customer.Country) AS Country
+            COALESCE(staff.Address, customer.Address) AS Address
             FROM user
             LEFT JOIN staff ON user.UserID = staff.UserID
             LEFT JOIN customer ON user.UserID = customer.UserID) AS user_customer_staff         
@@ -185,14 +180,15 @@ def home():
 
         # Get the user's role.
         user_role = get_user_role()
+        account = get_account(session['id'])
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
             return render_template('admin_dashboard.html')
         elif user_role == 'staff':
-            return render_template('staff_dashboard.html')
+            return render_template('staff_dashboard.html',name=account['FirstName'])
         elif user_role == 'customer':
-            return render_template('customer_dashboard.html')
+            return render_template('customer_dashboard.html',name=account['FirstName'])
         else:
             return 'unauthorized'
     else:
@@ -207,7 +203,6 @@ def profile():
         user_role = get_user_role()
         # We need all the account info for the user so we can display it on the profile page
         account = get_account(session['id'])
-        print(account)
         # Show the profile page with account info
         return render_template('profile.html', account=account,user_role=user_role)
     else:
@@ -282,8 +277,6 @@ def update_profile():
                 mysql.connection.commit()
 
             # update the other data to the database
-            print(original_account['Role'])
-            print(userid)
             if original_account['Role'] == 3:
                 cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s,Suburb=%s,City=%s,State=%s,Postcode=%s,Country=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,suburb,city,state,postcode,country,userid))
                 mysql.connection.commit()
@@ -312,7 +305,7 @@ def car_list():
         msg = get_flashed_messages()
         if  user_role == 'customer':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Acitve=1')
+            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Active=1')
             car_list = cursor.fetchall()
             return render_template('car_list.html', car_list=car_list, user_role=user_role )
         elif user_role in ['staff','admin']:
@@ -347,8 +340,10 @@ def customer_list():
         cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID WHERE user.Active=1')
         customer_list = cursor.fetchall()
         msg = get_flashed_messages()
-        if user_role in ['admin','staff']:
-            return render_template('customer_list.html', customer_list=customer_list, msg=msg, user_role=user_role)   
+        if user_role in ['admin']:
+            return render_template('customer_list_admin.html', customer_list=customer_list, msg=msg) 
+        elif user_role in ['staff']:
+            return render_template('customer_list_staff.html', customer_list = customer_list,msg=msg)
         else:
             return 'unauthorized'
     else:
@@ -362,27 +357,8 @@ def staff_list():
         cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID WHERE user.Active = 1')
         stafflist = cursor.fetchall()
         msg = get_flashed_messages()
-        print(msg)
         if user_role == 'admin':
             return render_template('staff_list.html', stafflist=stafflist, msg=msg)
-        else:
-            return 'unauthorized'
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/edit/user/<userid>')
-def edit_user(userid):
-    if is_authenticated():
-        user_role = get_user_role()
-        if user_role in ['admin']:
-            msg = get_flashed_messages()
-            user_type = request.args.get('type')
-            user_role = get_user_role()
-            account = get_account(userid)
-            if user_role == 'admin':
-                return render_template('edit_user.html', user_type=user_type, account=account,msg=msg)
-            else:
-                return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -393,48 +369,42 @@ def update_user():
     if is_authenticated():
         user_role = get_user_role()
         if user_role in ['admin']:
-            user_type = request.args.get('type')
-            user_id = request.form.get('user_id')
+            userid = request.form.get('user_id')
             username = request.form.get('username')
             firstname = request.form.get('firstname')
             lastname = request.form.get('lastname')
             phone = request.form.get('phone')
             email = request.form.get('email')
             address = request.form.get('address')
-            suburb = request.form.get('suburb')
-            city = request.form.get('city')
-            state = request.form.get('state')
-            postcode = request.form.get('postcode')
-            country = request.form.get('country')
             password = request.form.get('password')
 
-            original_account = get_account(user_id)
+            account = get_account(userid)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-
+            print(account)
             #if username is changed:
-            if username != original_account['UserName']:
+            if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
                     flash('Username already exists. Please choose a different username.')
-                    return redirect(url_for('edit_user',userid=user_id))
+                    return redirect(url_for('edit_user',userid=userid))
                 else:
-                    cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, user_id))
+                    cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
                     mysql.connection.commit()
 
             # check if the password is changed by comparing the input password with the password stored in database
-            if password != original_account['Password']:
+            if password != account['Password']:
                 # if password is changed, then the new password needs to be encrypted before inserting into databse
                 hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-                cursor.execute('UPDATE user SET Password=%s WHERE UserID=%s',(hashed, user_id))
+                cursor.execute('UPDATE user SET Password=%s WHERE UserID=%s',(hashed, userid))
                 mysql.connection.commit()
 
             # update the other data to the database
-            if user_type == 'customer':
-                cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s,Suburb=%s,City=%s,State=%s,Postcode=%s,Country=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,suburb,city,state,postcode,country,user_id))
+            if account['Role']== 3:
+                cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s', (email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
                 return redirect(url_for('customer_list'))
-            elif user_type == 'staff':
-                cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s,Suburb=%s,City=%s,State=%s,Postcode=%s,Country=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,suburb,city,state,postcode,country,user_id))
+            elif account['Role'] == 2:
+                cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
                 return redirect(url_for('staff_list'))
             else:
@@ -480,21 +450,7 @@ def delete_user(userid):
             return 'unauthorized'
     else:
         return redirect(url_for('login'))
-    
-    
-@app.route('/add/user/page', methods=['GET'])
-def add_user_page():
-    if is_authenticated():
-        user_role = get_user_role()
-        if user_role == 'admin':
-            user_type = request.args.get('type')
-            return render_template('add_user.html',user_type=user_type)
-        else:
-            return 'unauthorized'
-    else:
-        return redirect(url_for('login'))
-
-    
+     
 @app.route('/add/user', methods=['Get', 'POST'])
 def add_user():
     if is_authenticated():
@@ -506,28 +462,25 @@ def add_user():
             phone = request.form.get('phone')
             email = request.form.get('email')
             address = request.form.get('address')
-            suburb = request.form.get('suburb')
-            city = request.form.get('city')
-            state = request.form.get('state')
-            postcode = request.form.get('postcode')
-            country = request.form.get('country')
             password = request.form.get('password')
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             user_type = request.form.get('user_type')
+            print(user_type)
             # insert the data to the database
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            if user_type == 'staff':
+            if user_type == 2:
                 cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)',(username, hashed, 2))
                 user_id = cursor.lastrowid
-                cursor.execute('INSERT INTO staff (UserID,Email,FirstName,LastName,PhoneNumber,Address,Suburb,City,State,Postcode,Country) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address,suburb,city,state,postcode,country))
+                cursor.execute('INSERT INTO staff (UserID,Email,FirstName,LastName,PhoneNumber,Address) VALUES (%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address))
                 mysql.connection.commit()
                 flash("You have successfully added a staff!")
                 return redirect(url_for('staff_list'))
-            elif user_type == 'customer':
+            elif user_type == 3:
                 cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)',(username, hashed, 3))
                 user_id = cursor.lastrowid
-                cursor.execute('INSERT INTO customer (UserID,Email,FirstName,LastName,PhoneNumber,Address,Suburb,City,State,Postcode,Country) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address,suburb,city,state,postcode,country))
+                cursor.execute('INSERT INTO customer (UserID,Email,FirstName,LastName,PhoneNumber,Address) VALUES (%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address))
                 mysql.connection.commit()
+                print("success")
                 flash("You have successfully added a customer!")
                 return redirect(url_for('customer_list'))
             else:
@@ -582,7 +535,6 @@ def add_car():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()
-            print("4")
             flash("You have successfully added a car!")
             return redirect(url_for('car_list'))
         else:
