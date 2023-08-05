@@ -355,10 +355,10 @@ def staff_list():
         user_role = get_user_role()
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID WHERE user.Active = 1')
-        stafflist = cursor.fetchall()
+        staff_list = cursor.fetchall()
         msg = get_flashed_messages()
         if user_role == 'admin':
-            return render_template('staff_list.html', stafflist=stafflist, msg=msg)
+            return render_template('staff_list.html', staff_list=staff_list, msg=msg)
         else:
             return 'unauthorized'
     else:
@@ -370,6 +370,7 @@ def update_user():
         user_role = get_user_role()
         if user_role in ['admin']:
             userid = request.form.get('user_id')
+            print(userid)
             username = request.form.get('username')
             firstname = request.form.get('firstname')
             lastname = request.form.get('lastname')
@@ -464,8 +465,7 @@ def add_user():
             address = request.form.get('address')
             password = request.form.get('password')
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            user_type = request.form.get('user_type')
-            print(user_type)
+            user_type = int(request.form.get('user_type'))
             # insert the data to the database
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             if user_type == 2:
@@ -480,27 +480,12 @@ def add_user():
                 user_id = cursor.lastrowid
                 cursor.execute('INSERT INTO customer (UserID,Email,FirstName,LastName,PhoneNumber,Address) VALUES (%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address))
                 mysql.connection.commit()
-                print("success")
                 flash("You have successfully added a customer!")
                 return redirect(url_for('customer_list'))
             else:
-                return 'unauthorized'
+                return 'unauthorized1'
         else:
-            return 'unauthorized'
-    else:
-        return redirect(url_for('login'))
-    
-
-@app.route('/add/car/page')
-def add_car_page():
-    if is_authenticated():
-        msg = ''
-        msg = get_flashed_messages()
-        user_role = get_user_role()
-        if user_role in ['admin','staff']:
-            return render_template('add_car.html',msg=msg)
-        else:
-            return 'unauthorized'
+            return 'unauthorized2'
     else:
         return redirect(url_for('login'))
 
@@ -526,7 +511,7 @@ def add_car():
                         carimage = file.filename
                 else:
                     flash("To change the image, please select a valid image file (jpg, jpeg, png, gif).")
-                    return redirect(url_for('add_car_page'))
+                    return redirect(url_for('car_list'))
   
             # insert the data to the database
             sql = '''INSERT INTO car (CarImage, CarModel, Year, RegNumber, SeatCap, RentalPerDay, CustomerID)
@@ -537,22 +522,6 @@ def add_car():
             mysql.connection.commit()
             flash("You have successfully added a car!")
             return redirect(url_for('car_list'))
-        else:
-            return 'unauthorized'
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/edit/car/<carid>')
-def edit_car(carid):
-    if is_authenticated():
-        user_role = get_user_role()
-        if user_role in ['admin','staff']:
-            msg = ''
-            msg = get_flashed_messages()
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE Active=1 and CarID=%s',(carid,))
-            car_to_edit = cursor.fetchone()
-            return render_template('edit_car.html', car_to_edit=car_to_edit, msg=msg)
         else:
             return 'unauthorized'
     else:

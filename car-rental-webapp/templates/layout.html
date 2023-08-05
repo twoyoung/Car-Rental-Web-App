@@ -12,11 +12,14 @@
 		<header class="sticky-top flex-md-nowrap p-0 shadow opacity-80" style="background-color:#001C30;">
 			<div class="px-3 py-1 border-bottom">
 			  <div class="container">				
-				<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+				<div class="d-flex flex-wrap align-items-center justify-content-lg-between justify-content-center">
+					<div class="me-4">
 				  <a href="/home" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
 					<img src="{{ url_for('static', filename='image/' + 'logo.png')}}" style="height: 45px" >
 				  </a>
-				  <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+					</div>	
+					<div class="ms-4">
+				  <ul class="nav col-12 col-lg-auto  justify-content-center my-2 my-md-0 text-small">
 					<li>
 					  <a href="{{ url_for('home') }}" class="nav-link text-white">
 						<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-speedometer" viewBox="0 0 16 16">
@@ -45,6 +48,7 @@
 					  </a>
 					</li>
 				  </ul>
+				</div>
 				</div>
 			  </div>
 			</div>

@@ -191,6 +191,25 @@ body.loggedin {
     transition: transform 0.3s ease;
 }
 
+.custom-btn {
+    background-color: #176B87 !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.custom-back{
+    color: #176B87;
+}
+
+.custom-delete{
+    color: #E23E57 !important;
+}
+
+.custom-edit{
+    color: #0f5bb2 !important;
+}
+
+
 @media (max-width: 1200px){
     .circle span {
         font-size: 3rem !important;
@@ -212,6 +231,16 @@ body.loggedin {
     }
 
 }
+
+@media (max-width: 1200px){
+    .circle span {
+        font-size: 3rem !important;
+        transform: scale(0.8);
+    }
+}
+
+
+
 
 
 

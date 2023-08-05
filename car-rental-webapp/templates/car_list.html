@@ -10,45 +10,265 @@
   {% endif %}
 {% endwith %}
 
-{% if user_role == 'admin' or user_role == 'staff' %}
-<a href="{{ url_for('add_car_page')}}" class="btn btn-primary">Add car</a>
-{% endif %}
+<div class="container px-5">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <!-- go back to dashboard icon -->
+        <div>
+            <a href="{{ url_for('home')}}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="custom-back" width="30" height="30" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+             </a>
+        </div>
 
-<a href="{{ url_for('home')}}">Go back</a>
+        <!-- add a car -->   
+        <button type="button" class="btn custom-btn" data-bs-toggle="modal" data-bs-target="#add_car">
+            <div class="d-flex justify-content-between align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-plus mx-1" viewBox="0 0 16 16">
+                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+            </svg>
+            <span>Add car</span>
+            </div>
+        </button>
+    
+        <div class="modal fade" id="add_car" tabindex="-1" aria-labelledby="add_car" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="add_car">Add a car</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/add/car" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <label for="model" class="form-label">Car Model</label>
+                                    <input type="text" name="model" class="form-control" id="model" value="" required>
+                                    <div class="invalid-feedback">
+                                        Valid car model is required.
+                                    </div>
+                                </div>
+                      
+                                <div class="col-sm-6">
+                                    <label for="year" class="form-label">Year (YYYY)</label>
+                                    <input type="text" name="year" pattern="[0-9]{4}" class="form-control" id="year" placeholder="YYYY" required>
+                                    <div class="invalid-feedback">
+                                        Valid year is required.
+                                    </div>
+                                </div>
+                      
+                                <div class="col-sm-6">
+                                    <label for="registration" class="form-label">Registration</label>
+                                    <input type="text" name="registration" class="form-control" id="registration" value="" required>
+                                    <div class="invalid-feedback">
+                                        Valid registration is required.
+                                    </div>
+                                </div>
+                      
+                                <div class="col-sm-6">
+                                    <label for="seat_capacity" class="form-label">Number of seats </label>
+                                    <input type="number" name="seat_capacity" class="form-control" id="seat_capacity" value="">
+                                </div>
+                        
+                                <div class="col-sm-6">
+                                    <label for="rental_per_day" class="form-label">Rental per day</label>
+                                    <input type="text" name="rental_per_day" class="form-control" id="rental_per_day" value="">
+                                </div>
+                        
+                                <div class="col-sm-6">
+                                    <label for="carid" class="form-label">Car ID</label>
+                                    <input type="number" name="carid" id="carid" value="">
+                                </div>
+                        
+                                <div class="col-sm-6">
+                                    <label for="car_image" class="form-label">Car Image</label>
+                                    <input type="file" name="car_image" class="form-control" id="car_image">
+                                    <div class="invalid-feedback">
+                                        Please select a valid image file (jpg, jpeg, png, gif).
+                                    </div>
+                                </div>
 
-<table class="table table-striped mt-5 text-center" >
-    <tr><th>Car ID</th><th>Car Image</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
-        {% if user_role == 'admin' or user_role == 'staff' %}
-        <th>Action</th></tr>
-        {% endif %}
-    {% for car in car_list %}
-        <tr>
-                <td>{{car['CarID']}}</td>
-                {% if car['CarImage'] %}
-                    <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + car['CarImage']) }}"></a></td>
-                {% else %}
-                    <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}"></a></td>
-                {% endif %}
-                <td><a href="/home/car/{{car['CarID']}}">{{car['CarModel']}}</a></td>
-                <td>{{car['Year']}}</td>
-                <td>{{car['RegNumber']}}</td>
-                <td>{{car['SeatCap']}}</td>
-                <td>{{car['RentalPerDay']}}</td>
-                {% if car['CustomerID'] == None %}
-                    <td>Available</td>
-                {% else %}
-                    <td>Unavailable</td>  
-                {% endif %}
+                                {{msg}}
+                            </div>
+                            <hr class="my-4">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="{{ url_for('add_car') }}">
+                                <button type="submit" class="btn btn-primary">Add car</button>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- finish adding car -->
+    </div>
 
-                {% if user_role == 'admin' or user_role == 'staff' %}
-                <td>
-                    <a href="/edit/car/{{car['CarID']}}">Edit</a>
-                    <a href="/delete/car/{{car['CarID']}}">Delete</a>
-                </td>
-                {% endif %}
-        </tr>
-    {% endfor %}
-</table>
+    <div class="table-responsive">
+        <table class="table mt-2">
+            <thead>
+                <tr>
+                    <th>Car ID</th><th>Car Image</th><th>Car Model</th><th>Year</th><th>Registration Number</th><th>Seat Capacity</th><th>Rental Per Day</th><th>Availability</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for car in car_list %}
+                    <tr class="py-0">
+                        <td class="px-0">{{car['CarID']}}</td>
+                        {% if car['CarImage'] %}
+                            <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + car['CarImage']) }}" style="width:180px; height: 100%;"></a></td>
+                        {% else %}
+                            <td><a href="/home/car/{{car['CarID']}}"><img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}"></a></td>
+                        {% endif %}
+                        <td><a href="/home/car/{{car['CarID']}}">{{car['CarModel']}}</a></td>
+                        <td>{{car['Year']}}</td>
+                        <td>{{car['RegNumber']}}</td>
+                        <td>{{car['SeatCap']}}</td>
+                        <td>{{car['RentalPerDay']}}</td>
+                        {% if car['CustomerID'] == None %}
+                            <td>Available</td>
+                        {% else %}
+                            <td>Unavailable</td>  
+                        {% endif %}
+
+                        <td>
+                            <!-- Edit car -->
+                            <button type="button" class="btn custom-edit px-2 mx-0" data-bs-toggle="modal" data-bs-target="#edit_{{car['CarID']}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+                            </button>
+
+                            <div class="modal fade" id="edit_{{car['CarID']}}" tabindex="-1" aria-labelledby="edit_car" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="edit_car">Edit car information</h2>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                                                <div class="row g-3">
+
+                                                    <div class="col-sm-6">
+                                                      <label for="carid" class="form-label">Car ID (read only):</label>
+                                                      <input type="number" name="carid" id="carid" value="{{car['CarID']}}" class="form-control" readonly >
+                                                    </div>
+                                          
+                                                    <div class="row g-3">
+                                                        <div class="col-sm-6">
+                                                        <label for="car_model" class="form-label">Car model</label>
+                                                        <input type="text" name="car_model" class="form-control" id="car_model" value="{{car['CarModel']}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Valid car model is required.
+                                                        </div>
+                                                    </div>
+                                          
+                                                    <div class="col-sm-6">
+                                                        <label for="year" class="form-label">Year (YYYY)</label>
+                                                        <input type="text" name="year" class="form-control" pattern="[0-9]{4}" id="year" value="{{car['Year']}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Valid year is required.
+                                                        </div>
+                                                    </div>
+                                          
+                                                    <div class="col-sm-6">
+                                                    <label for="registration_number" class="form-label">Registration</label>
+                                                    <input type="text" name="registration_number" class="form-control" id="registration_number" value="{{car['RegNumber']}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Valid registration number is required.
+                                                        </div>
+                                                    </div>
+                                          
+                                                    <div class="col-sm-6">
+                                                        <label for="seat_cap" class="form-label">Number of seats</label>
+                                                        <input type="number" name="seat_cap" class="form-control" id="seat_cap" value="{{car['SeatCap']}}" required>
+                                                    </div>
+                                          
+                                                    <div class="col-sm-6">
+                                                        <label for="rental_per_day" class="form-label">Rental per day</label>
+                                                        <input type="text" name="rental_per_day" class="form-control" id="rental_per_day" value="{{car['RentalPerDay']}}" required>
+                                                    </div>
+                                          
+                                                    <div class="col-sm-6">
+                                                        <label for="carid" class="form-label">Car ID</label>
+                                                        <input type="number" name="carid" id="carid" value="{{car['CarID']}}">
+                                                    </div>
+                                            
+                                                    <div class="col-sm-6">
+                                                        <label for="car_image" class="form-label">Car Image</label>
+                                                            {% if car['CarImage'] %}
+                                                                <img src="{{ url_for('static', filename='car_images/' + car['CarImage']) }}">
+                                                            {% else %}
+                                                                <img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}">
+                                                            {% endif %}
+                                                        <input type="file" name="car_image" class="form-control" id="car_image">
+                                                        <div class="invalid-feedback">
+                                                            To change the image, please select a valid image file (jpg, jpeg, png, gif).
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                          
+                                              {{msg}}
+                                          
+                                              <hr class="my-4">
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <a href="{{ url_for('update_car')}}">
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                    </a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- finish editing car -->
+
+                            <!-- delete car -->
+                            <button type="button" class="btn custom-delete px-2 mx-0" data-bs-toggle="modal" data-bs-target="#delete_{{car['CarID']}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                </svg>
+                            </button>
+                        
+                            <div class="modal fade" id="delete_{{car['CarID']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete_car" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="delete_car">Delete car</h2>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the car '{{car['CarModel']}}'?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a href="{{ url_for('delete_car', carid=car['CarID']) }}">
+                                                    <button type="button" class="btn btn-primary">Delete</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- finish deleting car -->
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>  
+</div>
 
 
 {% endblock %}
