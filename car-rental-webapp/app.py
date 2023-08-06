@@ -181,14 +181,30 @@ def home():
         # Get the user's role.
         user_role = get_user_role()
         account = get_account(session['id'])
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Active=1')
+        car_list = cursor.fetchall()
+        available_car_count = sum(1 for car in car_list if car['CustomerID'] is None)
+        cursor.execute('SELECT * FROM car WHERE Active=1')
+        car_list = cursor.fetchall()
+        total_car_count = sum(1 for car in car_list)
+        cursor.execute('SELECT * FROM customer WHERE Active=1')
+        customer_list = cursor.fetchall()
+        customer_count = sum(1 for customer in customer_list)
+        cursor.execute('SELECT * FROM staff WHERE Active=1')
+        staff_list = cursor.fetchall()
+        staff_count = sum(1 for staff in staff_list)
+        print(total_car_count)
+        print(customer_count)
+        print(staff_count)
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
-            return render_template('admin_dashboard.html')
+            return render_template('admin_dashboard.html', customer_count=customer_count, staff_count=staff_count,car_count=total_car_count)
         elif user_role == 'staff':
-            return render_template('staff_dashboard.html',name=account['FirstName'])
+            return render_template('staff_dashboard.html',name=account['FirstName'],customer_count=customer_count,car_count=total_car_count)
         elif user_role == 'customer':
-            return render_template('customer_dashboard.html',name=account['FirstName'])
+            return render_template('customer_dashboard.html',name=account['FirstName'], car_list=car_list, user_role=session['role'], car_count=available_car_count)
         else:
             return 'unauthorized'
     else:
@@ -204,7 +220,7 @@ def profile():
         # We need all the account info for the user so we can display it on the profile page
         account = get_account(session['id'])
         # Show the profile page with account info
-        return render_template('profile.html', account=account,user_role=user_role)
+        return render_template('profile.html', account=account,user_role=session['role'])
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -214,11 +230,11 @@ def check_profile(userid):
     # Check if user is loggedin
     if is_authenticated():
         user_role = get_user_role()
-        if user_role in ['admin','staff']:
+        if user_role in ['admin','staff','customer']:
             # We need all the account info for the user so we can display it on the profile page
             account = get_account(userid)
             # Show the profile page with account info
-            return render_template('profile.html', account=account,user_role=user_role)
+            return render_template('profile.html', account=account,user_role=session['role'])
         else:
             return "unauthorized"
     else:
@@ -227,12 +243,12 @@ def check_profile(userid):
     
     
 @app.route('/edit/profile/<userid>')
-def edit_profile(userid):
+def change_password(userid):
     if is_authenticated():
         user_role = get_user_role()
         msg = get_flashed_messages()
         account = get_account(userid)
-        return render_template('edit_profile.html',account=account,user_role=user_role,msg=msg) 
+        return render_template('change_password.html',account=account,user_role=user_role,msg=msg) 
     else:
         # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -250,48 +266,70 @@ def update_profile():
             phone = request.form.get('phone')
             email = request.form.get('email')
             address = request.form.get('address')
-            suburb = request.form.get('suburb')
-            city = request.form.get('city')
-            state = request.form.get('state')
-            postcode = request.form.get('postcode')
-            country = request.form.get('country')
             password = request.form.get('password')
-            
-            original_account = get_account(userid)
+            print(firstname)
+            print(lastname)
+            account = get_account(userid)
+            print(account)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             #if username is changed:
-            if username != original_account['UserName']:
+            if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
                     flash('Username already exists. Please choose a different username.')
-                    return redirect(url_for('edit_profile',userid=userid))
+                    return redirect(url_for('change_password',userid=userid))
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
                     mysql.connection.commit()
 
             # check if the password is changed by comparing the input password with the password stored in database
-            if password != original_account['Password']:
+            if password != account['Password']:
                 # if password is changed, then the new password needs to be encrypted before inserting into databse
                 hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
                 cursor.execute('UPDATE user SET Password=%s WHERE UserID=%s',(hashed, userid))
                 mysql.connection.commit()
 
-            # update the other data to the database
-            if original_account['Role'] == 3:
-                cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s,Suburb=%s,City=%s,State=%s,Postcode=%s,Country=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,suburb,city,state,postcode,country,userid))
-                mysql.connection.commit()
-                if user_role in ['admin','staff']:
-                    return redirect(url_for('check_profile',userid=userid))
-                elif user_role in ['customer']:
-                    return redirect(url_for('profile'))
-            elif original_account['Role'] == 2:
-                cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s,Suburb=%s,City=%s,State=%s,Postcode=%s,Country=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,suburb,city,state,postcode,country,userid))
+            if account['Role'] == 3:
+                cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
                 return redirect(url_for('check_profile',userid=userid))
-            elif original_account['Role'] == 1:
+            elif account['Role'] == 2:
+                cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
+                mysql.connection.commit()
+                return redirect(url_for('check_profile',userid=userid))
+            elif account['Role'] == 1:
                 return redirect(url_for('check_profile',userid=userid))
             else:
                 return 'unauthorized'
+
+            # update the other data to the database
+            # if user_role == 'staff' and account['Role'] == 2:
+            #     cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
+            #     mysql.connection.commit()
+            #     return redirect(url_for('profile'))
+            # elif user_role == 'customer' and account['Role'] == 3:
+            #     cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID = %s', (email,firstname,lastname,phone,address,userid))
+            #     mysql.connection.commit()
+            #     return redirect(url_for('profile'))
+            # elif user_role == 'admin' and account['Role'] == 1:
+            #     return redirect(url_for('profile'))
+            # elif user_role == 'admin' and account['Role'] in [2,3]:
+                
+            # if account['Role'] == 3:
+            #     cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,userid))
+            #     mysql.connection.commit()
+            #     if user_role in ['admin','staff']:
+            #         return redirect(url_for('check_profile',userid=userid))
+            #     elif user_role in ['customer']:
+            #         return redirect(url_for('profile'))
+            # elif account['Role'] == 2:
+            #     cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
+            #     mysql.connection.commit()
+            #     return redirect(url_for('check_profile',userid=userid))
+            # elif account['Role'] == 1:
+            #     return redirect(url_for('check_profile',userid=userid))
+            # else:
+            #     return 'unauthorized'
         else:
             return 'unauthorized'
     else:
@@ -303,12 +341,12 @@ def car_list():
     if is_authenticated():
         user_role = get_user_role()
         msg = get_flashed_messages()
-        if  user_role == 'customer':
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Active=1')
-            car_list = cursor.fetchall()
-            return render_template('car_list.html', car_list=car_list, user_role=user_role )
-        elif user_role in ['staff','admin']:
+        # if  user_role == 'customer':
+        #     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        #     cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Active=1')
+        #     car_list = cursor.fetchall()
+        #     return render_template('car_list_customer.html', car_list=car_list, user_role=user_role )
+        if user_role in ['staff','admin']:
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car WHERE Active=1')
             car_list = cursor.fetchall()
@@ -326,7 +364,7 @@ def check_car(carid):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM car WHERE CarID = %s and Active = 1', (carid,))
         car = cursor.fetchone()
-        return render_template('car.html', car=car)
+        return render_template('car.html', car=car, user_role=session['role'])
         # return render_template('car_test.html')
     else:
     # User is not loggedin redirect to login page
@@ -340,10 +378,8 @@ def customer_list():
         cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID WHERE user.Active=1')
         customer_list = cursor.fetchall()
         msg = get_flashed_messages()
-        if user_role in ['admin']:
-            return render_template('customer_list_admin.html', customer_list=customer_list, msg=msg) 
-        elif user_role in ['staff']:
-            return render_template('customer_list_staff.html', customer_list = customer_list,msg=msg)
+        if user_role in ['admin','staff']:
+            return render_template('customer_list.html', customer_list=customer_list, user_role=user_role,msg=msg) 
         else:
             return 'unauthorized'
     else:
@@ -500,6 +536,8 @@ def add_car():
             seat_capacity = request.form.get('seat_capacity')
             rental_per_day = request.form.get('rental_per_day')
             customer_id = request.form.get('customer_id')
+            if not customer_id:
+                customer_id = None
             carimage = ''
             if 'car_image' in request.files:
                 file = request.files['car_image']
@@ -539,7 +577,7 @@ def update_car():
             seat_cap = request.form.get('seat_cap')
             rental_per_day = request.form.get('rental_per_day')
             customer_id = request.form.get('customer_id')
-            if customer_id == "":
+            if not customer_id:
                 customer_id = None
             carimage = ''
             if 'car_image' in request.files:
@@ -552,7 +590,7 @@ def update_car():
                         carimage = file.filename
                 else:
                     flash("To change the image, please select a valid image file (jpg, jpeg, png, gif).")
-                    return redirect(url_for('edit_car',carid=carid))
+                    return redirect(url_for('car_list'))
             # insert the data to the database
             sql = '''UPDATE car 
                     SET CarImage = %s, CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, CustomerID = %s

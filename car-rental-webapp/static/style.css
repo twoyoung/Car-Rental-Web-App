@@ -209,6 +209,9 @@ body.loggedin {
     color: #0f5bb2 !important;
 }
 
+.custom-font {
+    font-size: 18px !important;
+}
 
 @media (max-width: 1200px){
     .circle span {

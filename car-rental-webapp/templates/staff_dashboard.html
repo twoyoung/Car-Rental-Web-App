@@ -3,9 +3,38 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1 class="display-5">Welcome, {{ name }}!</h1>
+
+<div class="container mx-auto px-5">
+    <h1 class="display-6 my-3" style="text-align: right; color: #001C30">Welcome, {{name}}!</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4 me-5 p-4 mx-auto">
+            <a href="/home/customer_list" class="nav-link">
+            <div class="circle text-white opacity-60" style="background-color: #64CCC5;">
+                <div>
+                    <p class="display-1 fw-bolder align-middle mb-0">{{ customer_count }}</p>
+                    <h2 class="fs-1 align-middle">Customers</h2>
+                </div>
+            </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 ms-5 p-4 mx-auto">
+            <a href="/home/car_list" class="nav-link">
+            <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: #176B87">
+                <div>
+                    <p class="display-1 fw-bolder align-middle mb-0">{{ car_count }}</p>
+                    <h2 class="fs-1 align-middle">Cars</h2>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- <h1 class="display-5">Welcome, {{ name }}!</h1>
 <hr />
 
 <h2><a href="/home/customer_list" class="nav-link">Browse all customers</a></h2>
-<h2><a href="/home/car_list" class="nav-link">Manage rental cars</a></h2>
+<h2><a href="/home/car_list" class="nav-link">Manage rental cars</a></h2> -->
 {% endblock %}
