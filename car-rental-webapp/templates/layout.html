@@ -96,7 +96,7 @@
 			  'use strict';
 		  
 			  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-			  var forms = document.querySelectorAll('.needs-validation');
+			  const forms = document.querySelectorAll('.needs-validation');
 		  
 			  // Loop over them and prevent submission
 			  Array.prototype.slice.call(forms).forEach(function (form) {
@@ -138,6 +138,128 @@
 				location.reload();
 			}
 		</script>
+
+
+		<!-- front-end validate username -->
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const usernameInput = document.getElementById('username');
+				const formatFeedback = document.querySelector('.username-invalid-format-feedback');
+				const emptyFeedback = document.querySelector('.username-empty-feedback');
+
+
+				usernameInput.addEventListener('input', function(event) {
+					const input = event.target;
+					const value = input.value.trim();
+
+					if (value.length === 0) {
+						input.classList.add('is-invalid');				
+						formatFeedback.style.display = 'none';
+						emptyFeedback.style.display = 'block';
+					} else {
+						const isValid = /^[a-zA-Z0-9]+$/.test(value);
+						input.classList.remove('is-valid');
+						emptyFeedback.style.display = 'none';
+						if (isValid) {
+							input.classList.remove('is-invalid');
+							formatFeedback.style.display = 'none';
+						} else {
+							input.classList.add('is-invalid');
+							input.classList.remove('is-valid');
+							formatFeedback.style.display = 'block';
+						}
+					}
+				});
+				usernameInput.addEventListener('submit', function(event) {
+					const input = event.target;
+					const value = input.value.trim();
+
+					if (value.length === 0) {
+						input.classList.add('is-invalid');				
+						formatFeedback.style.display = 'none';
+						emptyFeedback.style.display = 'block';
+					} else {
+						const isValid = /^[a-zA-Z0-9]+$/.test(value);
+						input.classList.remove('is-valid');
+						emptyFeedback.style.display = 'none';
+						if (isValid) {
+							input.classList.remove('is-invalid');
+							formatFeedback.style.display = 'none';
+						} else {
+							input.classList.add('is-invalid');
+							input.classList.remove('is-valid');
+							formatFeedback.style.display = 'block';
+						}
+					}
+				});
+			});
+		</script>
+		<!-- front-end finish validating username -->
+
+		<!-- front-end validate password -->
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const passwordInput = document.getElementById('password');
+				const formatFeedback = document.querySelector('.password-invalid-format-feedback');
+				const emptyFeedback = document.querySelector('.password-empty-feedback');
+
+
+				passwordInput.addEventListener('input', function(event) {
+					const input = event.target;
+					const value = input.value.trim();
+
+					if (value.length === 0) {
+						input.classList.add('is-invalid');				
+						formatFeedback.style.display = 'none';
+						emptyFeedback.style.display = 'block';
+					} else {
+						const isValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value);
+						input.classList.remove('is-valid');
+						emptyFeedback.style.display = 'none';
+						if (isValid) {
+							input.classList.remove('is-invalid');
+							formatFeedback.style.display = 'none';
+						} else {
+							input.classList.add('is-invalid');
+							input.classList.remove('is-valid');
+							formatFeedback.style.display = 'block';
+						}
+					}
+				});
+				passwordInput.addEventListener('submit', function(event) {
+					const input = event.target;
+					const value = input.value.trim();
+
+					if (value.length === 0) {
+						input.classList.add('is-invalid');				
+						formatFeedback.style.display = 'none';
+						emptyFeedback.style.display = 'block';
+					} else {
+						const isValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value);
+						input.classList.remove('is-valid');
+						emptyFeedback.style.display = 'none';
+						if (isValid) {
+							input.classList.remove('is-invalid');
+							formatFeedback.style.display = 'none';
+						} else {
+							input.classList.add('is-invalid');
+							input.classList.remove('is-valid');
+							formatFeedback.style.display = 'block';
+						}
+					}
+				});
+			});
+		</script>
+		<!-- front-end finish validating password -->
+	
+
+		<!-- Add this script in the <head> or before the closing </body> tag -->
+<!-- Add this script in the <head> or before the closing </body> tag -->
+	  
+  
+
+
+
 
 
 

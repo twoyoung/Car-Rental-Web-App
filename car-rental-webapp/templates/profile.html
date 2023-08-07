@@ -188,18 +188,21 @@
 
                                                     <div class="col-sm-8">
                                                         <label for="username" class="form-label">Username</label>
-                                                        <div class="input-group">
-                                                            <span class="input-group-text">@</span>
-                                                            <input type="text" name="username" class="form-control" id="userName" value="{{account['UserName']}}" required>
-                                                        </div>
-                                                        <div class="invalid-feedback">
-                                                            Valid user name is required.
+                                                        <div class="input-group has-validation">
+                                                            <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                            <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" value="{{account['UserName']}}" required>
+                                                            <div class="invalid-feedback">
+                                                                Valid username is required.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 
                                                     <div class="col-sm-8 mb-4">
                                                         <label for="password" class="form-label">Password</label>
-                                                        <input type="text" name="password" class="form-control" id="password" value="{{account['Password']}}">
+                                                        <input type="text" name="password" class="form-control" id="password" value="{{account['Password']}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Password is required.
+                                                        </div>
                                                     </div>
 
                                                     <div class="modal-footer">

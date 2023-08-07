@@ -42,9 +42,9 @@
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="model" class="form-label">Car Model</label>
-                                    <input type="text" name="model" class="form-control" id="model" value="" required>
+                                    <input type="text" name="model" class="form-control" id="model" required>
                                     <div class="invalid-feedback">
-                                        Valid car model is required.
+                                        Car model is required.
                                     </div>
                                 </div>
                       
@@ -57,26 +57,35 @@
                                 </div>
                       
                                 <div class="col-sm-6">
-                                    <label for="registration" class="form-label">Registration</label>
-                                    <input type="text" name="registration" class="form-control" id="registration" value="" required>
+                                    <label for="registration" class="form-label">Registration number</label>
+                                    <input type="text" name="registration" class="form-control" id="registration" required>
                                     <div class="invalid-feedback">
-                                        Valid registration is required.
+                                        Valid registration number is required.
                                     </div>
                                 </div>
                       
                                 <div class="col-sm-6">
                                     <label for="seat_capacity" class="form-label">Number of seats </label>
-                                    <input type="number" name="seat_capacity" class="form-control" id="seat_capacity" value="">
+                                    <input type="number" name="seat_capacity" class="form-control" id="seat_capacity" required>
+                                    <div class="invalid-feedback">
+                                        Number of seats is required.
+                                    </div>
                                 </div>
-                        
+
                                 <div class="col-sm-6">
                                     <label for="rental_per_day" class="form-label">Rental per day</label>
-                                    <input type="text" name="rental_per_day" class="form-control" id="rental_per_day" value="">
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text" id="inputGroupPrepend">$</span>
+                                        <input type="text" class="form-control" id="rental_per_day" name="rental_per_day" aria-describedby="inputGroupPrepend" required>
+                                        <div class="invalid-feedback">
+                                            Valid rental is required.
+                                        </div>
+                                    </div>
                                 </div>
                         
                                 <div class="col-sm-6">
-                                    <label for="customer_id" class="form-label">Customer ID</label>
-                                    <input type="number" name="customer_id" class="form-control"  id="customer_id" value="">
+                                    <label for="customer_id" class="form-label">Rent to customer with ID #</label>
+                                    <input type="number" name="customer_id" class="form-control"  id="customer_id">
                                 </div>
                         
                                 <div class="col-sm-12 mb-4">
@@ -162,13 +171,9 @@
                                         <div class="modal-body">
                                             <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
                                                 <div class="row g-3">
+               
+                                                    <input type="hidden" name="carid" id="carid" value="{{car['CarID']}}" class="form-control" readonly >
 
-                                                    <div class="col-sm-6">
-                                                    <label for="carid" class="form-label">Car ID (read only):</label>
-                                                    <input type="number" name="carid" id="carid" value="{{car['CarID']}}" class="form-control" readonly >
-                                                    </div>
-                                        
-                                                  
                                                     <div class="col-sm-6">
                                                         <label for="car_model" class="form-label">Car model</label>
                                                         <input type="text" name="car_model" class="form-control" id="car_model" value="{{car['CarModel']}}" required>
@@ -186,7 +191,7 @@
                                                     </div>
                                         
                                                     <div class="col-sm-6">
-                                                    <label for="registration_number" class="form-label">Registration</label>
+                                                    <label for="registration_number" class="form-label">Registration number</label>
                                                     <input type="text" name="registration_number" class="form-control" id="registration_number" value="{{car['RegNumber']}}" required>
                                                         <div class="invalid-feedback">
                                                             Valid registration number is required.
@@ -196,18 +201,24 @@
                                                     <div class="col-sm-6">
                                                         <label for="seat_cap" class="form-label">Number of seats</label>
                                                         <input type="number" name="seat_cap" class="form-control" id="seat_cap" value="{{car['SeatCap']}}" required>
+                                                        <div class="invalid-feedback">
+                                                            Number of seats is required.
+                                                        </div>
                                                     </div>
-                                        
+
                                                     <div class="col-sm-6">
                                                         <label for="rental_per_day" class="form-label">Rental per day</label>
-                                                        <div class="input-group">
-                                                            <span class="input-group-text">$</span>
-                                                            <input type="text" name="rental_per_day" class="form-control" id="rental_per_day" value="{{car['RentalPerDay']}}" required>
+                                                        <div class="input-group has-validation">
+                                                            <span class="input-group-text" id="inputGroupPrepend">$</span>
+                                                            <input type="text" class="form-control" id="rental_per_day" name="rental_per_day" aria-describedby="inputGroupPrepend" value="{{car['RentalPerDay']}}" required>
+                                                            <div class="invalid-feedback">
+                                                                Valid rental is required.
+                                                            </div>
                                                         </div>
                                                     </div>
                                         
                                                     <div class="col-sm-6">
-                                                        <label for="customer_id" class="form-label">Customer ID</label>
+                                                        <label for="customer_id" class="form-label">Rent to customer with ID #</label>
                                                         <input type="number" name="customer_id" class="form-control" id="customer_id" value="{{car['CustomerID']}}">
                                                     </div>
                                             
