@@ -38,37 +38,55 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="/add/car" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                        <form action="/add/car" method = "POST" class="needs-validation form-feedback" id="add-car" novalidate enctype="multipart/form-data">
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="model" class="form-label">Car Model</label>
                                     <input type="text" name="model" class="form-control" id="model" required>
-                                    <div class="invalid-feedback">
+                                    <div class="invalid-feedback modelEmptyFeedback">
                                         Car model is required.
+                                    </div>
+                                    <div class="valid-feedback modelValidFeedback">
+                                        Looks good!
                                     </div>
                                 </div>
                       
                                 <div class="col-sm-6">
                                     <label for="year" class="form-label">Year (YYYY)</label>
                                     <input type="text" name="year" pattern="[0-9]{4}" class="form-control" id="year" placeholder="YYYY" required>
-                                    <div class="invalid-feedback">
+                                    <div class="invalid-feedback yearInvalidFeedback">
                                         Valid year is required.
+                                    </div>
+                                    <div class="valid-feedback yearValidFeedback">
+                                        Looks good!
                                     </div>
                                 </div>
                       
                                 <div class="col-sm-6">
                                     <label for="registration" class="form-label">Registration number</label>
                                     <input type="text" name="registration" class="form-control" id="registration" required>
-                                    <div class="invalid-feedback">
-                                        Valid registration number is required.
+                                    <div class="invalid-feedback registrationEmptyFeedback">
+                                        Registration number is required.
+                                    </div>
+                                    <div class="invalid-feedback registrationFormatFeedback">
+                                        Valid Registration number is in the form of LLNNN or LLLNN.
+                                    </div>
+                                    <div class="valid-feedback registrationValidFeedback">
+                                        Looks good!
                                     </div>
                                 </div>
                       
                                 <div class="col-sm-6">
                                     <label for="seat_capacity" class="form-label">Number of seats </label>
-                                    <input type="number" name="seat_capacity" class="form-control" id="seat_capacity" required>
-                                    <div class="invalid-feedback">
+                                    <input type="text" name="seat_capacity" class="form-control" id="seatNumber" required>
+                                    <div class="invalid-feedback seatNumberEmptyFeedback">
                                         Number of seats is required.
+                                    </div>
+                                    <div class="invalid-feedback seatNumberFormatFeedback">
+                                        Input a number between 0 to 50.
+                                    </div>
+                                    <div class="valid-feedback seatNumberValidFeedback">
+                                        Looks good!
                                     </div>
                                 </div>
 
@@ -76,32 +94,49 @@
                                     <label for="rental_per_day" class="form-label">Rental per day</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="inputGroupPrepend">$</span>
-                                        <input type="text" class="form-control" id="rental_per_day" name="rental_per_day" aria-describedby="inputGroupPrepend" required>
-                                        <div class="invalid-feedback">
+                                        <input type="text" class="form-control" id="rentalPerDay" name="rental_per_day" aria-describedby="inputGroupPrepend" required>
+                                        <div class="invalid-feedback rentalPerDayEmptyFeedback">
                                             Valid rental is required.
+                                        </div>
+                                        <div class="invalid-feedback rentalPerDayFormatFeedback">
+                                            Unvalid rental.
+                                        </div>
+                                        <div class="valid-feedback rentalPerDayValidFeedback">
+                                            Looks good!
                                         </div>
                                     </div>
                                 </div>
                         
                                 <div class="col-sm-6">
                                     <label for="customer_id" class="form-label">Rent to customer with ID #</label>
-                                    <input type="number" name="customer_id" class="form-control"  id="customer_id">
+                                    <input type="text" name="customer_id" class="form-control"  id="customerId">
+                                    <div class="invalid-feedback customerIdFormatFeedback">
+                                        Unvalid customer ID number.
+                                    </div>
+                                    <div class="valid-feedback customerIdValidFeedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="valid-feedback customerIdEmptyFeedback">
+                                    </div>
                                 </div>
                         
                                 <div class="col-sm-12 mb-4">
                                     <label for="car_image" class="form-label">Car Image</label>
-                                    <input type="file" name="car_image" class="form-control" id="car_image">
-                                    <div class="invalid-feedback">
+                                    <input type="file" name="car_image" class="form-control" id="carImage">
+                                    <div class="invalid-feedback carImageInvalidFeedback">
                                         Please select a valid image file (jpg, jpeg, png, gif).
+                                    </div>
+                                    <div class="valid-feedback carImageValidFeedback">
+                                        Looks good!
                                     </div>
                                 </div>
                                 {{msg}}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a href="{{ url_for('add_car') }}">
-                                    <button type="submit" class="btn btn-primary">Add car</button>
-                                </a>
+                           
+                                    <button type="submit" class="btn btn-primary" id="submitButton" disabled>Add car</button>
+    
                             </div>
                         </form>
                     </div>
@@ -169,40 +204,58 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation" novalidate enctype="multipart/form-data">
+                                            <form action="{{ url_for('update_car')}}" method = "POST" class="needs-validation edit-car form-feedback" id="edit_{{car['CarID']}}" novalidate enctype="multipart/form-data">
                                                 <div class="row g-3">
                
-                                                    <input type="hidden" name="carid" id="carid" value="{{car['CarID']}}" class="form-control" readonly >
+                                                    <input type="hidden" name="carid" id="{{car['CarID']}}" value="{{car['CarID']}}" class="form-control" readonly >
 
                                                     <div class="col-sm-6">
                                                         <label for="car_model" class="form-label">Car model</label>
-                                                        <input type="text" name="car_model" class="form-control" id="car_model" value="{{car['CarModel']}}" required>
-                                                        <div class="invalid-feedback">
-                                                            Valid car model is required.
+                                                        <input type="text" name="car_model" class="form-control model input-class" id="model_{{car['CarID']}}" value="{{car['CarModel']}}" required>
+                                                        <div class="invalid-feedback modelEmptyFeedback">
+                                                            Car model is required.
+                                                        </div>
+                                                        <div class="valid-feedback modelValidFeedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                         
                                                     <div class="col-sm-6">
                                                         <label for="year" class="form-label">Year (YYYY)</label>
-                                                        <input type="text" name="year" class="form-control" pattern="[0-9]{4}" id="year" value="{{car['Year']}}" required>
-                                                        <div class="invalid-feedback">
+                                                        <input type="text" name="year" class="form-control year input-class" pattern="[0-9]{4}" id="year_{{car['CarID']}}" value="{{car['Year']}}" required>
+                                                        <div class="invalid-feedback yearInvalidFeedback">
                                                             Valid year is required.
+                                                        </div>
+                                                        <div class="valid-feedback yearValidFeedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                         
                                                     <div class="col-sm-6">
                                                     <label for="registration_number" class="form-label">Registration number</label>
-                                                    <input type="text" name="registration_number" class="form-control" id="registration_number" value="{{car['RegNumber']}}" required>
-                                                        <div class="invalid-feedback">
-                                                            Valid registration number is required.
+                                                    <input type="text" name="registration_number" class="form-control registration input-class" id="registration_{{car['CarID']}}" value="{{car['RegNumber']}}" required>
+                                                        <div class="invalid-feedback registrationEmptyFeedback">
+                                                            Registration number is required.
+                                                        </div>
+                                                        <div class="invalid-feedback registrationFormatFeedback">
+                                                            Valid Registration number is in the form of LLNNN or LLLNN.
+                                                        </div>
+                                                        <div class="valid-feedback registrationValidFeedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                         
                                                     <div class="col-sm-6">
                                                         <label for="seat_cap" class="form-label">Number of seats</label>
-                                                        <input type="number" name="seat_cap" class="form-control" id="seat_cap" value="{{car['SeatCap']}}" required>
-                                                        <div class="invalid-feedback">
+                                                        <input type="text" name="seat_cap" class="form-control seatNumber input-class" id="seatNumber_{{car['CarID']}}" value="{{car['SeatCap']}}" required>
+                                                        <div class="invalid-feedback seatNumberEmptyFeedback">
                                                             Number of seats is required.
+                                                        </div>
+                                                        <div class="invalid-feedback seatNumberFormatFeedback">
+                                                            Input a number between 0 to 50.
+                                                        </div>
+                                                        <div class="valid-feedback seatNumberValidFeedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
 
@@ -210,16 +263,34 @@
                                                         <label for="rental_per_day" class="form-label">Rental per day</label>
                                                         <div class="input-group has-validation">
                                                             <span class="input-group-text" id="inputGroupPrepend">$</span>
-                                                            <input type="text" class="form-control" id="rental_per_day" name="rental_per_day" aria-describedby="inputGroupPrepend" value="{{car['RentalPerDay']}}" required>
-                                                            <div class="invalid-feedback">
+                                                            <input type="text" class="form-control rentalPerDay input-class" id="rentalPerDay_{{car['CarID']}}" name="rental_per_day" aria-describedby="inputGroupPrepend" value="{{car['RentalPerDay']}}" required>
+                                                            <div class="invalid-feedback rentalPerDayEmptyFeedback">
                                                                 Valid rental is required.
+                                                            </div>
+                                                            <div class="invalid-feedback rentalPerDayFormatFeedback">
+                                                                Unvalid rental.
+                                                            </div>
+                                                            <div class="valid-feedback rentalPerDayValidFeedback">
+                                                                Looks good!
                                                             </div>
                                                         </div>
                                                     </div>
                                         
                                                     <div class="col-sm-6">
                                                         <label for="customer_id" class="form-label">Rent to customer with ID #</label>
-                                                        <input type="number" name="customer_id" class="form-control" id="customer_id" value="{{car['CustomerID']}}">
+                                                        {% if car['CustomerID'] == None %}
+                                                            <input type="text" name="customer_id" class="form-control customerId input-class" id="customerId_{{car['CarID']}}" value="">
+                                                        {% else %}
+                                                            <input type="text" name="customer_id" class="form-control customerId input-class" id="customerId_{{car['CarID']}}" value="{{car['CustomerID']}}">
+                                                        {% endif %}
+                                                        <div class="invalid-feedback customerIdFormatFeedback">
+                                                            Unvalid customer ID number.
+                                                        </div>
+                                                        <div class="valid-feedback customerIdValidFeedback">
+                                                            Looks good!
+                                                        </div>
+                                                        <div class="valid-feedback customerIdEmptyFeedback">
+                                                        </div>
                                                     </div>
                                             
                                                     <div class="col-sm-12 mb-4" >
@@ -229,18 +300,21 @@
                                                         {% else %}
                                                             <img src="{{ url_for('static', filename='car_images/' + 'replace.gif') }}" class="img-fluid">
                                                         {% endif %}
-                                                        <input type="file" name="car_image" class="form-control" id="car_image">
-                                                        <div class="invalid-feedback">
-                                                            To change the image, please select a valid image file (jpg, jpeg, png, gif).
+                                                        <input type="file" name="car_image" class="form-control input-class file" id="carImage_{{car['CarID']}}">
+                                                        <div class="invalid-feedback carImageInvalidFeedback">
+                                                            Please select a valid image file (jpg, jpeg, png, gif).
+                                                        </div>
+                                                        <div class="valid-feedback carImageValidFeedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                                 </div>
                                                 {{msg}}
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <a href="{{ url_for('update_car')}}">
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </a>
+                                        
+                                                    <button type="submit" class="btn btn-primary input-class submitButton" id="submitButton_{{car['CarID']}}" disabled>Save changes</button>
+                                       
                                                 </div>
                                                 
                                             </form>
@@ -275,7 +349,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <a href="{{ url_for('delete_car', carid=car['CarID']) }}">
-                                                    <button type="button" class="btn btn-primary">Delete</button>
+                                                    <button type="button" class="btn btn-danger">Delete</button>
                                                 </a>
                                         </div>
                                     </div>

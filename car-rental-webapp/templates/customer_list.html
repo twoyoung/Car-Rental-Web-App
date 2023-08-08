@@ -42,25 +42,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url_for('add_user')}}" method = "POST" class="needs-validation" novalidate>
+                        <form action="{{ url_for('add_user')}}" method = "POST" class="needs-validation form-feedback" id="add-user" novalidate>
                             <div class="row g-3">
                                 <input type="hidden" name="user_type" value="3">
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="basic-addon1">@</span>
-                                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                  </div>
-
                                 <div class="col-sm-6">
                                     <label for="username" class="form-label">Username</label>
                                     <div class="input-group has-validation">
                                         <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                        <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" required>
+                                        <input type="text" class="form-control hehe" id="username" name="username" aria-describedby="inputGroupPrepend" required>
                                         <div class="invalid-feedback username-empty-feedback">
                                             Username is required.
                                         </div>
                                         <div class="invalid-feedback username-invalid-format-feedback">
                                             Username must contain only letters and numbers.
+                                        </div>
+                                        <div class="valid-feedback username-valid-feedback">
+                                            Looks good!
                                         </div>
                                     </div>
                                 </div>
@@ -82,37 +79,42 @@
                             
                                 <div class="col-sm-10">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="text" name="email" class="form-control" id="email" required>
-                                    <div class="invalid-feedback">
-                                    Valid email is required.
+                                    <input type="text" name="email" class="form-control hehe" id="email" required>
+                                    <div class="invalid-feedback email-empty-feedback">
+                                        Email addrss is required.
                                     </div>
-                                    <div class="valid-feedback">
+                                    <div class="invalid-feedback email-invalid-format-feedback">
+                                        Invalid email address.
+                                    </div>
+                                    <div class="valid-feedback email-valid-feedback">
                                         Looks good!
                                     </div>
                                 </div>
                             
                                 <div class="col-sm-10">
                                     <label for="address" class="form-label">Address</label>
-                                    <input type="text" name="address" class="form-control" id="address" value="">
+                                    <input type="text" name="address" class="form-control" id="address">
                                 </div>
 
                                 <div class="col-sm-10 mb-4">
                                     <label for="password" class="form-label">Password</label>
-                                    <input type="text" name="password" class="form-control" id="password" value="" required>
+                                    <input type="text" name="password" class="form-control hehe" id="password" required>
                                     <div class="invalid-feedback password-empty-feedback">
                                         Password is required.
                                     </div>
                                     <div class="invalid-feedback password-invalid-format-feedback">
                                         Password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.
                                     </div>
+                                    <div class="valid-feedback password-valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <a href="{{ url_for('add_user') }}">
-                                <button type="submit" class="btn btn-primary">Add customer</button>
-                                </a>
+                                <button type="submit" class="btn btn-primary" id="submitButton" disabled>Add customer</button>
+                        
                             </div>
                         </form>
                     </div>
@@ -164,68 +166,86 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <form action="{{ url_for('update_user')}}" method = "POST" class="needs-validation" novalidate>
+                                            <form action="{{ url_for('update_user')}}" method = "POST" class="needs-validation edit-user form-feedback" id="edit_{{customer['UserID']}}" novalidate>
                                                 <div class="row g-3">
                                                     <input type="hidden" name="user_id" value="{{customer['UserID']}}" readonly>
 
                                                     <div class="col-sm-6">
                                                         <label for="customer_id" class="form-label">Customer ID</label>
-                                                        <input type="text" name="customer_id" class="form-control" id="customer_id" value="{{customer['CustomerID']}}" disabled readonly>
+                                                        <input type="text" name="customer_id" class="form-control" id="customerId_{{customer['UserID']}}" value="{{customer['CustomerID']}}" disabled readonly>
                                                     </div>
 
                                                     <div class="col-sm-6">
                                                         <label for="username" class="form-label">Username</label>
                                                         <div class="input-group has-validation">
                                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                            <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" value="{{customer['UserName']}}" required>
-                                                            <div class="invalid-feedback">
-                                                                Valid username is required.
+                                                            <input type="text" class="form-control username input-class" id="username_{{customer['UserID']}}" name="username" aria-describedby="inputGroupPrepend" value="{{customer['UserName']}}" required>
+                                                            <div class="invalid-feedback username-empty-feedback">
+                                                                Username is required.
+                                                            </div>
+                                                            <div class="invalid-feedback username-invalid-format-feedback">
+                                                                Username must contain only letters and numbers.
+                                                            </div>
+                                                            <div class="valid-feedback username-valid-feedback">
+                                                                Looks good!
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-sm-6">
                                                         <label for="firstname" class="form-label">First Name</label>
-                                                        <input type="text" name="firstname" class="form-control" id="firstname" value="{{customer['FirstName']}}">
+                                                        <input type="text" name="firstname" class="form-control" id="firstname_{{customer['UserID']}}" value="{{customer['FirstName']}}">
                                                     </div>
                                                 
                                                     <div class="col-sm-6">
                                                         <label for="lastname" class="form-label">Last Name</label>
-                                                        <input type="text" name="lastname" class="form-control" id="lastname" value="{{customer['LastName']}}">
+                                                        <input type="text" name="lastname" class="form-control" id="lastname_{{customer['UserID']}}" value="{{customer['LastName']}}">
                                                     </div>
                                                 
                                                     <div class="col-sm-6">
                                                         <label for="phone" class="form-label">Phone number</label>
-                                                        <input type="text" name="phone" class="form-control" id="phone" value="{{customer['PhoneNumber']}}">
+                                                        <input type="text" name="phone" class="form-control" id="phone_{{customer['UserID']}}" value="{{customer['PhoneNumber']}}">
                                                     </div>
                                                 
                                                     <div class="col-sm-6">
                                                         <label for="email" class="form-label">Email</label>
-                                                        <input type="text" name="email" class="form-control" id="email" value="{{customer['Email']}}" required>
-                                                        <div class="invalid-feedback">
-                                                        Valid email is required.
+                                                        <input type="text" name="email" class="form-control email input-class" id="email_{{customer['UserID']}}" value="{{customer['Email']}}" required>
+                                                        <div class="invalid-feedback email-empty-feedback">
+                                                            Email addrss is required.
+                                                        </div>
+                                                        <div class="invalid-feedback email-invalid-format-feedback">
+                                                            Invalid email address.
+                                                        </div>
+                                                        <div class="valid-feedback email-valid-feedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                                 
                                                     <div class="col-sm-10">
                                                         <label for="address" class="form-label">Address</label>
-                                                        <input type="text" name="address" class="form-control" id="address" value="{{customer['Address']}}">
+                                                        <input type="text" name="address" class="form-control" id="address_{{customer['UserID']}}" value="{{customer['Address']}}">
                                                     </div>
 
                                                     <div class="col-sm-10 mb-4">
                                                         <label for="password" class="form-label">Password</label>
-                                                        <input type="text" name="password" class="form-control" id="password" value="{{customer['Password']}}" required>
-                                                        <div class="invalid-feedback">
-                                                        Password is required.
+                                                        <input type="text" name="password" class="form-control password input-class" id="password_{{customer['UserID']}}" value="{{customer['Password']}}" required>
+                                                        <div class="invalid-feedback password-empty-feedback">
+                                                            Password is required.
+                                                        </div>
+                                                        <div class="invalid-feedback password-invalid-format-feedback">
+                                                            Password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.
+                                                        </div>
+                                                        <div class="valid-feedback password-valid-feedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <a href="{{ url_for('update_user')}}">
-                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </a>
+                    
+                                                    <button type="submit" class="btn btn-primary submitButton input-class " id="submitButton_{{customer['UserID']}}" disabled>Save changes</button>
+                                            
                                                 </div>
                                             </form>
                                         </div>
@@ -256,7 +276,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                             <a href="{{ url_for('delete_user', userid=customer['UserID']) }}">
-                                                <button type="button" class="btn btn-primary">Delete</button>
+                                                <button type="button" class="btn btn-danger">Delete</button>
                                             </a>
                                         </div>
                                     </div>

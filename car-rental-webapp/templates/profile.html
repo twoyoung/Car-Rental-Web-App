@@ -75,7 +75,7 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <form action="{{ url_for('update_profile')}}" method = "POST" class="needs-validation" novalidate>
+                                            <form action="{{ url_for('update_profile')}}" method = "POST" class="needs-validation form-feedback" id="edit-profile" novalidate>
                                                 <div class="row g-3">
                                                     <input type="hidden" name="user_id" value="{{account['UserID']}}" readonly>
                                                     <input type="hidden" name="username" value="{{account['UserName']}}" readonly>
@@ -99,8 +99,14 @@
                                                     <div class="col-sm-6">
                                                         <label for="email" class="form-label">Email</label>
                                                         <input type="text" name="email" class="form-control" id="email" value="{{account['Email']}}" required>
-                                                        <div class="invalid-feedback">
-                                                        Valid email is required.
+                                                        <div class="invalid-feedback email-empty-feedback">
+                                                            Email addrss is required.
+                                                        </div>
+                                                        <div class="invalid-feedback email-invalid-format-feedback">
+                                                            Invalid email address.
+                                                        </div>
+                                                        <div class="valid-feedback email-valid-feedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
                                                 
@@ -112,9 +118,9 @@
 
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <a href="{{ url_for('update_profile')}}">
-                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </a>
+                            
+                                                    <button type="submit" class="btn btn-primary" id="submitButton-edit" disabled>Save changes</button>
+                                        
                                                 </div>
                                             </form>
                                         </div>
@@ -141,7 +147,7 @@
                                 <p class="text-body-secondary mb-1">
                                     <strong><small>EMAIL</small></strong>
                                 </p>
-                                <p class="display-6 custom-font">@{{ account['Email'] }}</p>
+                                <p class="display-6 custom-font">{{ account['Email'] }}</p>
                             </div>
                             <div class="mb-4">
                                 <p class="text-body-secondary mb-1">
@@ -177,7 +183,7 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <form action="{{ url_for('update_profile')}}" method = "POST" class="needs-validation" novalidate>
+                                            <form action="{{ url_for('update_profile')}}" method = "POST" class="needs-validation form-feedback" id="change-password" novalidate>
                                                 <div class="row g-3">
                                                     <input type="hidden" name="user_id" value="{{account['UserID']}}" readonly>
                                                     <input type="hidden" name="firstname" value="{{account['FirstName']}}" readonly>
@@ -191,8 +197,14 @@
                                                         <div class="input-group has-validation">
                                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                                                             <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" value="{{account['UserName']}}" required>
-                                                            <div class="invalid-feedback">
-                                                                Valid username is required.
+                                                            <div class="invalid-feedback username-empty-feedback">
+                                                                Username is required.
+                                                            </div>
+                                                            <div class="invalid-feedback username-invalid-format-feedback">
+                                                                Username must contain only letters and numbers.
+                                                            </div>
+                                                            <div class="valid-feedback username-valid-feedback">
+                                                                Looks good!
                                                             </div>
                                                         </div>
                                                     </div>
@@ -200,16 +212,22 @@
                                                     <div class="col-sm-8 mb-4">
                                                         <label for="password" class="form-label">Password</label>
                                                         <input type="text" name="password" class="form-control" id="password" value="{{account['Password']}}" required>
-                                                        <div class="invalid-feedback">
+                                                        <div class="invalid-feedback password-empty-feedback">
                                                             Password is required.
+                                                        </div>
+                                                        <div class="invalid-feedback password-invalid-format-feedback">
+                                                            Password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.
+                                                        </div>
+                                                        <div class="valid-feedback password-valid-feedback">
+                                                            Looks good!
                                                         </div>
                                                     </div>
 
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <a href="{{ url_for('update_profile')}}">
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                        </a>
+                            
+                                                        <button type="submit" class="btn btn-primary submitButton" id="submitButton" disabled>Save changes</button>
+                                                
                                                     </div>
                                                 </div>
                                             </form>

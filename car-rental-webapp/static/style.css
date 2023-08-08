@@ -129,9 +129,7 @@ body {
 .navtop div a:hover {
     color: #eaebed;
 }
-body.loggedin {
-    background-color: #f3f4f7;
-}
+
 .content {
     width: 1000px;
     margin: 0 auto;
@@ -213,6 +211,22 @@ body.loggedin {
     font-size: 18px !important;
 }
 
+/* .submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+} */
+
+.background-image{
+    background-image:url('https://media.nomadicmatt.com/2023/nzroadtrip.jpg'); 
+    background-size: cover; 
+    background-position: center top; 
+    background-repeat: no-repeat;
+    height: 100vh;
+    
+}
+
+
+
 @media (max-width: 1200px){
     .circle span {
         font-size: 3rem !important;
@@ -242,7 +256,63 @@ body.loggedin {
     }
 }
 
+@media (min-width: 992px){
+    .list-icon {
+        display: none !important;
+      }
+    .nav-link.text-white.py-1 {
+        display: block;
+      }
+      
+} 
 
+@media (max-width: 991px){
+        /* Hide the individual icons */
+        .nav-link.text-white {
+          display: none;
+        }
+      
+        /* Show the combined icon */
+        .list-icon {
+          display: block !important;
+        }
+}
+
+@media (max-width: 767px){
+    .nav-link.text-white.py-1 {
+        display: none;
+      }
+
+      .transparent-button.dropdown.bi-list {
+        height: 40px;
+      }
+    
+}
+
+@media (min-width:575px ){
+    .logo{
+        display:block;
+    }
+    .logo_small{
+        display:none;
+    }
+}
+
+@media (max-width:576px){
+    .logo{
+        display: none;
+    }
+    .logo_small{
+        display: block;
+    }
+
+}
+
+@media (max-width:576px){
+    .circle.text-white{
+        font-size: 9rem;
+    }
+}
 
 
 

@@ -17,18 +17,18 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = '32494971'
 
-#Enter your database connection details below
-# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-# app.config['MYSQL_USER'] = '2young'
-# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-# app.config['MYSQL_DB'] = '2young$COMP639'
-# app.config['MYSQL_PORT'] = 3306
-
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'rental'
+# Enter your database connection details below
+app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+app.config['MYSQL_USER'] = '2young'
+app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+app.config['MYSQL_DB'] = '2young$COMP639'
 app.config['MYSQL_PORT'] = 3306
+
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'rental'
+# app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -44,7 +44,7 @@ def get_user_role():
     elif session['role'] == 2:
         return 'staff'
     else:
-        return None
+        return 'guest'
     
 def username_crash(username):
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -423,7 +423,12 @@ def update_user():
                 #check if username already exists in database
                 if username_crash(username):
                     flash('Username already exists. Please choose a different username.')
-                    return redirect(url_for('edit_user',userid=userid))
+                    if account['Role']== 3:
+                        return redirect(url_for('customer_list'))
+                    elif account['Role'] == 2:
+                        return redirect(url_for('staff_list'))
+                    else:
+                        return 'unauthorized'
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
                     mysql.connection.commit()
@@ -544,9 +549,9 @@ def add_car():
                 if not file:
                     carimage = 'replace.gif'
                 elif allowed_file(file.filename):
-                        filename = secure_filename(file.filename)
-                        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-                        carimage = file.filename
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                    carimage = file.filename
                 else:
                     flash("To change the image, please select a valid image file (jpg, jpeg, png, gif).")
                     return redirect(url_for('car_list'))
@@ -579,23 +584,27 @@ def update_car():
             customer_id = request.form.get('customer_id')
             if not customer_id:
                 customer_id = None
-            carimage = ''
-            if 'car_image' in request.files:
-                file = request.files['car_image']
-                if not file:
-                    carimage = 'replace.gif'
-                elif allowed_file(file.filename):
-                        filename = secure_filename(file.filename)
-                        file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-                        carimage = file.filename
-                else:
-                    flash("To change the image, please select a valid image file (jpg, jpeg, png, gif).")
-                    return redirect(url_for('car_list'))
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * from car WHERE CarID=%s',(carid,))
+            car=cursor.fetchone()
+            print(car)
+            car_image = car['CarImage']
+            file = request.files['car_image']
+            if not file:
+                carimage = car_image
+            elif allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
+                carimage = file.filename
+            else:
+                flash("To change the image, please select a valid image file (jpg, jpeg, png, gif).")
+                return redirect(url_for('car_list'))
             # insert the data to the database
             sql = '''UPDATE car 
                     SET CarImage = %s, CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, CustomerID = %s
                     WHERE CarID = %s;'''
             parameters = (carimage, car_model, year, registration_number, seat_cap, rental_per_day, customer_id, carid)
+            print(carimage)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()
