@@ -18,17 +18,17 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = '32494971'
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-app.config['MYSQL_USER'] = '2young'
-app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-app.config['MYSQL_DB'] = '2young$COMP639'
-app.config['MYSQL_PORT'] = 3306
-
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = ''
-# app.config['MYSQL_DB'] = 'rental'
+# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+# app.config['MYSQL_USER'] = '2young'
+# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+# app.config['MYSQL_DB'] = '2young$COMP639'
 # app.config['MYSQL_PORT'] = 3306
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'rental'
+app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -120,7 +120,7 @@ def login():
             # Account doesnt exist or username incorrect
             msg = 'Incorrect username'
     # Show the login form with message (if any)
-    return render_template('index.html', msg=msg)
+    return render_template('index.html')
 
 # http://localhost:5000/logout - this will be the logout page
 @app.route('/logout')
@@ -168,7 +168,7 @@ def register():
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
     # Show registration form with message (if any)
-    return render_template('register.html', msg=msg)
+    return render_template('register.html',msg=msg)
 
 
 # http://localhost:5000/home - this will be the home page, only accessible for loggedin users
@@ -246,9 +246,8 @@ def check_profile(userid):
 def change_password(userid):
     if is_authenticated():
         user_role = get_user_role()
-        msg = get_flashed_messages()
         account = get_account(userid)
-        return render_template('change_password.html',account=account,user_role=user_role,msg=msg) 
+        return render_template('change_password.html',account=account,user_role=user_role) 
     else:
         # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -276,7 +275,7 @@ def update_profile():
             if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
-                    flash('Username already exists. Please choose a different username.')
+                    flash('Username already exists. Please choose a different username.','error')
                     return redirect(url_for('change_password',userid=userid))
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
@@ -292,12 +291,15 @@ def update_profile():
             if account['Role'] == 3:
                 cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
+                flash('Profile information changed successfully!','success')
                 return redirect(url_for('check_profile',userid=userid))
             elif account['Role'] == 2:
                 cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
+                flash('Profile information changed successfully!','success')
                 return redirect(url_for('check_profile',userid=userid))
             elif account['Role'] == 1:
+                flash('Profile information changed successfully!','success')
                 return redirect(url_for('check_profile',userid=userid))
             else:
                 return 'unauthorized'
@@ -340,7 +342,6 @@ def update_profile():
 def car_list():
     if is_authenticated():
         user_role = get_user_role()
-        msg = get_flashed_messages()
         # if  user_role == 'customer':
         #     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         #     cursor.execute('SELECT * FROM car WHERE CustomerID is NULL and Active=1')
@@ -350,7 +351,7 @@ def car_list():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car WHERE Active=1')
             car_list = cursor.fetchall()
-            return render_template('car_list.html', car_list=car_list,msg=msg, user_role=user_role)
+            return render_template('car_list.html', car_list=car_list, user_role=user_role)
         else:
             return 'unauthorized'
     else:
@@ -377,9 +378,8 @@ def customer_list():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID WHERE user.Active=1')
         customer_list = cursor.fetchall()
-        msg = get_flashed_messages()
         if user_role in ['admin','staff']:
-            return render_template('customer_list.html', customer_list=customer_list, user_role=user_role,msg=msg) 
+            return render_template('customer_list.html', customer_list=customer_list, user_role=user_role) 
         else:
             return 'unauthorized'
     else:
@@ -392,9 +392,8 @@ def staff_list():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID WHERE user.Active = 1')
         staff_list = cursor.fetchall()
-        msg = get_flashed_messages()
         if user_role == 'admin':
-            return render_template('staff_list.html', staff_list=staff_list, msg=msg)
+            return render_template('staff_list.html', staff_list=staff_list)
         else:
             return 'unauthorized'
     else:
@@ -422,7 +421,7 @@ def update_user():
             if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
-                    flash('Username already exists. Please choose a different username.')
+                    flash('Username already exists. Please choose a different username.','error')
                     if account['Role']== 3:
                         return redirect(url_for('customer_list'))
                     elif account['Role'] == 2:
@@ -444,10 +443,12 @@ def update_user():
             if account['Role']== 3:
                 cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s', (email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
+                flash('Information updated successfully!','success')
                 return redirect(url_for('customer_list'))
             elif account['Role'] == 2:
                 cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
                 mysql.connection.commit()
+                flash('Information updated successfully!','success')
                 return redirect(url_for('staff_list'))
             else:
                 return 'unauthorized'
@@ -471,20 +472,20 @@ def delete_user(userid):
                 cursor.execute('SELECT * FROM car WHERE Active = 1 and CustomerID in (SELECT CustomerID FROM customer WHERE customer.UserID=%s)',(userid,))
                 rented_car = cursor.fetchall()
                 if rented_car:
-                    flash("Cannot delete customer who has rented a car.")
+                    flash('Cannot delete customer who has rented a car.','error')
                     return redirect(url_for('customer_list'))
                 else:
                     cursor.execute('UPDATE user SET Active=%s WHERE UserID=%s',(0,userid))
                     cursor.execute('UPDATE customer SET Active=%s WHERE UserID=%s',(0,userid))
                     mysql.connection.commit()
-                    flash("Delete successfully")
+                    flash('Delete successfully!','success')
                     return redirect(url_for('customer_list'))
             # delete a staff
             elif user_to_delete['Role'] == 2:
                     cursor.execute('UPDATE user SET Active=%s WHERE UserID=%s',(0,userid,))
                     cursor.execute('UPDATE staff SET Active=%s WHERE UserID=%s',(0,userid))
                     mysql.connection.commit()
-                    flash("Delete successfully")
+                    flash('Delete successfully!','success')
                     return redirect(url_for('staff_list'))
             else:
                 return 'unauthorized'
@@ -514,14 +515,14 @@ def add_user():
                 user_id = cursor.lastrowid
                 cursor.execute('INSERT INTO staff (UserID,Email,FirstName,LastName,PhoneNumber,Address) VALUES (%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address))
                 mysql.connection.commit()
-                flash("You have successfully added a staff!")
+                flash("You have successfully added a staff!",'success')
                 return redirect(url_for('staff_list'))
             elif user_type == 3:
                 cursor.execute('INSERT INTO user (UserName, Password, Role) VALUES (%s, %s, %s)',(username, hashed, 3))
                 user_id = cursor.lastrowid
                 cursor.execute('INSERT INTO customer (UserID,Email,FirstName,LastName,PhoneNumber,Address) VALUES (%s,%s,%s,%s,%s,%s)',(user_id,email,firstname,lastname,phone,address))
                 mysql.connection.commit()
-                flash("You have successfully added a customer!")
+                flash("You have successfully added a customer!",'success')
                 return redirect(url_for('customer_list'))
             else:
                 return 'unauthorized1'
@@ -563,7 +564,7 @@ def add_car():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()
-            flash("You have successfully added a car!")
+            flash("You have successfully added a car!",'success')
             return redirect(url_for('car_list'))
         else:
             return 'unauthorized'
@@ -604,10 +605,10 @@ def update_car():
                     SET CarImage = %s, CarModel = %s, Year = %s, RegNumber = %s, SeatCap = %s, RentalPerDay = %s, CustomerID = %s
                     WHERE CarID = %s;'''
             parameters = (carimage, car_model, year, registration_number, seat_cap, rental_per_day, customer_id, carid)
-            print(carimage)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(sql, parameters)
             mysql.connection.commit()
+            flash('Car information changed successfully!','success')
             return redirect(url_for('car_list'))
         else:
             return 'unauthorized'
@@ -622,7 +623,7 @@ def delete_car(carid):
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('UPDATE car SET Active=%s WHERE CarID=%s',(0,carid))
             mysql.connection.commit()
-            flash("Delete successfully")
+            flash("Delete successfully!",'success')
             return redirect(url_for('car_list'))
         else:
             return 'unauthorized'

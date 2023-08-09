@@ -4,13 +4,19 @@
 
 {% block content %}
 
-<div class="container mx-5 px-5">
-    <h1 class="display-6 my-3" style="text-align: right; color: #001C30">Welcome, {{ name }}!</h1>
+<div class="container mx-5 px-5 mx-auto">
+    <h1 class="display-6 my-3" style="text-align: right; color: #001C30">
+        Welcome
+        {% if name != None%}
+        , {{ name }}!
+        {% else %}
+        !
+        {% endif%}</h1>
     <hr />
 
     <div class="row">
         
-        <div class="col-lg-3 mt-3 px-5">
+        <div class="filter col-lg-3 mt-3 px-5">
 
             <h2 style="font-size: 1.3rem; font-weight: bolder;">Filter</h2>
             <hr />

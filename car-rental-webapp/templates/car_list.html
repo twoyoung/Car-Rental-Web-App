@@ -4,9 +4,14 @@
 
 {% block content %}
 
-{% with msg = get_flashed_messages() %}
-  {% if msg %}
-        {{ msg }}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages text-center">
+    {% for category, message in messages %}
+        <div class="py-2 flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+        {{ message }}
+    {% endfor %}
+        </div>
   {% endif %}
 {% endwith %}
 

@@ -4,6 +4,17 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages text-center">
+    {% for category, message in messages %}
+        <div class="py-2 flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+        {{ message }}
+    {% endfor %}
+        </div>
+  {% endif %}
+{% endwith %}
+
 <div class="container container-sm">
     <div class="row d-flex justify-content-center">
         <div class="col-11 col-md-10 col-lg-9 col-xl-8 col-xxl-7 mt-3">
@@ -196,7 +207,7 @@
                                                         <label for="username" class="form-label">Username</label>
                                                         <div class="input-group has-validation">
                                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                            <input type="text" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" value="{{account['UserName']}}" required>
+                                                            <input type="username" class="form-control" id="username" name="username" aria-describedby="inputGroupPrepend" value="{{account['UserName']}}" required>
                                                             <div class="invalid-feedback username-empty-feedback">
                                                                 Username is required.
                                                             </div>
@@ -211,7 +222,7 @@
                                                 
                                                     <div class="col-sm-8 mb-4">
                                                         <label for="password" class="form-label">Password</label>
-                                                        <input type="text" name="password" class="form-control" id="password" value="{{account['Password']}}" required>
+                                                        <input type="password" name="password" class="form-control" id="password" value="{{account['Password']}}" required>
                                                         <div class="invalid-feedback password-empty-feedback">
                                                             Password is required.
                                                         </div>

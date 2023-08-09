@@ -225,6 +225,17 @@ body {
     
 }
 
+.flash-error {
+    color: red;
+    background-color: #ffe6e6; /* Light red background */
+  }
+  
+  /* Success Flash Message Styles */
+.flash-success {
+    color: green;
+    background-color: #e6ffe6; /* Light green background */
+  }
+
 
 
 @media (max-width: 1200px){
@@ -311,6 +322,12 @@ body {
 @media (max-width:576px){
     .circle.text-white{
         font-size: 9rem;
+    }
+}
+
+@media (max-width:991px){
+    .filter{
+        display: none;
     }
 }
 
