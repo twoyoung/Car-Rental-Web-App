@@ -1,5 +1,13 @@
 # car-rental-webapp
 
+## Log in
+* as admin:
+  * username: admin; password: admin
+* as staff:
+  * username: staff1; password: staff1
+* as customer:
+  * username: customer1; password: customer1
+
 ## This is a simple web app for car rental company with the basic functions of:
 * customer register new account
 * log in
