@@ -258,10 +258,15 @@ def check_profile(userid):
     
 @app.route('/edit/profile/<userid>')
 def change_password(userid):
+    account=get_account(userid)
+    userid = int(userid)
     if is_authenticated():
-        user_role = get_user_role()
-        account = get_account(userid)
-        return render_template('change_password.html',account=account,user_role=session['role']) 
+        if session['id'] == 1:
+            user_role = get_user_role()
+            account = get_account(userid)
+            return render_template('change_password.html',account=account,user_role=session['role']) 
+        else:
+            return render_template('unauthorized.html')
     else:
         # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -314,35 +319,6 @@ def update_profile():
                 return redirect(url_for('check_profile',userid=userid))
             else:
                 return render_template('unauthorized.html')
-
-            # update the other data to the database
-            # if user_role == 'staff' and account['Role'] == 2:
-            #     cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
-            #     mysql.connection.commit()
-            #     return redirect(url_for('profile'))
-            # elif user_role == 'customer' and account['Role'] == 3:
-            #     cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID = %s', (email,firstname,lastname,phone,address,userid))
-            #     mysql.connection.commit()
-            #     return redirect(url_for('profile'))
-            # elif user_role == 'admin' and account['Role'] == 1:
-            #     return redirect(url_for('profile'))
-            # elif user_role == 'admin' and account['Role'] in [2,3]:
-                
-            # if account['Role'] == 3:
-            #     cursor.execute('UPDATE customer SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE customer.UserID=%s',(email,firstname,lastname,phone,address,userid))
-            #     mysql.connection.commit()
-            #     if user_role in ['admin','staff']:
-            #         return redirect(url_for('check_profile',userid=userid))
-            #     elif user_role in ['customer']:
-            #         return redirect(url_for('profile'))
-            # elif account['Role'] == 2:
-            #     cursor.execute('UPDATE staff SET Email=%s,FirstName=%s,LastName=%s,PhoneNumber=%s,Address=%s WHERE staff.UserID = %s', (email,firstname,lastname,phone,address,userid))
-            #     mysql.connection.commit()
-            #     return redirect(url_for('check_profile',userid=userid))
-            # elif account['Role'] == 1:
-            #     return redirect(url_for('check_profile',userid=userid))
-            # else:
-            #     return 'unauthorized'
         else:
             return render_template('unauthorized.html')
     else:
