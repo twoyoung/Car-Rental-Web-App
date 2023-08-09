@@ -206,7 +206,7 @@ def home():
         elif user_role == 'customer':
             return render_template('customer_dashboard.html',name=account['FirstName'], car_list=car_list, user_role=session['role'], car_count=available_car_count)
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -229,14 +229,28 @@ def profile():
 def check_profile(userid):
     # Check if user is loggedin
     if is_authenticated():
-        user_role = get_user_role()
-        if user_role in ['admin','staff','customer']:
-            # We need all the account info for the user so we can display it on the profile page
-            account = get_account(userid)
-            # Show the profile page with account info
-            return render_template('profile.html', account=account,user_role=session['role'])
+        account = get_account(userid)
+        userid = int(userid)
+        if account:
+            user_role = get_user_role()
+            if user_role == 'admin':
+                # We need all the account info for the user so we can display it on the profile page
+                # Show the profile page with account info
+                return render_template('profile.html', account=account,user_role=session['role'])
+            elif user_role == 'staff':
+                if account['Role'] == 3 or userid == session['id']:
+                    return render_template('profile.html', account=account,user_role=session['role'])
+                else:
+                    return render_template('unauthorized.html')
+            elif user_role == 'customer':
+                if session['id'] == userid:
+                    return render_template('profile.html', account=account,user_role=session['role'])
+                else:
+                    return render_template('unauthorized.html')
+            else:
+                return render_template('unauthorized.html')
         else:
-            return "unauthorized"
+            return render_template('unauthorized.html')
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -299,7 +313,7 @@ def update_profile():
                 flash('Profile information changed successfully!','success')
                 return redirect(url_for('check_profile',userid=userid))
             else:
-                return 'unauthorized'
+                return render_template('unauthorized.html')
 
             # update the other data to the database
             # if user_role == 'staff' and account['Role'] == 2:
@@ -330,7 +344,7 @@ def update_profile():
             # else:
             #     return 'unauthorized'
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -350,7 +364,7 @@ def car_list():
             car_list = cursor.fetchall()
             return render_template('car_list.html', car_list=car_list, user_role=session['role'])
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -378,7 +392,7 @@ def customer_list():
         if user_role in ['admin','staff']:
             return render_template('customer_list.html', customer_list=customer_list, user_role=session['role']) 
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -392,7 +406,7 @@ def staff_list():
         if user_role == 'admin':
             return render_template('staff_list.html', staff_list=staff_list, user_role=session['role'])
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
     
@@ -424,7 +438,7 @@ def update_user():
                     elif account['Role'] == 2:
                         return redirect(url_for('staff_list'))
                     else:
-                        return 'unauthorized'
+                        return render_template('unauthorized.html')
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
                     mysql.connection.commit()
@@ -448,9 +462,9 @@ def update_user():
                 flash('Information updated successfully!','success')
                 return redirect(url_for('staff_list'))
             else:
-                return 'unauthorized'
+                return render_template('unauthorized.html')
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -485,9 +499,9 @@ def delete_user(userid):
                     flash('Delete successfully!','success')
                     return redirect(url_for('staff_list'))
             else:
-                return 'unauthorized'
+                return render_template('unauthorized.html')
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
      
@@ -512,7 +526,7 @@ def add_user():
                     elif user_type == 2:
                         return redirect(url_for('staff_list'))
                     else:
-                        return 'unauthorized'
+                        return render_template('unauthorized.html')
             # insert the data to the database
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             if user_type == 2:
@@ -530,9 +544,9 @@ def add_user():
                 flash("You have successfully added a customer!",'success')
                 return redirect(url_for('customer_list'))
             else:
-                return 'unauthorized1'
+                return render_template('unauthorized.html')
         else:
-            return 'unauthorized2'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -572,7 +586,7 @@ def add_car():
             flash("You have successfully added a car!",'success')
             return redirect(url_for('car_list'))
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -616,7 +630,7 @@ def update_car():
             flash('Car information changed successfully!','success')
             return redirect(url_for('car_list'))
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
@@ -631,7 +645,7 @@ def delete_car(carid):
             flash("Delete successfully!",'success')
             return redirect(url_for('car_list'))
         else:
-            return 'unauthorized'
+            return render_template('unauthorized.html')
     else:
         return redirect(url_for('login'))
 
