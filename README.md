@@ -21,8 +21,9 @@
 * user management: list/check/add/edit/delete users
 * car management: list/check/add/edit/delete cars
 * input validation
+* responstive
   
 
-## current bug that hasn't been fixed
+## Current bug that hasn't been fixed
 * when editting the information of customer/staff/car, user have to click and edit the required field first to enable to submit button
 * function for filter on customer dashboard and list icon on the header hasn't been achieved yet due to the limit of time
