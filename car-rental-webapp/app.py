@@ -250,7 +250,7 @@ def check_profile(userid):
             else:
                 return render_template('unauthorized.html')
         else:
-            return render_template('unauthorized.html')
+            return "404"
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -352,8 +352,11 @@ def check_car(carid):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM car WHERE CarID = %s and Active = 1', (carid,))
         car = cursor.fetchone()
-        return render_template('car.html', car=car, user_role=session['role'])
-        # return render_template('car_test.html')
+        if car:
+            return render_template('car.html', car=car, user_role=session['role'])
+            # return render_template('car_test.html')
+        else:
+            return "404"
     else:
     # User is not loggedin redirect to login page
         return redirect(url_for('login'))
