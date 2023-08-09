@@ -200,9 +200,9 @@ def home():
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
-            return render_template('admin_dashboard.html', customer_count=customer_count, staff_count=staff_count,car_count=total_car_count)
+            return render_template('admin_dashboard.html', customer_count=customer_count, staff_count=staff_count,car_count=total_car_count,user_role=session['role'])
         elif user_role == 'staff':
-            return render_template('staff_dashboard.html',name=account['FirstName'],customer_count=customer_count,car_count=total_car_count)
+            return render_template('staff_dashboard.html',name=account['FirstName'],customer_count=customer_count,car_count=total_car_count,user_role=session['role'])
         elif user_role == 'customer':
             return render_template('customer_dashboard.html',name=account['FirstName'], car_list=car_list, user_role=session['role'], car_count=available_car_count)
         else:
@@ -247,7 +247,7 @@ def change_password(userid):
     if is_authenticated():
         user_role = get_user_role()
         account = get_account(userid)
-        return render_template('change_password.html',account=account,user_role=user_role) 
+        return render_template('change_password.html',account=account,user_role=session['role']) 
     else:
         # User is not loggedin redirect to login page
         return redirect(url_for('login'))
@@ -266,17 +266,14 @@ def update_profile():
             email = request.form.get('email')
             address = request.form.get('address')
             password = request.form.get('password')
-            print(firstname)
-            print(lastname)
             account = get_account(userid)
-            print(account)
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             #if username is changed:
             if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
                     flash('Username already exists. Please choose a different username.','error')
-                    return redirect(url_for('change_password',userid=userid))
+                    return redirect(url_for('check_profile',userid=userid))
                 else:
                     cursor.execute('UPDATE user SET UserName=%s WHERE UserID=%s',(username, userid))
                     mysql.connection.commit()
@@ -351,7 +348,7 @@ def car_list():
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM car WHERE Active=1')
             car_list = cursor.fetchall()
-            return render_template('car_list.html', car_list=car_list, user_role=user_role)
+            return render_template('car_list.html', car_list=car_list, user_role=session['role'])
         else:
             return 'unauthorized'
     else:
@@ -379,7 +376,7 @@ def customer_list():
         cursor.execute('SELECT * FROM customer LEFT JOIN user ON customer.UserID = user.UserID WHERE user.Active=1')
         customer_list = cursor.fetchall()
         if user_role in ['admin','staff']:
-            return render_template('customer_list.html', customer_list=customer_list, user_role=user_role) 
+            return render_template('customer_list.html', customer_list=customer_list, user_role=session['role']) 
         else:
             return 'unauthorized'
     else:
@@ -393,7 +390,7 @@ def staff_list():
         cursor.execute('SELECT * FROM staff LEFT JOIN user ON staff.UserID = user.UserID WHERE user.Active = 1')
         staff_list = cursor.fetchall()
         if user_role == 'admin':
-            return render_template('staff_list.html', staff_list=staff_list)
+            return render_template('staff_list.html', staff_list=staff_list, user_role=session['role'])
         else:
             return 'unauthorized'
     else:
@@ -421,7 +418,7 @@ def update_user():
             if username != account['UserName']:
                 #check if username already exists in database
                 if username_crash(username):
-                    flash('Username already exists. Please choose a different username.','error')
+                    flash('Failed. Username already exists. Please choose a different username.','error')
                     if account['Role']== 3:
                         return redirect(url_for('customer_list'))
                     elif account['Role'] == 2:
@@ -508,6 +505,14 @@ def add_user():
             password = request.form.get('password')
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             user_type = int(request.form.get('user_type'))
+            if username_crash(username):
+                    flash('Failed. Username already exists. Please choose a different username.','error')
+                    if user_type == 3:
+                        return redirect(url_for('customer_list'))
+                    elif user_type == 2:
+                        return redirect(url_for('staff_list'))
+                    else:
+                        return 'unauthorized'
             # insert the data to the database
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             if user_type == 2:

@@ -6,9 +6,9 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <div class="flash-messages text-center">
+    <div class="flash-messages">
     {% for category, message in messages %}
-        <div class="py-2 flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+        <div class="py-2 text-center flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
         {{ message }}
     {% endfor %}
         </div>

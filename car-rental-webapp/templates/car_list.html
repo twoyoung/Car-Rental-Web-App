@@ -6,9 +6,9 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <div class="flash-messages text-center">
+    <div class="flash-messages">
     {% for category, message in messages %}
-        <div class="py-2 flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+        <div class="py-2 text-center flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
         {{ message }}
     {% endfor %}
         </div>
@@ -44,6 +44,8 @@
                     </div>
                     <div class="modal-body">
                         <form action="/add/car" method = "POST" class="needs-validation form-feedback" id="add-car" novalidate enctype="multipart/form-data">
+
+                            <input type="hidden" name="customer_id" class="form-control"  id="customerId" value="">
                             <div class="row g-3">
                                 <div class="col-sm-6">
                                     <label for="model" class="form-label">Car Model</label>
@@ -112,7 +114,7 @@
                                     </div>
                                 </div>
                         
-                                <div class="col-sm-6">
+                                <!-- <div class="col-sm-6">
                                     <label for="customer_id" class="form-label">Rent to customer with ID #</label>
                                     <input type="text" name="customer_id" class="form-control"  id="customerId">
                                     <div class="invalid-feedback customerIdFormatFeedback">
@@ -123,7 +125,7 @@
                                     </div>
                                     <div class="valid-feedback customerIdEmptyFeedback">
                                     </div>
-                                </div>
+                                </div> -->
                         
                                 <div class="col-sm-12 mb-4">
                                     <label for="car_image" class="form-label">Car Image</label>

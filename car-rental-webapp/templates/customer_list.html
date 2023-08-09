@@ -6,9 +6,9 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <div class="flash-messages text-center">
+    <div class="flash-messages">
     {% for category, message in messages %}
-        <div class="py-2 flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+        <div class="py-2 text-center flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
         {{ message }}
     {% endfor %}
         </div>
@@ -27,7 +27,7 @@
              </a>
         </div>
 
-        {% if user_role == 'admin'%}
+        {% if user_role == 1 %}
         <!-- add a customer -->   
         <button type="button" class="btn custom-btn" data-bs-toggle="modal" data-bs-target="#add_customer">
             <div class="d-flex justify-content-between align-items-center">
@@ -136,7 +136,7 @@
             <thead>
                 <tr>
                     <th>Customer ID</th><th>Username</th><th>Customer Name</th><th>Email</th><th>Phone Number</th><th>Address</th>
-                    {% if user_role == 'admin' %}
+                    {% if user_role == 1 %}
                     <th>Action</th>
                     {% endif %}
                 </tr>
@@ -151,7 +151,7 @@
                         <td>{{customer['PhoneNumber']}}</td>
                         <td>{{customer['Address']}}</td>
 
-                        {% if user_role == 'admin' %}
+                        {% if user_role == 1 %}
                         <td>
                             <!-- Edit customer -->
                             <button type="button" class="btn custom-edit px-2 mx-0" data-bs-toggle="modal" data-bs-target="#edit_{{customer['UserID']}}">
