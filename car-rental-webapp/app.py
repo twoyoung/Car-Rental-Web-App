@@ -18,17 +18,17 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = '32494971'
 
 # Enter your database connection details below
-# app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
-# app.config['MYSQL_USER'] = '2young'
-# app.config['MYSQL_PASSWORD'] = 'Young@32494971'
-# app.config['MYSQL_DB'] = '2young$COMP639'
-# app.config['MYSQL_PORT'] = 3306
-
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'rental'
+app.config['MYSQL_HOST'] = '2young.mysql.pythonanywhere-services.com'
+app.config['MYSQL_USER'] = '2young'
+app.config['MYSQL_PASSWORD'] = 'Young@32494971'
+app.config['MYSQL_DB'] = '2young$COMP639'
 app.config['MYSQL_PORT'] = 3306
+
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'rental'
+# app.config['MYSQL_PORT'] = 3306
 
 # Intialize MySQL
 mysql = MySQL(app)
