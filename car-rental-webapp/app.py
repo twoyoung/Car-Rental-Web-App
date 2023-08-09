@@ -8,7 +8,8 @@ from pymysql import NULL
 import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = './static/car_images'
+# UPLOAD_FOLDER = './static/car_images'
+UPLOAD_FOLDER = '/home/2young/COMP639-Rental-Car-Web-App/car-rental-webapp/static/car_images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
