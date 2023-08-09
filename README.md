@@ -7,8 +7,8 @@
 * change password
 * different dashboards and functions for admin, staff and customer
 * different access authorization for admin, staff and customer
-* list/check/add/edit/delete users
-* list/check/add/edit/delete cars
+* user management: list/check/add/edit/delete users
+* car management: list/check/add/edit/delete cars
 * input validation
   
 
