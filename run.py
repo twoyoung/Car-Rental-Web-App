@@ -1,4 +1,3 @@
-from flask import Flask
 from car_rental_webapp import app
 
 if __name__ == '__main__':
