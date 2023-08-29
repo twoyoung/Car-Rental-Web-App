@@ -6,36 +6,32 @@
 
 <div class="container mx-auto">
     <h1 class="display-6 my-3" style="text-align: right; color: #001C30">Welcome, {{name}}!</h1>
+
     <hr />
+
     <div class="row col-md-12 col-xl-10 col-8 mx-auto d-flex justify-content-center align-items-center">
         <div class="col-md-4 mt-4 mb-3 p-2 mx-auto">
             <a href="/home/customer_list" class="nav-link">
-            <div class="circle text-white opacity-60" style="background-color: #64CCC5;">
-                <div>
-                    <p class="display-1 fw-bolder align-middle mb-0">{{ customer_count }}</p>
-                    <h2 class="fs-1 align-middle">Customers</h2>
+                <div class="circle text-white opacity-60" style="background-color: #64CCC5;">
+                    <div>
+                        <p class="display-1 fw-bolder align-middle mb-0">{{ customer_count }}</p>
+                        <h2 class="fs-1 align-middle">Customers</h2>
+                    </div>
                 </div>
-            </div>
             </a>
         </div>
 
         <div class="col-md-4 mt-4 mb-3 p-2 mx-auto">
             <a href="/home/car_list" class="nav-link">
-            <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: #176B87">
-                <div>
-                    <p class="display-1 fw-bolder align-middle mb-0">{{ car_count }}</p>
-                    <h2 class="fs-1 align-middle">Cars</h2>
+                <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: #176B87">
+                    <div>
+                        <p class="display-1 fw-bolder align-middle mb-0">{{ car_count }}</p>
+                        <h2 class="fs-1 align-middle">Cars</h2>
+                    </div>
                 </div>
-            </div>
             </a>
-        </div>
         </div>
     </div>
 </div>
 
-<!-- <h1 class="display-5">Welcome, {{ name }}!</h1>
-<hr />
-
-<h2><a href="/home/customer_list" class="nav-link">Browse all customers</a></h2>
-<h2><a href="/home/car_list" class="nav-link">Manage rental cars</a></h2> -->
 {% endblock %}

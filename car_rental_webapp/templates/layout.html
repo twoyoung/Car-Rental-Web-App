@@ -7,804 +7,150 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
 	</head>
+	{% if user_role != 1 and user_role != 2 and user_role != 3 %}
+	<body class="background-image">
+	{% else %}
 	<body>
-
+	{% endif %}
+		<!-- navbar -->
 		{% if user_role == 3 %}
 		<header class="flex-md-nowrap p-0 shadow" style="background-color:#2589bc;">
 		{% elif user_role == 1 %}
 		<header class="sticky-top flex-md-nowrap p-0 shadow opacity-80" style="background-color:#001C30;">
 		{% elif user_role == 2 %}
 		<header class="sticky-top flex-md-nowrap p-0 shadow opacity-80" style="background-color:#126097;">
+		{% else %}
+		<header class="flex-md-nowrap p-0 shadow" style="background-color:rgb(0,28,48,0.8);">
 		{% endif %}
-			<div class="px-3 py-1 border-bottom">
+			<div class="px-3 py-1 border-0">
 				<div class="container col-md-12 header">				
 					<div class="d-flex flex-wrap align-items-center justify-content-between justify-content-center">
+						<!-- logo -->
 						<div class="me-4">
 							<a href="/home" class="d-flex align-items-center justify-content-center mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
 								<img src="{{ url_for('static', filename='image/' + 'logo.png')}}" class="logo" style="height: 45px" >
 								<img src="{{ url_for('static', filename='image/' + 'logo_small.png')}}" class="logo_small ms-4" style="height: 45px" >
 							</a>
-							</div>	
-							<div class="ms-4">
-								<ul class="nav col-12 col-lg-auto  justify-content-center my-2 my-md-0 text-small">
-									{% if user_role == 3 %}
-									<li>
-										<a href="{{ url_for('home') }}" class="nav-link text-white py-1">
+						</div>	
+						<div class="ms-4">
+							<ul class="nav col-12 col-lg-auto justify-content-center my-2 my-md-0 text-small">
+								<!-- navbar link for customer -->
+								{% if user_role == 3 %}
+								<li>
+									<a href="{{ url_for('home') }}" class="nav-link text-white py-1">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-house-door" viewBox="0 0 16 16">
 										<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"/>
 										</svg>
 										Home
-										</a>
-									</li>
-									<li>
-										<a href="{{ url_for('profile') }}" class="nav-link text-white py-1">
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('profile') }}" class="nav-link text-white py-1">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-person-circle" viewBox="0 0 16 16">
 											<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
 											<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
 										</svg>
 										Profile
-										</a>
-									</li>
-									<li>
-										<a href="{{ url_for('logout') }}" class="nav-link text-white py-1">
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('logout') }}" class="nav-link text-white py-1">
 										<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-box-arrow-right" viewBox="0 0 16 16">
 											<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
 											<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
 										</svg>
 										Logout
-										</a>
-									</li>
+									</a>
+								</li>
 
-										{% else %}
-										<li>
-										<a href="{{ url_for('home') }}" class="nav-link text-white">
-											<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-speedometer" viewBox="0 0 16 16">
-												<path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
-												<path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
+								<!-- navbar link for admin and staff -->
+								{% elif user_role == 1 or user_role == 2 %}
+								<li>
+									<a href="{{ url_for('home') }}" class="nav-link text-white">
+										<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-speedometer" viewBox="0 0 16 16">
+											<path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2zM3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z"/>
+											<path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z"/>
+										</svg>
+										Dashboard
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('profile') }}" class="nav-link text-white">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-person-circle" viewBox="0 0 16 16">
+											<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+											<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+										</svg>
+										Profile
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('logout') }}" class="nav-link text-white">
+										<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-box-arrow-right" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+											<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+										</svg>
+										Logout
+									</a>
+								</li>
+
+								<!-- navbar link for guests -->
+								{% else %}
+								<li>
+									<a href="{{ url_for('home') }}" class="nav-link text-white py-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-house-door" viewBox="0 0 16 16">
+											<path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146ZM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5Z"/>
+										</svg>
+										Home
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('profile') }}" class="nav-link text-white py-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-car-front-fill" viewBox="0 0 16 16">
+											<path d="M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679c.033.161.049.325.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.807.807 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2H6ZM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17 1.247 0 3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z"/>
+										</svg>
+										Cars
+									</a>
+								</li>
+								<li>
+									<a href="{{ url_for('logout') }}" class="nav-link text-white py-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-box-arrow-in-left" viewBox="0 0 16 16">
+											<path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+											<path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+										</svg>
+										Login
+									</a>
+								</li>									
+								{% endif %}
+								<li>
+									<div>
+										<a href="" class="list-icon nav-link text-white py-1" data-bs-toggle="dropdown" aria-expanded="false">
+											<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi d-block mx-auto mb-1 bi-list" viewBox="0 0 16 16">
+												<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
 											</svg>
-											Dashboard
 										</a>
-										</li>
-										<li>
-										<a href="{{ url_for('profile') }}" class="nav-link text-white">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-person-circle" viewBox="0 0 16 16">
-												<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-												<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-											</svg>
-											Profile
-										</a>
-										</li>
-										<li>
-										<a href="{{ url_for('logout') }}" class="nav-link text-white">
-											<svg xmlns="http://www.w3.org/2400/svg" width="24" height="24" fill="currentColor" class="bi d-block mx-auto mb-1 bi-box-arrow-right" viewBox="0 0 16 16">
-												<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-												<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-											</svg>
-											Logout
-										</a>
-										</li>
-										{% endif %}
-										<li>
-											<a href="" class="list-icon nav-link text-white py-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi d-block mx-auto mb-1 bi-list" viewBox="0 0 16 16">
-													<path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
-												  </svg>
-				
-											</a>
-										  </li>
-				  					</ul>
-								</div>
+									</div>
+								</li>
+							</ul>
 						</div>
-			  		</div>
+					</div>
+				</div>
 			</div>
 		</header>
+		<!-- end of navbar -->
 
 		{% block content %}{% endblock %}
 
-		<!-- <script>
-			// Enable form validation
-			(function () {
-			  'use strict';
-		  
-			  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-			  const forms = document.querySelectorAll('.needs-validation');
-		  
-			  // Loop over them and prevent submission
-			  Array.prototype.slice.call(forms).forEach(function (form) {
-				form.addEventListener('submit', function (event) {
-				  if (!form.checkValidity()) {
-					event.preventDefault();
-					event.stopPropagation();
-				  }
-		  
-				  form.classList.add('was-validated');
-				}, false);
-			  });
-			})();
-		  
-		</script> -->
-
-
-		
-
-
-	<!-- below is Javascript code for input real-time validation and feedback -->
-
-		<!-- client-side input validation username with different #id -->
-		<script>
-			function usernameListener(elementID){
-				const usernameInput = document.getElementById(elementID);
-				const usernameFormatFeedback = document.querySelector('.username-invalid-format-feedback');
-				const usernameEmptyFeedback = document.querySelector('.username-empty-feedback');
-				const usernameValidFeedback = document.querySelector('.username-valid-feedback');
-				
-				usernameInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						usernameValidFeedback.style.display = 'none';					
-						usernameFormatFeedback.style.display = 'none';
-						usernameEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^[a-zA-Z0-9]+$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							usernameFormatFeedback.style.display = 'none';
-							usernameValidFeedback.style.display = 'block';
-							usernameEmptyFeedback.style.display = 'none';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							usernameValidFeedback.style.display = 'none';
-							usernameFormatFeedback.style.display = 'block';
-							usernameEmptyFeedback.style.display = 'none';
-						}
-					}
-				});
-			};
-			// #id is 'username'
-			usernameListener('username');
-
-			usernameListener('username-register');
-
-			// #id is not 'username' but class is 'username'
-			const usernameInputs = document.querySelectorAll('.form-control.username');
-			// Loop through all input elements and call the usernameListener function for each element
-			usernameInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				usernameListener(elementID);
-			});
-		</script>
-
-		<!-- client-side input validation password with different #id -->
-		<script>
-			function passwordListener(elementID){
-				const passwordInput = document.getElementById(elementID);
-				const passwordFormatFeedback = document.querySelector('.password-invalid-format-feedback');
-				const passwordEmptyFeedback = document.querySelector('.password-empty-feedback');
-				const passwordValidFeedback = document.querySelector('.password-valid-feedback');
-				
-				passwordInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						passwordValidFeedback.style.display = 'none';					
-						passwordFormatFeedback.style.display = 'none';
-						passwordEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							passwordFormatFeedback.style.display = 'none';
-							passwordValidFeedback.style.display = 'block';
-							passwordEmptyFeedback.style.display = 'none';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							passwordValidFeedback.style.display = 'none';
-							passwordFormatFeedback.style.display = 'block';
-							passwordEmptyFeedback.style.display = 'none';
-						}
-					}
-				});		
-			};
-			passwordListener('password');
-
-			const passwordInputs = document.querySelectorAll('.form-control.password');
-			// Loop through all input elements and call the passwordListener function for each element
-			passwordInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				passwordListener(elementID);
-			});
-		</script>
-
-		<!-- client-side input validation email with different #id -->
-		<script>
-			function emailListener(elementID){
-				const emailInput = document.getElementById(elementID);
-				const emailFormatFeedback = document.querySelector('.email-invalid-format-feedback');
-				const emailEmptyFeedback = document.querySelector('.email-empty-feedback');
-				const emailValidFeedback = document.querySelector('.email-valid-feedback');
-				
-				emailInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						emailValidFeedback.style.display = 'none';					
-						emailFormatFeedback.style.display = 'none';
-						emailEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							emailFormatFeedback.style.display = 'none';
-							emailValidFeedback.style.display = 'block';
-							emailEmptyFeedback.style.display = 'none';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							emailValidFeedback.style.display = 'none';
-							emailFormatFeedback.style.display = 'block';
-							emailEmptyFeedback.style.display = 'none';
-						}
-					}
-				});
-			};
-			emailListener('email');
-			const emailInputs = document.querySelectorAll('.form-control.email');
-			// Loop through all input elements and call the usernameListener function for each element
-			emailInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				emailListener(elementID);
-			});
-		</script>
-
-
-		<!-- client-side input validation car model with different #id -->
-		<script>
-			function modelListener(elementID){
-				const modelInput = document.getElementById(elementID);
-				const modelInvalidFeedback = document.querySelector('.modelEmptyFeedback');
-				const modelValidFeedback = document.querySelector('.modelValidFeedback');
-				
-				modelInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						modelValidFeedback.style.display = 'none';					
-						modelInvalidFeedback.style.display = 'block';
-					} else {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							modelInvalidFeedback.style.display = 'none';
-							modelValidFeedback.style.display = 'block';
-					} 
-					}
-				);
-			};
-			modelListener('model');
-
-			const modelInputs = document.querySelectorAll('.form-control.model');
-			// Loop through all input elements and call the modelListener function for each element
-			modelInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				modelListener(elementID);
-			});
-			
-		</script>
-
-		<!-- client-side input validation year with different #id -->
-		<script>
-			function yearListener(elementID){
-				const yearInput = document.getElementById(elementID);
-				const yearInvalidFeedback = document.querySelector('.yearInvalidFeedback');
-				const yearValidFeedback = document.querySelector('.yearValidFeedback');
-				
-				yearInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						yearValidFeedback.style.display = 'none';					
-						yearInvalidFeedback.style.display = 'block';
-					} else {
-						const isValid = /^(188[6-9]|18[9-9]\d|19\d\d|20[0-1]\d|202[0-3])$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							yearInvalidFeedback.style.display = 'none';
-							yearValidFeedback.style.display = 'block';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							yearValidFeedback.style.display = 'none';
-							yearInvalidFeedback.style.display = 'block';
-						}
-					}
-				});
-			};
-			yearListener('year')
-			const yearInputs = document.querySelectorAll('.form-control.year');
-			// Loop through all input elements and call the yearListener function for each element
-			yearInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				yearListener(elementID);
-			});
-		
-		</script>
-
-
-		<!-- client-side input validation seatNumber with different #id -->
-		<script>
-			function seatNumberListener(elementID){
-				const seatNumberInput = document.getElementById(elementID);
-				const seatNumberEmptyFeedback = document.querySelector('.seatNumberEmptyFeedback');
-				const seatNumberFormatFeedback = document.querySelector('.seatNumberFormatFeedback');
-				const seatNumberValidFeedback = document.querySelector('.seatNumberValidFeedback');
-				
-				seatNumberInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						seatNumberValidFeedback.style.display = 'none';		
-						seatNumberFormatFeedback.style.display = 'none';			
-						seatNumberEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^(?:[1-9]|[1-4][0-9]|50)$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							seatNumberEmptyFeedback.style.display = 'none';
-							seatNumberFormatFeedback.style.display = 'none';
-							seatNumberValidFeedback.style.display = 'block';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							seatNumberValidFeedback.style.display = 'none';
-							seatNumberEmptyFeedback.style.display = 'none';
-							seatNumberFormatFeedback.style.display = 'block';
-						}
-					}
-				});
-			};
-			seatNumberListener('seatNumber')
-			const seatNumberInputs = document.querySelectorAll('.form-control.seatNumber');
-			// Loop through all input elements and call the seatNumberListener function for each element
-			seatNumberInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				seatNumberListener(elementID);
-			});
-			
-		</script>
-
-
-
-		<!-- client-side input validation registration with different #id -->
-		<script>
-			function registrationListener(elementID){
-				const registrationInput = document.getElementById(elementID);
-				const registrationEmptyFeedback = document.querySelector('.registrationEmptyFeedback');
-				const registrationFormatFeedback = document.querySelector('.registrationFormatFeedback');
-				const registrationValidFeedback = document.querySelector('.registrationValidFeedback');
-				
-				registrationInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						registrationValidFeedback.style.display = 'none';		
-						registrationFormatFeedback.style.display = 'none';			
-						registrationEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^[A-Z]{2,3}\d{2,3}$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							registrationEmptyFeedback.style.display = 'none';
-							registrationFormatFeedback.style.display = 'none';
-							registrationValidFeedback.style.display = 'block';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							registrationValidFeedback.style.display = 'none';
-							registrationEmptyFeedback.style.display = 'none';
-							registrationFormatFeedback.style.display = 'block';
-						}
-					}
-				});
-			};
-			registrationListener('registration')
-			const registrationInputs = document.querySelectorAll('.form-control.registration');
-			// Loop through all input elements and call the registrationListener function for each element
-			registrationInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				registrationListener(elementID);
-			});
-			
-		</script>
-
-
-		<!-- client-side input validation rental per day with different #id -->
-		<script>
-			function rentalPerDayListener(elementID){
-				const rentalPerDayInput = document.getElementById(elementID);
-				const rentalPerDayEmptyFeedback = document.querySelector('.rentalPerDayEmptyFeedback');
-				const rentalPerDayFormatFeedback = document.querySelector('.rentalPerDayFormatFeedback');
-				const rentalPerDayValidFeedback = document.querySelector('.rentalPerDayValidFeedback');
-				
-				rentalPerDayInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-invalid');
-						input.classList.remove('is-valid');
-						rentalPerDayValidFeedback.style.display = 'none';		
-						rentalPerDayFormatFeedback.style.display = 'none';			
-						rentalPerDayEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^\d+(\.\d{1,2})?$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							rentalPerDayEmptyFeedback.style.display = 'none';
-							rentalPerDayFormatFeedback.style.display = 'none';
-							rentalPerDayValidFeedback.style.display = 'block';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							rentalPerDayValidFeedback.style.display = 'none';
-							rentalPerDayEmptyFeedback.style.display = 'none';
-							rentalPerDayFormatFeedback.style.display = 'block';
-						}
-					}
-				});
-			};
-			rentalPerDayListener('rentalPerDay')
-			const rentalPerDayInputs = document.querySelectorAll('.form-control.rentalPerDay');
-			// Loop through all input elements and call the rentalPerDayListener function for each element
-			rentalPerDayInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				rentalPerDayListener(elementID);
-			});
-			
-		</script>
-
-		<!-- client-side input validation customer ID with different #id -->
-		<script>
-			function customerIdListener(elementID){
-				const customerIdInput = document.getElementById(elementID);
-				const customerIdEmptyFeedback = document.querySelector('.customerIdEmptyFeedback');
-				const customerIdFormatFeedback = document.querySelector('.customerIdFormatFeedback');
-				const customerIdValidFeedback = document.querySelector('.customerIdValidFeedback');
-				
-				customerIdInput.addEventListener('input', function(event) {
-					const input = event.target;
-					const value = input.value.trim();
-
-					if (value.length === 0) {
-						input.classList.add('is-valid');
-						input.classList.remove('is-invalid');
-						customerIdValidFeedback.style.display = 'none';		
-						customerIdFormatFeedback.style.display = 'none';			
-						customerIdEmptyFeedback.style.display = 'block';
-					} else {
-						const isValid = /^(?:[1-9]\d*|)$/.test(value);
-						if (isValid) {
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							customerIdEmptyFeedback.style.display = 'none';
-							customerIdFormatFeedback.style.display = 'none';
-							customerIdValidFeedback.style.display = 'block';
-						} else {
-							input.classList.add('is-invalid');
-							input.classList.remove('is-valid');
-							customerIdValidFeedback.style.display = 'none';
-							customerIdEmptyFeedback.style.display = 'none';
-							customerIdFormatFeedback.style.display = 'block';
-						}
-					}
-				});
-			};
-			const customerIdInput = document.querySelectorAll('.form-control.customerId');
-			// Loop through all input elements and call the customerIdListener function for each element
-			customerIdInputs.forEach((inputElement) => {
-				const elementID = inputElement.id;
-				customerIdListener(elementID);
-			});
-		
-		</script>
-
-
-		<!-- client-side input validation car image with different #id -->
-		<script>
-			function carImageListener(elementID) {
-			  const fileInput = document.getElementById(elementID);
-			  const carImageInvalidFeedback = document.querySelector('.carImageInvalidFeedback');
-			  const carImageValidFeedback = document.querySelector('.carImageValidFeedback');
-		  
-			  fileInput.addEventListener('change', function(event) {
-				const selectedFile = event.target.files[0];
-		  
-				if (selectedFile) {
-				  const fileName = selectedFile.name;
-				  const fileExtension = fileName.split('.').pop().toLowerCase();
-		  
-				  if (['jpg', 'png', 'gif', 'jpeg'].includes(fileExtension)) {
-					fileInput.classList.add('is-valid');
-					fileInput.classList.remove('is-invalid');
-					carImageInvalidFeedback.style.display = 'none';
-					carImageValidFeedback.style.display = 'block';
-				  } else {
-					fileInput.classList.remove('is-valid');
-					fileInput.classList.add('is-invalid');
-					carImageInvalidFeedback.style.display = 'block';
-					carImageValidFeedback.style.display = 'none';
-				  }
-				} else {
-				  fileInput.classList.remove('is-valid');
-				  fileInput.classList.remove('is-invalid');
-				  carImageInvalidFeedback.style.display = 'none';
-				  carImageValidFeedback.style.display = 'none';
-				}
-			  });
-			}
-			
-			carImageListener('carImage');
-			// Get all input elements with the class 'form-control' and 'file'
-			const carImageInputs = document.querySelectorAll('.form-control.file');
-		  
-			// Loop through all input elements and call the carImageListener function for each element
-			carImageInputs.forEach((inputElement) => {
-			  const elementID = inputElement.id;
-			  carImageListener(elementID);
-			});
-		  </script>
-		  
-		  
-
-
-		<!-- function 1 to keep submit button disabled until all input valid for user story changing username & password-->
-		<script>
-			function enableSubmitButtonFunction1(form, usernameId, passwordId, submitButtonId) {
-				const usernameInput = form.querySelector("#username");
-				const passwordInput = form.querySelector("#password");
-				const submitButton = form.querySelector("#submitButton");
-			
-				function updateSubmitButtonState() {
-					const isUsernameValid = /^[a-zA-Z0-9]+$/.test(usernameInput.value.trim());
-					const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordInput.value.trim());
-			
-					if (isUsernameValid && isPasswordValid) {
-					submitButton.disabled = false;
-					submitButton.classList.remove('btn-disabled');
-					submitButton.classList.add('btn-enabled');
-					} else {
-					submitButton.disabled = true;
-					submitButton.classList.remove('btn-enabled');
-					submitButton.classList.add('btn-disabled');
-					}
-				}
-			
-				usernameInput.addEventListener('input', updateSubmitButtonState);
-				passwordInput.addEventListener('input', updateSubmitButtonState);
-				};
-		</script>
-
-		<!-- function 2 to keep submit button disabled until all input valid for user story add/edit users-->
-		<script>
-			function enableSubmitButtonFunction2(form, usernameId, passwordId, emailId, submitButtonId) {
-				const passwordInput = form.querySelector(`#${passwordId}`);
-				const usernameInput = form.querySelector(`#${usernameId}`);
-				const submitButton = form.querySelector(`#${submitButtonId}`);
-				const emailInput = form.querySelector(`#${emailId}`);
-				function updateSubmitButtonState() {
-					const isUsernameValid = /^[a-zA-Z0-9]+$/.test(usernameInput.value.trim());
-					const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(passwordInput.value.trim());
-					const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput.value.trim());
-
-					if (isUsernameValid && isPasswordValid && isEmailValid) {
-					submitButton.disabled = false;
-					submitButton.classList.remove('btn-disabled');
-					submitButton.classList.add('btn-enabled');
-					} else {
-					submitButton.disabled = true;
-					submitButton.classList.remove('btn-enabled');
-					submitButton.classList.add('btn-disabled');
-					}
-				}
-
-				usernameInput.addEventListener('input', updateSubmitButtonState);
-				passwordInput.addEventListener('input', updateSubmitButtonState);
-				emailInput.addEventListener('input', updateSubmitButtonState);
-			};
-		</script>
-
-
-		<!-- function 3 to keep submit button disabled until all input valid for user story edit profile-->
-		<script>
-			function enableSubmitButtonFunction3(form, emailId, submitButtonId) {
-				console.log('emailId:',emailId)
-				const emailInput = form.querySelector(`#${emailId}`);
-				const submitButton = form.querySelector(`#${submitButtonId}`);
-				function updateSubmitButtonState() {
-					const isEmailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput.value.trim());
-
-					if (isEmailValid) {
-					submitButton.disabled = false;
-					submitButton.classList.remove('btn-disabled');
-					submitButton.classList.add('btn-enabled');
-					} else {
-					submitButton.disabled = true;
-					submitButton.classList.remove('btn-enabled');
-					submitButton.classList.add('btn-disabled');
-					}
-				}
-				emailInput.addEventListener('input', updateSubmitButtonState);
-			};
-		</script>
-
-		<!-- function 4 to keep submit button disabled until all input valid for user story add/edit cars-->
-		
-		<script>
-			function enableSubmitButtonFunction4(form, modelId, yearId, registrationId, seatNumberId, rentalPerDayId, customerId, submitButtonId) {
-				const modelInput = form.querySelector(`#${modelId}`);
-				const yearInput = form.querySelector(`#${yearId}`);
-				const registrationInput = form.querySelector(`#${registrationId}`);
-				const seatNumberInput = form.querySelector(`#${seatNumberId}`);
-				const rentalPerDayInput = form.querySelector(`#${rentalPerDayId}`);
-				const customerIdInput = form.querySelector(`#${customerId}`);
-				const submitButton = form.querySelector(`#${submitButtonId}`);
-
-				function updateSubmitButtonState() {
-					const isModelValid = /^.+$/.test(modelInput.value.trim());
-					const isYearValid = /^(188[6-9]|18[9-9]\d|19\d\d|20[0-1]\d|202[0-3])$/.test(yearInput.value.trim());
-					const isRegistrationValid = /^[A-Z]{2,3}\d{2,3}$/.test(registrationInput.value.trim());
-					const isSeatNumberValid = /^(?:[1-9]|[1-4][0-9]|50)$/.test(seatNumberInput.value.trim());
-					const isRentalPerDayValid = /^\d+(\.\d{1,2})?$/.test(rentalPerDayInput.value.trim());
-					const isCustomerIdValid = /^(?:[1-9]\d*|)$/.test(customerIdInput.value.trim());
-
-					if (isModelValid && isYearValid && isRegistrationValid && isSeatNumberValid && isRentalPerDayValid && isCustomerIdValid) {
-					submitButton.disabled = false;
-					submitButton.classList.remove('btn-disabled');
-					submitButton.classList.add('btn-enabled');
-					} else {
-					submitButton.disabled = true;
-					submitButton.classList.remove('btn-enabled');
-					submitButton.classList.add('btn-disabled');
-					}
-				}
-
-				modelInput.addEventListener('input', updateSubmitButtonState);
-				yearInput.addEventListener('input', updateSubmitButtonState);
-				registrationInput.addEventListener('input', updateSubmitButtonState);
-				seatNumberInput.addEventListener('input', updateSubmitButtonState);
-				rentalPerDayInput.addEventListener('input', updateSubmitButtonState);
-			};
-		</script>
-
-		<!-- Call enableSubmitButtonFunction1 for Form group 'change-password' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.getElementById('change-password');
-				enableSubmitButtonFunction1(form,'username','password','submitButton');
-			});
-		</script>
-
-		<!-- Call enableSubmitButtonFunction2 for Form group 'add-user' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.getElementById('add-user');
-				enableSubmitButtonFunction2(form,'username','password','email','submitButton');
-			});
-		</script>
-
-		<!-- Call enableSubmitButtonFunction2 for Form group 'edit-user' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.querySelectorAll('.edit-user');
-				console.log('form:',form)
-				for (let i=0; i < form.length; i++){
-					console.log('i:',i);
-					const Elements = form[i].querySelectorAll('.input-class');
-					console.log('Elements:',Elements);
-					const usernameId = Elements[0].id;
-					console.log('usernameId:',usernameId);
-					const emailId = Elements[1].id;
-					console.log('emailId:',emailId);
-					const passwordId = Elements[2].id;
-					console.log('passwordId:',passwordId);
-					const submitButtonId = Elements[3].id;
-					console.log('submitButtonId:',submitButtonId);
-					enableSubmitButtonFunction2(form[i],usernameId,passwordId,emailId,submitButtonId);
-				}
-			});
-		</script>
-
-		<!-- Call enableSubmitButtonFunction3 for Form group 'edit-profile' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.getElementById('edit-profile');
-				enableSubmitButtonFunction3(form,'email','submitButton-edit');
-			});
-		</script>
-
-		<!-- Call enableSubmitButtonFunction4 for Form group 'add-car' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.getElementById('add-car');
-				enableSubmitButtonFunction4(form,'model','year','registration','seatNumber','rentalPerDay','customerId','submitButton');
-			});
-		</script>	
-
-		<!-- Call enableSubmitButtonFunction4 for Form group 'edit-car' -->
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				const form = document.querySelectorAll('.edit-car');
-				// console.log('form:',form)
-				for (let i=0; i < form.length; i++){
-					const Elements = form[i].querySelectorAll('.input-class');
-					// console.log('Elements:',Elements);
-					const modelId = Elements[0].id;
-					// console.log('modelId:',modelId);
-					const yearId = Elements[1].id;
-					// console.log('yearId:',yearId);
-					const registrationId = Elements[2].id;
-					// console.log('registrationId:',registrationId);
-					const seatNumberId = Elements[3].id;
-					// console.log('seatNumberID:',seatNumberId);
-					const rentalPerDayId = Elements[4].id;
-					// console.log('rentalPerDayId:',rentalPerDayId);
-					const customerId = Elements[5].id;
-					// console.log('customerID:',customerId);
-					const submitButtonId = Elements[7].id;
-					// console.log('submitButtonId:',submitButtonId);
-
-					enableSubmitButtonFunction4(form[i],modelId,yearId,registrationId,seatNumberId, rentalPerDayId, customerId, submitButtonId);
-				}
-			});
-		</script>
-
-	<!-- end of Javascript code for input real-time validation and feedback  -->
-
-
-	
-	
-
-
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-SVzv5xjaKBD5iYjtG/xLxlF3GiZo2/c5vq6YzO6b4GcbD5G6tQ6sQ7CW9FqijanI" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+		<script src="{{ url_for('static', filename='index.js') }}" charset="utf-8"></script>
 	</body>
-	<div class="container">
-		<!-- <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-		  <div class="col-md-4 d-flex align-items-center">
-			<a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-			  <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-			</a>
-			<span class="mb-3 mb-md-0 text-body-secondary">© 2023 Swiftcar. All rights reserved.</span>
-		  </div>
-		</footer> -->
+	<!-- <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+		<div class="col-md-4 d-flex align-items-center">
+		<a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+			<svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+		</a>
+		<span class="mb-3 mb-md-0 text-body-secondary">© 2023 Swiftcar. All rights reserved.</span>
+		</div>
+	</footer> -->
 </html>

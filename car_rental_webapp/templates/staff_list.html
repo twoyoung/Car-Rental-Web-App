@@ -5,19 +5,19 @@
 {% block content %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="flash-messages">
-    {% for category, message in messages %}
-        <div class="py-2 text-center flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
-        {{ message }}
-    {% endfor %}
+    {% if messages %}
+        <div class="flash-messages">
+        {% for category, message in messages %}
+            <div class="py-2 text-center flash-message {% if category == 'error' %}flash-error{% elif category == 'success' %}flash-success{% endif %}">
+            {{ message }}
+            </div>
+        {% endfor %}
         </div>
-  {% endif %}
+    {% endif %}
 {% endwith %}
 
 <div class="container px-5">
-
-    <div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 py-2">
         <!-- go back to dashboard icon -->
         <div>
             <a href="{{ url_for('home')}}">
@@ -30,11 +30,11 @@
         <!-- add a staff -->   
         <button type="button" class="btn custom-btn" data-bs-toggle="modal" data-bs-target="#add_staff">
             <div class="d-flex justify-content-between align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-plus mx-2" viewBox="0 0 16 16">
-                <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
-                <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
-            </svg>
-            <span>Add a staff</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-plus mx-2" viewBox="0 0 16 16">
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                </svg>
+                <span>Add a staff</span>
             </div>
         </button>
     
@@ -127,11 +127,11 @@
                 </div>
             </div>
         </div>
-        <!-- finish adding staff -->
+        <!-- end of adding staff -->
     </div>
 
-    <div class="table-responsive">
-        <table class="table mt-2">
+    <div class="table-responsive mt-4">
+        <table class="table">
             <thead>
                 <tr>
                     <th>staff ID</th><th>Username</th><th>Staff Name</th><th>Email</th><th>Phone Number</th><th>Address</th><th>Action</th>
@@ -139,156 +139,155 @@
             </thead>
             <tbody class="table-group-divider">
                 {% for staff in staff_list %}
-                    <tr>
-                        <td class="text-center">{{staff['StaffID']}}</td>
-                        <td><a href="/profile/{{staff['UserID']}}">{{staff['UserName']}}</a></td>
-                        <td><a href="/profile/{{staff['UserID']}}">{{staff['FirstName']}} {{staff['LastName']}}</a></td>
-                        <td>{{staff['Email']}}</td>
-                        <td>{{staff['PhoneNumber']}}</td>
-                        <td>{{staff['Address']}}</td>
-                        <td>
-                            <!-- Edit staff -->
-                            <button type="button" class="btn custom-edit px-2 mx-0" data-bs-toggle="modal" data-bs-target="#edit_{{staff['UserID']}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                </svg>
-                            </button>
+                <tr>
+                    <td class="text-center">{{staff['StaffID']}}</td>
+                    <td><a href="/profile/{{staff['UserID']}}">{{staff['UserName']}}</a></td>
+                    <td><a href="/profile/{{staff['UserID']}}">{{staff['FirstName']}} {{staff['LastName']}}</a></td>
+                    <td>{{staff['Email']}}</td>
+                    <td>{{staff['PhoneNumber']}}</td>
+                    <td>{{staff['Address']}}</td>
+                    <td>
+                        <!-- Edit staff -->
+                        <button type="button" class="btn custom-edit px-2 mx-0" data-bs-toggle="modal" data-bs-target="#edit_{{staff['UserID']}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>
+                        </button>
 
-                            <div class="modal fade" id="edit_{{staff['UserID']}}" tabindex="-1" aria-labelledby="edit_staff" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
+                        <div class="modal fade" id="edit_{{staff['UserID']}}" tabindex="-1" aria-labelledby="edit_staff" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
 
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="edit_staff">Edit staff information</h2>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <form action="{{ url_for('update_user')}}" method = "POST" class="needs-validation edit-user form-feedback" id="edit_{{staff['UserID']}}" novalidate>
-                                                <div class="row g-3">
-                                                    <input type="hidden" name="user_id" value="{{staff['UserID']}}" readonly>
-
-                                                    <div class="col-sm-6">
-                                                        <label for="staff_id" class="form-label">Staff ID</label>
-                                                        <input type="text" name="staff_id" class="form-control" id="staff_id" value="{{staff['StaffID']}}" disabled readonly>
-                                                    </div>
-
-                                                    <div class="col-sm-6">
-                                                        <label for="username" class="form-label">Username</label>
-                                                        <div class="input-group has-validation">
-                                                            <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                                            <input type="text" class="form-control username input-class" id="username_{{staff['UserID']}}" name="username" aria-describedby="inputGroupPrepend" value="{{staff['UserName']}}" required>
-                                                            <div class="invalid-feedback username-empty-feedback">
-                                                                Username is required.
-                                                            </div>
-                                                            <div class="invalid-feedback username-invalid-format-feedback">
-                                                                Username must contain only letters and numbers.
-                                                            </div>
-                                                            <div class="valid-feedback username-valid-feedback">
-                                                                Looks good!
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-sm-6">
-                                                        <label for="firstname" class="form-label">First Name</label>
-                                                        <input type="text" name="firstname" class="form-control" id="firstname" value="{{staff['FirstName']}}">
-                                                    </div>
-                                                
-                                                    <div class="col-sm-6">
-                                                        <label for="lastname" class="form-label">Last Name</label>
-                                                        <input type="text" name="lastname" class="form-control" id="lastname" value="{{staff['LastName']}}">
-                                                    </div>
-                                                
-                                                    <div class="col-sm-6">
-                                                        <label for="phone" class="form-label">Phone number</label>
-                                                        <input type="text" name="phone" class="form-control" id="phone" value="{{staff['PhoneNumber']}}">
-                                                    </div>
-                                                
-                                                    <div class="col-sm-6">
-                                                        <label for="email" class="form-label">Email</label>
-                                                        <input type="text" name="email" class="form-control email input-class" id="email_{{staff['UserID']}}" value="{{staff['Email']}}" required>
-                                                        <div class="invalid-feedback email-empty-feedback">
-                                                            Email addrss is required.
-                                                        </div>
-                                                        <div class="invalid-feedback email-invalid-format-feedback">
-                                                            Invalid email address.
-                                                        </div>
-                                                        <div class="valid-feedback email-valid-feedback">
-                                                            Looks good!
-                                                        </div>
-                                                    </div>
-                                                
-                                                    <div class="col-sm-10">
-                                                        <label for="address" class="form-label">Address</label>
-                                                        <input type="text" name="address" class="form-control" id="address" value="{{staff['Address']}}">
-                                                    </div>
-
-                                                    <div class="col-sm-10 mb-4">
-                                                        <label for="password" class="form-label">Password</label>
-                                                        <input type="text" name="password" class="form-control password input-class" id="password_{{staff['UserID']}}" value="{{staff['Password']}}" required>
-                                                        <div class="invalid-feedback password-empty-feedback">
-                                                            Password is required.
-                                                        </div>
-                                                        <div class="invalid-feedback password-invalid-format-feedback">
-                                                            Password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.
-                                                        </div>
-                                                        <div class="valid-feedback password-valid-feedback">
-                                                            Looks good!
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    
-                                                    <button type="submit" class="btn btn-primary input-class" id="submitButton_{{staff['UserID']}}" disabled>Save changes</button>
-                                                 
-                                                </div>
-                                            </form>
-                                        </div>
-                                        
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="edit_staff">Edit staff information</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                </div>
-                            </div>
-                            <!-- finish editing staff -->
 
-                            <!-- delete staff -->
-                            <button type="button" class="btn custom-delete px-2 mx-0" data-bs-toggle="modal" data-bs-target="#delete_{{staff['UserID']}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
-                                </svg>
-                            </button>
-                        
-                            <div class="modal fade" id="delete_{{staff['UserID']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_staff" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="delete_staff">Delete staff</h2>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="modal-body">
-                                                Are you sure you want to delete the staff '{{staff['FirstName']}} {{staff['LastName']}}'?
+                                    <div class="modal-body">
+                                        <form action="{{ url_for('update_user')}}" method = "POST" class="needs-validation edit-user form-feedback" id="edit_{{staff['UserID']}}" novalidate>
+                                            <div class="row g-3">
+                                                <input type="hidden" name="user_id" value="{{staff['UserID']}}" readonly>
+
+                                                <div class="col-sm-6">
+                                                    <label for="staff_id" class="form-label">Staff ID</label>
+                                                    <input type="text" name="staff_id" class="form-control" id="staff_id" value="{{staff['StaffID']}}" disabled readonly>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <label for="username" class="form-label">Username</label>
+                                                    <div class="input-group has-validation">
+                                                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                        <input type="text" class="form-control username input-class" id="username_{{staff['UserID']}}" name="username" aria-describedby="inputGroupPrepend" value="{{staff['UserName']}}" required>
+                                                        <div class="invalid-feedback username-empty-feedback">
+                                                            Username is required.
+                                                        </div>
+                                                        <div class="invalid-feedback username-invalid-format-feedback">
+                                                            Username must contain only letters and numbers.
+                                                        </div>
+                                                        <div class="valid-feedback username-valid-feedback">
+                                                            Looks good!
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <label for="firstname" class="form-label">First Name</label>
+                                                    <input type="text" name="firstname" class="form-control" id="firstname" value="{{staff['FirstName']}}">
+                                                </div>
+                                            
+                                                <div class="col-sm-6">
+                                                    <label for="lastname" class="form-label">Last Name</label>
+                                                    <input type="text" name="lastname" class="form-control" id="lastname" value="{{staff['LastName']}}">
+                                                </div>
+                                            
+                                                <div class="col-sm-6">
+                                                    <label for="phone" class="form-label">Phone number</label>
+                                                    <input type="text" name="phone" class="form-control" id="phone" value="{{staff['PhoneNumber']}}">
+                                                </div>
+                                            
+                                                <div class="col-sm-6">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="text" name="email" class="form-control email input-class" id="email_{{staff['UserID']}}" value="{{staff['Email']}}" required>
+                                                    <div class="invalid-feedback email-empty-feedback">
+                                                        Email addrss is required.
+                                                    </div>
+                                                    <div class="invalid-feedback email-invalid-format-feedback">
+                                                        Invalid email address.
+                                                    </div>
+                                                    <div class="valid-feedback email-valid-feedback">
+                                                        Looks good!
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-sm-10">
+                                                    <label for="address" class="form-label">Address</label>
+                                                    <input type="text" name="address" class="form-control" id="address" value="{{staff['Address']}}">
+                                                </div>
+
+                                                <div class="col-sm-10 mb-4">
+                                                    <label for="password" class="form-label">Password</label>
+                                                    <input type="text" name="password" class="form-control password input-class" id="password_{{staff['UserID']}}" value="{{staff['Password']}}" required>
+                                                    <div class="invalid-feedback password-empty-feedback">
+                                                        Password is required.
+                                                    </div>
+                                                    <div class="invalid-feedback password-invalid-format-feedback">
+                                                        Password must be at least 8 characters including a lowercase letter, an uppercase letter, and a number.
+                                                    </div>
+                                                    <div class="valid-feedback password-valid-feedback">
+                                                        Looks good!
+                                                    </div>
+                                                </div>
                                             </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <a href="{{ url_for('delete_user', userid=staff['UserID']) }}">
-                                                <button type="button" class="btn btn-danger">Delete</button>
-                                            </a>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                
+                                                <button type="submit" class="btn btn-primary input-class" id="submitButton_{{staff['UserID']}}" disabled>Save changes</button>
+                                                
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end of editing staff -->
+
+                        <!-- delete staff -->
+                        <button type="button" class="btn custom-delete px-2 mx-0" data-bs-toggle="modal" data-bs-target="#delete_{{staff['UserID']}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                            </svg>
+                        </button>
+                    
+                        <div class="modal fade" id="delete_{{staff['UserID']}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_staff" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="delete_staff">Delete staff</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="modal-body">
+                                            Are you sure you want to delete the staff '{{staff['FirstName']}} {{staff['LastName']}}'?
                                         </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <a href="{{ url_for('delete_user', userid=staff['UserID']) }}">
+                                            <button type="button" class="btn btn-danger">Delete</button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <!-- finish deleting costomer -->
-                        </td>
-                    </tr>
+                        </div>
+                        <!-- end of deleting costomer -->
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>  
-
 </div>
 
 {% endblock %}

@@ -7,41 +7,43 @@
 
 <div class="container container-sm mx-auto mx-5 px-0">
     <h1 class="display-6 my-3 me-4" style="text-align: right; color: #001C30">Welcome!</h1>
+    
     <hr />
+
     <div class="row col-xl-10 col-lg-12 col-md-12 col-8 mx-auto mx-2">
-      <div class="col-md-4 my-3 p-4 mx-auto">
-        <a href="/home/customer_list" class="nav-link">
-        <div class="circle text-white opacity-60" style="background-color: #64CCC5;">
-          <div>
-              <p class="display-1 fw-bolder align-middle mb-0">{{ customer_count }}</p>
-              <h2 class="fs-1 align-middle">Customers</h2>
-          </div>
+        <div class="col-md-4 my-3 p-4 mx-auto">
+            <a href="/home/customer_list" class="nav-link">
+                <div class="circle text-white opacity-60" style="background-color: #64CCC5;">
+                    <div>
+                        <p class="display-1 fw-bolder align-middle mb-0">{{ customer_count }}</p>
+                        <h2 class="fs-1 align-middle">Customers</h2>
+                    </div>
+                </div>
+            </a>
         </div>
-        </a>
-      </div>
 
-      <div class="col-md-4 my-3 p-4 mx-auto">
-        <a href="/home/car_list" class="nav-link">
-        <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: #176B87">
-            <div>
-              <p class="display-1 fw-bolder align-middle mb-0">{{ car_count }}</p>
-              <h2 class="fs-1 align-middle">Cars</h2>
-            </div>
+        <div class="col-md-4 my-3 p-4 mx-auto">
+            <a href="/home/car_list" class="nav-link">
+              <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: #176B87">
+                  <div>
+                    <p class="display-1 fw-bolder align-middle mb-0">{{ car_count }}</p>
+                    <h2 class="fs-1 align-middle">Cars</h2>
+                  </div>
+              </div>
+            </a>
         </div>
-        </a>
-      </div>
 
-      <div class="col-md-4 my-3 p-4 mx-auto">
-        <a href="/home/staff_list" class="nav-link">
-        <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: hwb(189 51% 5%)">
-          <div>
-            <p class="display-1 fw-bolder align-middle mb-0">{{ staff_count }}</p>
-            <h2 class="fs-1 align-middle">Staff</h2>
-          </div>
-        </div>
-          </a>
-      </div>    
-</div>
+        <div class="col-md-4 my-3 p-4 mx-auto">
+            <a href="/home/staff_list" class="nav-link">
+                <div class="circle text-white opacity-60 d-flex align-items-center justify-content-center" style="background-color: hwb(189 51% 5%)">
+                    <div>
+                        <p class="display-1 fw-bolder align-middle mb-0">{{ staff_count }}</p>
+                        <h2 class="fs-1 align-middle">Staff</h2>
+                    </div>
+                </div>
+            </a>
+        </div>    
+    </div>
 </div>
 
 {% endblock %}
