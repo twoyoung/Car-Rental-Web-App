@@ -1,4 +1,4 @@
-from car_rental_webapp import app
+from app import app
 from flask_mysqldb import MySQL
 from flask import request, render_template, session, redirect, url_for, flash
 import MySQLdb.cursors
