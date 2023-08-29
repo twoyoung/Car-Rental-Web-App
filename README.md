@@ -1,6 +1,6 @@
 # car-rental-webapp
 
-## Log in
+## Log in methods:
 * as admin:
   * username: admin
   * password: admin
@@ -11,19 +11,20 @@
   * username: customer1
   * password: customer1
 
-## This is a simple web app for car rental company with the basic functions of:
+## This is a web app for a car rental company with the basic functions of:
 * customer register new account
-* log in
-* log out
-* change password
-* different dashboards and functions for admin, staff and customer
-* different access authorization for admin, staff and customer
-* user management: list/check/add/edit/delete users
-* car management: list/check/add/edit/delete cars
-* input validation
-* responstive
+* login/logout system
+* users edit own profile/ change password
+* role-based access control
+* role-based dashboards and functions design
+* user/car management:
+  * admin: list/check/add/edit/delete customer/staff/cars
+  * staff: list/check/add/edit/delete cars, check customer profile
+  * customer: list/check available cars
+* client-side real-time form validation
+* responstive web design
   
 
 ## Current bug that hasn't been fixed
-* when editting the information of customer/staff/car, user have to click and edit the required field first to enable to submit button
+* when editting the information of customer/staff/car, user have to click and edit the required field first to enable the submit button
 * function for filter on customer dashboard and list icon on the header hasn't been achieved yet due to the limit of time
