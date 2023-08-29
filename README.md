@@ -28,5 +28,5 @@ http://2young.pythonanywhere.com/
 * responstive web design
   
 
-## Current bug that hasn't been fixed due to the limit of time
-* function for filter on customer dashboard and list icon on the header hasn't been achieved yet
+## Current bug that hasn't been fixed:
+* Some functions and buttons such as the filter on customer dashboard and list icon on the header hasn't been achieved yet due to the limit of time.
