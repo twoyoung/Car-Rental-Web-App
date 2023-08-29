@@ -13,7 +13,7 @@ mysql = MySQL(app)
 
 # for uploading car images
 # UPLOAD_FOLDER = './static/car_images'
-UPLOAD_FOLDER = '/home/2young/COMP639-Rental-Car-Web-App/car-rental-webapp/static/car_images'
+UPLOAD_FOLDER = '/home/2young/COMP639-Rental-Car-Web-App/app/static/car_images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
