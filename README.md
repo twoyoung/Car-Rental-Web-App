@@ -27,5 +27,4 @@ http://2young.pythonanywhere.com/
   
 
 ## Current bug that hasn't been fixed due to the limit of time
-* when editting the information of customer/staff/car, user have to click and edit the required field first to enable the submit button
 * function for filter on customer dashboard and list icon on the header hasn't been achieved yet
