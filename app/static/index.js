@@ -6,22 +6,17 @@ $("input[id^='username']").each(function() {
         if (value.length === 0){
             input.removeClass("is-valid").addClass("is-invalid");
             $(".username-invalid-format-feedback").hide();
-            console.log(1);
             $(".username-empty-feedback").show();
-            console.log(2);
         } else{
             const isValid = /^[a-zA-Z0-9]+$/.test(value);
             if (isValid){
                 input.removeClass("is-invalid").addClass("is-valid");
                 $(".username-valid-feedback").show();  
-                console.log(3);
             }
             else {
                 input.removeClass("is-valid").addClass("is-invalid");
                 $(".username-empty-feedback").hide();
-                console.log(4);
                 $(".username-invalid-format-feedback").show();
-                console.log(5);
             }
         }
     });

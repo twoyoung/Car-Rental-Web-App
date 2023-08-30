@@ -189,9 +189,6 @@ def home():
         cursor.execute('SELECT * FROM staff WHERE Active=1')
         staff_list = cursor.fetchall()
         staff_count = sum(1 for staff in staff_list)
-        print(total_car_count)
-        print(customer_count)
-        print(staff_count)
 
         # Check if the user's role is allowed to access this page.
         if user_role == 'admin':
