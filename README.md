@@ -1,4 +1,4 @@
-# COMP639 car-rental-webapp
+# COMP639-Car-Rental-Web-App
 
 ## Log in methods:
 http://2young.pythonanywhere.com/
